@@ -63,7 +63,13 @@ export function JobberQuoteEmbed({
       } ${className}`}
       aria-label="Quote form section"
     >
-      <h2 className="font-display text-2xl font-extrabold text-brand-dark">{title}</h2>
+      <h2
+        className={`font-display font-extrabold text-brand-dark ${
+          isSection ? "text-[1.5rem] md:text-[1.65rem]" : "text-[1.3rem] md:text-[1.45rem]"
+        }`}
+      >
+        {title}
+      </h2>
       <p className="mt-2 text-sm text-brand-dark/70">{subtitle}</p>
       {isSection ? (
         <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">
@@ -78,7 +84,13 @@ export function JobberQuoteEmbed({
       {showCallFallback ? (
         <p className="mt-4 text-xs text-brand-dark/65">
           Prefer to skip the form? Text us directly at{" "}
-          <a href={SMS_LINK} className="font-semibold text-brand-primary hover:text-brand-accent" aria-label="Text Iconic Landscaping">
+          <a
+            href={SMS_LINK}
+            className="font-semibold text-brand-primary hover:text-brand-accent"
+            aria-label="Text Iconic Landscaping"
+            data-track-event="click_to_text"
+            data-track-params='{"source":"quote_embed_fallback"}'
+          >
             {PHONE_DISPLAY}
           </a>{" "}
           and we&apos;ll get back to you fast.

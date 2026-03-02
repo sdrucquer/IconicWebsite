@@ -8,6 +8,7 @@ const quickLinks = [
   { href: "/", label: "Home" },
   { href: "/about-us", label: "About" },
   { href: "/about-us/giving-back", label: "Giving Back" },
+  { href: "/resources", label: "Resources" },
   { href: "/service-area", label: "Service Area" },
   { href: "/contact", label: "Contact" },
   { href: CLIENT_HUB_LOGIN_URL, label: "Client Login", external: true },
@@ -30,12 +31,7 @@ export function Footer() {
             {quickLinks.map((link) => (
               <li key={link.href}>
                 {link.external ? (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-white/85 hover:text-brand-accent"
-                  >
+                  <a href={link.href} target="_blank" rel="noreferrer" className="text-white/85 hover:text-brand-accent">
                     {link.label}
                   </a>
                 ) : (
@@ -64,10 +60,22 @@ export function Footer() {
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">Contact</h2>
           <div className="mt-3 space-y-1 text-[0.9rem] leading-8">
-            <a href={SMS_LINK} className="inline-flex items-center gap-2 text-white/85 hover:text-brand-accent" aria-label="Text or call Iconic Landscaping">
+            <a
+              href={SMS_LINK}
+              className="inline-flex items-center gap-2 text-white/85 hover:text-brand-accent"
+              aria-label="Text or call Iconic Landscaping"
+              data-track-event="click_to_text"
+              data-track-params='{"source":"footer"}'
+            >
               <Phone className="h-4 w-4" /> Text or call: {PHONE_DISPLAY}
             </a>
-            <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 text-white/85 hover:text-brand-accent" aria-label="Email Iconic Landscaping">
+            <a
+              href={`mailto:${EMAIL}`}
+              className="inline-flex items-center gap-2 text-white/85 hover:text-brand-accent"
+              aria-label="Email Iconic Landscaping"
+              data-track-event="click_to_email"
+              data-track-params='{"source":"footer"}'
+            >
               <Mail className="h-4 w-4" /> {EMAIL}
             </a>
             <a

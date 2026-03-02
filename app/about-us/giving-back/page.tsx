@@ -2,13 +2,17 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/Button";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { PHONE_DISPLAY, PHONE_LINK } from "@/lib/constants";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Giving Back to Our Community",
   description:
-    "See how Iconic Landscaping supports local schools, nonprofits, and families through hands-on community initiatives."
-};
+    "See how Iconic Landscaping supports local schools, nonprofits, and families through hands-on community initiatives.",
+  path: "/about-us/giving-back",
+  ogImagePath: "/community/coat-drive-team.jpg"
+});
 
 const coatDriveStats = [
   {
@@ -67,6 +71,17 @@ const initiatives = [
 export default function GivingBackPage() {
   return (
     <>
+      <SchemaMarkup
+        type="breadcrumbList"
+        payload={{
+          items: [
+            { name: "Home", path: "/" },
+            { name: "About Us", path: "/about-us" },
+            { name: "Giving Back", path: "/about-us/giving-back" }
+          ]
+        }}
+      />
+
       <section className="relative overflow-hidden bg-brand-dark text-white">
         <Image
           src="/community/coat-drive-team.jpg"
@@ -89,7 +104,7 @@ export default function GivingBackPage() {
           </p>
 
           <div className="mt-8 max-w-3xl rounded-2xl border border-brand-accent/35 bg-white/10 p-5 backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent">2025 Coat Drive Has Begun</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent">2026 Coat Drive Is Open</p>
             <p className="mt-2 text-sm text-white/90">Donate today and help keep local families warm this winter.</p>
           </div>
         </div>
@@ -98,7 +113,7 @@ export default function GivingBackPage() {
       <section className="section-shell py-14 md:py-18">
         <div className="grid gap-7 lg:grid-cols-[1.05fr_0.95fr]">
           <article className="rounded-2xl border border-brand-primary/12 bg-white p-6 shadow-card md:p-8">
-            <h2 className="section-title">Now Accepting Donations: 2025 Winter Coat Drive</h2>
+            <h2 className="section-title">Now Accepting Donations: 2026 Winter Coat Drive</h2>
             <div className="mt-5 space-y-4 text-sm leading-relaxed text-brand-dark/80 md:text-base">
               <p>
                 <strong>Drop-Off Location:</strong> Owen J. Roberts High School, Main Entrance Lobby in Pottstown, PA.

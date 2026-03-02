@@ -26,7 +26,28 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         payload={{
           name: `${service.name} in Pottstown, PA`,
           serviceType: service.name,
-          areaServed: "Pottstown, PA"
+          areaServed: ["Pottstown, PA", "Royersford, PA", "Spring City, PA", "Chester Springs, PA", "Douglassville, PA"],
+          description: service.shortDescription,
+          offers: {
+            "@type": "Offer",
+            priceCurrency: "USD"
+          }
+        }}
+      />
+      <SchemaMarkup
+        type="breadcrumbList"
+        payload={{
+          items: [
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" },
+            { name: service.name, path: `/services/${service.slug}` }
+          ]
+        }}
+      />
+      <SchemaMarkup
+        type="faqPage"
+        payload={{
+          items: detail.faqs.map((faq) => ({ question: faq.question, answer: faq.answer }))
         }}
       />
 
@@ -63,13 +84,20 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button href="/contact#quote" ariaLabel={`Get a free quote for ${service.name}`}>
+            <Button
+              href="/contact#quote"
+              ariaLabel={`Get a free quote for ${service.name}`}
+              trackEventName="cta_quote_click"
+              trackEventParams={{ source: `service_hero_${service.slug}` }}
+            >
               Get a Free Quote
             </Button>
             <a
               href={`tel:${PHONE_LINK}`}
               className="inline-flex items-center justify-center rounded-full border border-white/50 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
               aria-label={`Call about ${service.name}`}
+              data-track-event="click_to_call"
+              data-track-params={`{"source":"service_hero_${service.slug}"}`}
             >
               Call {PHONE_DISPLAY}
             </a>
@@ -180,6 +208,20 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
             />
           ))}
         </div>
+        <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
+          <Link href="/areas/pottstown" className="text-brand-primary hover:text-brand-accent">
+            {service.name} in Pottstown
+          </Link>
+          <Link href="/areas/royersford" className="text-brand-primary hover:text-brand-accent">
+            {service.name} in Royersford
+          </Link>
+          <Link href="/areas/spring-city" className="text-brand-primary hover:text-brand-accent">
+            {service.name} in Spring City
+          </Link>
+          <Link href="/resources" className="text-brand-primary hover:text-brand-accent">
+            Landscaping resources and guides
+          </Link>
+        </div>
       </section>
 
       <section className="bg-brand-primary py-16 text-white">
@@ -192,7 +234,13 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
               "Get clear pricing, straightforward communication, and a crew that takes pride in the result."}
           </p>
           <div className="mt-8 flex justify-center">
-            <Button href="/contact#quote" ariaLabel={`Request quote for ${service.name}`} variant="secondary">
+            <Button
+              href="/contact#quote"
+              ariaLabel={`Request quote for ${service.name}`}
+              variant="secondary"
+              trackEventName="cta_quote_click"
+              trackEventParams={{ source: `service_bottom_${service.slug}` }}
+            >
               {detail.ctaButtonLabel ?? "Get a Free Quote"}
             </Button>
           </div>

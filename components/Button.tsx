@@ -7,6 +7,8 @@ type ButtonProps = {
   ariaLabel: string;
   variant?: "primary" | "secondary" | "ghost";
   className?: string;
+  trackEventName?: string;
+  trackEventParams?: Record<string, string | number | boolean>;
 };
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
@@ -22,12 +24,16 @@ export function Button({
   children,
   ariaLabel,
   variant = "primary",
-  className = ""
+  className = "",
+  trackEventName,
+  trackEventParams
 }: ButtonProps) {
   return (
     <Link
       href={href}
       aria-label={ariaLabel}
+      data-track-event={trackEventName}
+      data-track-params={trackEventParams ? JSON.stringify(trackEventParams) : undefined}
       className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-300 ${variantClasses[variant]} ${className}`}
     >
       {children}

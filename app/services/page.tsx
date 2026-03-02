@@ -5,12 +5,18 @@ import { ServiceCard } from "@/components/ServiceCard";
 import { getServiceIcon } from "@/components/ServiceIcon";
 import { services } from "@/data/services";
 import { Button } from "@/components/Button";
+import { FaqTeaser } from "@/components/FaqTeaser";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
+import { TrustProofPanel } from "@/components/TrustProofPanel";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Landscaping Services in Pottstown, PA",
   description:
-    "Explore bed cleanup, mulching, edging, spring cleanup, and more services from Iconic Landscaping."
-};
+    "Explore bed cleanup, mulching, edging, spring cleanup, and more services from Iconic Landscaping.",
+  path: "/services",
+  ogImagePath: "/photos/property-finish.jpg"
+});
 
 const serviceBundles = [
   {
@@ -39,6 +45,16 @@ const choosePoints = [
 export default function ServicesPage() {
   return (
     <>
+      <SchemaMarkup
+        type="breadcrumbList"
+        payload={{
+          items: [
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" }
+          ]
+        }}
+      />
+
       <section className="section-shell py-14 md:py-18">
         <div className="texture-panel rounded-2xl border border-brand-primary/15 p-6 shadow-card md:p-9">
           <p className="inline-flex items-center gap-2 rounded-full bg-brand-light px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-primary">
@@ -50,7 +66,13 @@ export default function ServicesPage() {
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg">
             Every service is built around clean execution, clear communication, and an end result that looks intentionally maintained.
           </p>
-          <Button href="/contact#quote" ariaLabel="Open full quote form" className="mt-7">
+          <Button
+            href="/contact#quote"
+            ariaLabel="Open full quote form"
+            className="mt-7"
+            trackEventName="cta_quote_click"
+            trackEventParams={{ source: "services_hero" }}
+          >
             Start Your Quote
           </Button>
         </div>
@@ -72,6 +94,21 @@ export default function ServicesPage() {
             />
           ))}
         </div>
+        <div className="mt-6 flex flex-wrap gap-3 text-sm font-semibold">
+          <Link href="/areas/pottstown" className="text-brand-primary hover:text-brand-accent">
+            Services in Pottstown
+          </Link>
+          <Link href="/areas/royersford" className="text-brand-primary hover:text-brand-accent">
+            Services in Royersford
+          </Link>
+          <Link href="/resources" className="text-brand-primary hover:text-brand-accent">
+            Landscaping guides
+          </Link>
+        </div>
+      </section>
+
+      <section className="section-shell py-10 md:py-12">
+        <TrustProofPanel />
       </section>
 
       <section className="section-shell py-12 md:py-16">
@@ -105,7 +142,12 @@ export default function ServicesPage() {
             ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button href="/contact#quote" ariaLabel="Open full quote form">
+            <Button
+              href="/contact#quote"
+              ariaLabel="Open full quote form"
+              trackEventName="cta_quote_click"
+              trackEventParams={{ source: "services_bottom" }}
+            >
               Get a Recommended Scope
             </Button>
             <Link
@@ -116,6 +158,10 @@ export default function ServicesPage() {
             </Link>
           </div>
         </div>
+      </section>
+
+      <section className="section-shell py-8 md:py-12">
+        <FaqTeaser />
       </section>
     </>
   );

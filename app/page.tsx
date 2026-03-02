@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 import {
   ArrowRight,
   CheckCircle2,
@@ -15,6 +16,7 @@ import { GoogleReviewsScroller } from "@/components/GoogleReviewsScroller";
 import { JobberQuoteEmbed } from "@/components/JobberQuoteEmbed";
 import { ProcessStep } from "@/components/ProcessStep";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
+import { FaqTeaser } from "@/components/FaqTeaser";
 import { ServiceCard } from "@/components/ServiceCard";
 import { StickyQuoteBar } from "@/components/StickyQuoteBar";
 import { WorkGallery } from "@/components/WorkGallery";
@@ -22,12 +24,15 @@ import { getServiceIcon } from "@/components/ServiceIcon";
 import { allServiceAreas, services } from "@/data/services";
 import { PHONE_DISPLAY, SMS_LINK } from "@/lib/constants";
 import { GREEN_BLUR_PLACEHOLDER } from "@/lib/placeholder";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Landscaping Services in Pottstown, PA",
   description:
-    "Get a fast, no-pressure landscaping quote from Iconic Landscaping. Serving Pottstown, PA and surrounding areas with premium local service."
-};
+    "Get a fast, no-pressure landscaping quote from Iconic Landscaping. Serving Pottstown, PA and surrounding areas with premium local service.",
+  path: "/",
+  ogImagePath: "/photos/edging-trim.jpg"
+});
 
 const trustStrip = [
   { title: "4.6 Google Rating", detail: "40+ verified reviews" },
@@ -101,11 +106,11 @@ export default function HomePage() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,30,10,0.88)] via-[rgba(10,30,10,0.62)] to-[rgba(10,30,10,0.28)]" />
-        <div className="relative section-shell py-12 md:py-18">
-          <div className="grid items-start gap-7 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
+        <div className="relative section-shell py-8 md:py-14">
+          <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
             <div className="order-1">
-              <p className="inline-block rounded-full border border-white/25 px-4 py-1 text-xs uppercase tracking-[0.14em] text-white/80">
-                Landscaping Services in Pottstown, PA
+              <p className="inline-block rounded-full border border-white/25 px-3 py-1 text-[0.7rem] uppercase tracking-[0.12em] text-white/80">
+                📍 Pottstown, PA
               </p>
               <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.4rem,7vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.02em]">
                 Make Your Property Iconic.
@@ -115,10 +120,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            <aside className="order-2 w-full max-w-[520px] justify-self-end rounded-2xl border border-brand-primary/20 border-t-4 border-t-brand-primary bg-white/95 p-6 text-brand-dark shadow-card backdrop-blur-md md:p-7">
-              <h2 className="font-display text-3xl font-extrabold leading-tight">Get Your Free Quote</h2>
-              <p className="mt-2 text-sm text-brand-dark/70">Same-day response, usually within 2 hours.</p>
-              <ul className="mt-5 space-y-3 text-sm text-brand-dark/85">
+            <aside className="order-2 w-full max-w-[520px] justify-self-end rounded-2xl border border-brand-primary/20 border-t-4 border-t-brand-primary bg-white/95 p-5 text-brand-dark shadow-card backdrop-blur-md md:p-6">
+              <h2 className="font-display text-[1.3rem] font-extrabold leading-tight md:text-[1.45rem]">Get Your Free Quote</h2>
+              <ul className="mt-4 space-y-2.5 text-sm text-brand-dark/85">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
                   Fast quote response and scheduling clarity
@@ -132,18 +136,27 @@ export default function HomePage() {
                   Local, licensed, and insured crew
                 </li>
               </ul>
-              <Button href="#quote" ariaLabel="Start free quote" className="mt-6 w-full">
+              <Button
+                href="#quote"
+                ariaLabel="Start free quote"
+                className="mt-4 w-full"
+                trackEventName="cta_quote_click"
+                trackEventParams={{ source: "home_hero_quote_card" }}
+              >
                 Start Free Quote
               </Button>
               <a
                 href={SMS_LINK}
                 className="mt-3 inline-flex w-full items-center justify-center gap-2 text-sm font-semibold text-brand-dark/70 hover:text-brand-primary"
                 aria-label="Text us"
+                data-track-event="click_to_text"
+                data-track-params='{"source":"home_hero"}'
               >
-                <PhoneCall className="h-4 w-4" /> Or text us at {PHONE_DISPLAY}
+                <PhoneCall className="h-4 w-4" /> Text {PHONE_DISPLAY}
               </a>
             </aside>
           </div>
+          <p className="mt-4 text-center text-xs font-semibold text-white/75 lg:hidden">Scroll down for the full quote form ↓</p>
         </div>
       </section>
 
@@ -221,7 +234,7 @@ export default function HomePage() {
           <ProcessStep
             step={1}
             title="Start a Quote"
-            description="Fill out our quick form or call us directly. Most homeowners hear back the same day, often within 2 hours."
+            description="Fill out our quick form or text us directly to start a quote."
             icon={<ClipboardCheck className="h-6 w-6" />}
           />
           <span className="hidden text-3xl font-bold text-brand-accent md:inline-flex md:justify-center">→</span>
@@ -239,7 +252,13 @@ export default function HomePage() {
             icon={<CheckCircle2 className="h-6 w-6" />}
           />
         </div>
-        <Button href="#quote" ariaLabel="Start with step one" className="mt-8">
+        <Button
+          href="#quote"
+          ariaLabel="Start with step one"
+          className="mt-8"
+          trackEventName="cta_quote_click"
+          trackEventParams={{ source: "home_how_it_works" }}
+        >
           Start with Step 1
         </Button>
       </section>
@@ -264,6 +283,17 @@ export default function HomePage() {
         >
           Check if we serve your area <ArrowRight className="h-4 w-4" />
         </Link>
+        <div className="mt-5 flex flex-wrap gap-2 text-sm">
+          <Link href="/areas/pottstown" className="font-semibold text-brand-primary hover:text-brand-accent">
+            Pottstown landscaping
+          </Link>
+          <Link href="/areas/royersford" className="font-semibold text-brand-primary hover:text-brand-accent">
+            Royersford landscaping
+          </Link>
+          <Link href="/areas/spring-city" className="font-semibold text-brand-primary hover:text-brand-accent">
+            Spring City landscaping
+          </Link>
+        </div>
       </section>
 
       <section className="section-shell py-16 md:py-20">
@@ -275,6 +305,10 @@ export default function HomePage() {
           subtitle="Tell us about your property and we will follow up quickly with clear next steps."
           showCallFallback
         />
+      </section>
+
+      <section className="section-shell py-4 md:py-8">
+        <FaqTeaser />
       </section>
 
       <section className="relative overflow-hidden bg-brand-primary py-20 text-white">
@@ -289,6 +323,8 @@ export default function HomePage() {
             href="#quote"
             ariaLabel="Open quote form"
             className="mt-8 min-h-[52px] border-[#1C4A1E] bg-[#1C4A1E] px-9 text-base font-bold text-white hover:border-[#163a18] hover:bg-[#163a18]"
+            trackEventName="cta_quote_click"
+            trackEventParams={{ source: "home_final_cta" }}
           >
             Get My Free Quote
           </Button>
@@ -296,6 +332,8 @@ export default function HomePage() {
             href={SMS_LINK}
             className="mt-4 inline-flex text-sm font-semibold text-white/90 underline-offset-2 hover:underline"
             aria-label="Text Iconic Landscaping"
+            data-track-event="click_to_text"
+            data-track-params='{"source":"home_final_cta"}'
           >
             Or text {PHONE_DISPLAY}
           </a>

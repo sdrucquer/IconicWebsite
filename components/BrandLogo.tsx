@@ -9,7 +9,7 @@ type BrandLogoProps = {
 export function BrandLogo({ className = "", compact = false }: BrandLogoProps) {
   return (
     <Image
-      src={compact ? "/brand/iconic-logo-mark.png" : "/brand/iconic-logo-wordmark.png"}
+      src={compact ? "/brand/iconic-logo-mark-optimized.png" : "/brand/iconic-logo-wordmark-optimized.png"}
       alt="Iconic Landscaping"
       width={compact ? 48 : 220}
       height={compact ? 48 : 220}

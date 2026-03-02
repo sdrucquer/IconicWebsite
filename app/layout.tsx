@@ -3,12 +3,14 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import { BUSINESS_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://iconic.land"),
   title: {
-    default: "Iconic Landscaping | Landscaping Services in Pottstown, PA",
-    template: "%s | Iconic Landscaping"
+    default: `${BUSINESS_NAME} | Landscaping Services in Pottstown, PA`,
+    template: `%s | ${BUSINESS_NAME}`
   },
   description:
     "Premium landscaping services in Pottstown, PA and surrounding areas. Locally run, quality-obsessed, and relationship-driven.",
@@ -20,13 +22,24 @@ export const metadata: Metadata = {
     "Iconic Landscaping"
   ],
   openGraph: {
-    title: "Iconic Landscaping",
+    title: BUSINESS_NAME,
     description:
       "Premium landscaping services in Pottstown, PA and surrounding areas.",
-    url: "https://iconic.land",
-    siteName: "Iconic Landscaping",
+    url: SITE_URL,
+    siteName: BUSINESS_NAME,
     locale: "en_US",
-    type: "website"
+    type: "website",
+    images: [{ url: `${SITE_URL}/photos/property-finish.jpg`, alt: `${BUSINESS_NAME} landscaping work` }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: BUSINESS_NAME,
+    description:
+      "Premium landscaping services in Pottstown, PA and surrounding areas.",
+    images: [`${SITE_URL}/photos/property-finish.jpg`]
+  },
+  alternates: {
+    canonical: SITE_URL
   }
 };
 
@@ -38,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans">
+        <AnalyticsTracker />
         <SchemaMarkup type="localBusiness" />
         <Header />
         <main>{children}</main>

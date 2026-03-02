@@ -3,13 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Leaf, ShieldCheck, Users2 } from "lucide-react";
 import { Button } from "@/components/Button";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { PHONE_DISPLAY, PHONE_LINK } from "@/lib/constants";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Meet the Team Behind Iconic Landscaping",
   description:
-    "Discover how our young, student-led team is redefining landscaping in Pottstown and surrounding areas."
-};
+    "Discover how our young, student-led team is redefining landscaping in Pottstown and surrounding areas.",
+  path: "/about-us",
+  ogImagePath: "/team/team-hero.jpg"
+});
 
 const uniqueness = [
   {
@@ -96,6 +100,16 @@ const teamMembers = [
 export default function AboutUsPage() {
   return (
     <>
+      <SchemaMarkup
+        type="breadcrumbList"
+        payload={{
+          items: [
+            { name: "Home", path: "/" },
+            { name: "About Us", path: "/about-us" }
+          ]
+        }}
+      />
+
       <section className="relative overflow-hidden bg-brand-dark text-white">
         <Image
           src="/team/team-hero.jpg"

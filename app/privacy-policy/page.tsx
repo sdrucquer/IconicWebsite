@@ -1,9 +1,12 @@
 import { Metadata } from "next";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Privacy Policy",
-  description: "Privacy Policy for Iconic Cleanup LLC, doing business as Iconic Landscaping."
-};
+  description: "Privacy Policy for Iconic Cleanup LLC, doing business as Iconic Landscaping.",
+  path: "/privacy-policy"
+});
 
 const privacyPolicyText = `Effective Date: February 24, 2026 | Last Updated: February 24, 2026
 
@@ -19,7 +22,7 @@ Phone
 
 Email
 
-contact@iconiccleanup.com
+contact@iconic.land
 
 Service Area
 
@@ -105,7 +108,7 @@ You may opt out of SMS communications at any time:
 
 Reply STOP to any message to unsubscribe immediately
 Reply HELP to any message for assistance
-Contact us directly at 484-925-1640 or contact@iconiccleanup.com
+Contact us directly at 484-925-1640 or contact@iconic.land
 After opting out, you will receive one final confirmation message. No further marketing messages will be sent unless you re-subscribe.
 
 E. Message & Data Rates
@@ -168,7 +171,7 @@ We retain personal information for as long as necessary to provide services, mai
 
 14. Children's Privacy
 
-Our services are not directed to individuals under the age of 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected information from a child, please contact us immediately at contact@iconiccleanup.com and we will delete it promptly.
+Our services are not directed to individuals under the age of 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected information from a child, please contact us immediately at contact@iconic.land and we will delete it promptly.
 
 15. Geographic Scope
 
@@ -187,7 +190,7 @@ To exercise any of these rights, contact us:
 
 Phone: 484-925-1640
 
-Email: contact@iconiccleanup.com
+Email: contact@iconic.land
 
 We will respond to your request within a reasonable timeframe and no later than 30 days.
 
@@ -197,16 +200,27 @@ We may update this Privacy Policy periodically to reflect changes in our practic
 
 Iconic Cleanup LLC | dba Iconic Landscaping | 859 Temple Road, Pottstown, PA 19465
 
-484-925-1640 |contact@iconiccleanup.com | © 2026 Iconic Cleanup LLC. All rights reserved.`;
+484-925-1640 |contact@iconic.land | © 2026 Iconic Cleanup LLC. All rights reserved.`;
 
 export default function PrivacyPolicyPage() {
   return (
-    <section className="section-shell py-20">
-      <h1 className="section-title">Privacy Policy</h1>
-      <p className="section-subtitle">Effective Date: February 24, 2026 | Last Updated: February 24, 2026</p>
-      <div className="mt-8 rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft md:p-8">
-        <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-brand-dark/80">{privacyPolicyText}</pre>
-      </div>
-    </section>
+    <>
+      <SchemaMarkup
+        type="breadcrumbList"
+        payload={{
+          items: [
+            { name: "Home", path: "/" },
+            { name: "Privacy Policy", path: "/privacy-policy" }
+          ]
+        }}
+      />
+      <section className="section-shell py-20">
+        <h1 className="section-title">Privacy Policy</h1>
+        <p className="section-subtitle">Effective Date: February 24, 2026 | Last Updated: February 24, 2026</p>
+        <div className="mt-8 rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft md:p-8">
+          <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-brand-dark/80">{privacyPolicyText}</pre>
+        </div>
+      </section>
+    </>
   );
 }

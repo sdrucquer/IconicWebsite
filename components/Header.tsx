@@ -12,6 +12,7 @@ import { Button } from "@/components/Button";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about-us", label: "About" },
+  { href: "/resources", label: "Resources" },
   { href: "/service-area", label: "Service Area" },
   { href: "/contact", label: "Contact" }
 ];
@@ -132,6 +133,8 @@ export function Header() {
             href={SMS_LINK}
             className="inline-flex items-center gap-1 text-sm font-semibold text-brand-dark transition-colors hover:text-brand-primary"
             aria-label="Text Iconic Landscaping"
+            data-track-event="click_to_text"
+            data-track-params='{"source":"header_desktop"}'
           >
             <Phone className="h-4 w-4" /> Text {PHONE_DISPLAY}
           </a>
@@ -139,6 +142,8 @@ export function Header() {
             href="/contact#quote"
             ariaLabel="Open full quote form"
             className="border-brand-primary bg-brand-primary px-6 py-2.5 text-white hover:border-brand-accent hover:bg-brand-accent"
+            trackEventName="cta_quote_click"
+            trackEventParams={{ source: "header_desktop" }}
           >
             Get a Free Quote
           </Button>
@@ -210,7 +215,13 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-              <a href={SMS_LINK} className="rounded-lg px-3 py-2 font-semibold hover:bg-brand-light" aria-label="Text Iconic Landscaping">
+              <a
+                href={SMS_LINK}
+                className="rounded-lg px-3 py-2 font-semibold hover:bg-brand-light"
+                aria-label="Text Iconic Landscaping"
+                data-track-event="click_to_text"
+                data-track-params='{"source":"header_mobile"}'
+              >
                 Text {PHONE_DISPLAY}
               </a>
               <a
@@ -222,7 +233,13 @@ export function Header() {
               >
                 Client Login
               </a>
-              <Button href="/contact#quote" ariaLabel="Open full quote form" className="mt-2 w-full">
+              <Button
+                href="/contact#quote"
+                ariaLabel="Open full quote form"
+                className="mt-2 w-full"
+                trackEventName="cta_quote_click"
+                trackEventParams={{ source: "header_mobile" }}
+              >
                 Get a Free Quote
               </Button>
             </div>

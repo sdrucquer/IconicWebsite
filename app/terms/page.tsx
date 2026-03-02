@@ -1,9 +1,12 @@
 import { Metadata } from "next";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Terms and Conditions",
-  description: "Terms and Conditions for Iconic Cleanup LLC, doing business as Iconic Landscaping."
-};
+  description: "Terms and Conditions for Iconic Cleanup LLC, doing business as Iconic Landscaping.",
+  path: "/terms"
+});
 
 const termsText = `Terms and conditions
 About us
@@ -21,7 +24,7 @@ Phone
 
 Email
 
-contact@iconiccleanup.com
+contact@iconic.land
 
 Service Area
 
@@ -86,7 +89,7 @@ We reserve the right to suspend or decline future services until all outstanding
 
 E. Payment Disputes
 
-If you have a concern about an invoice, you must contact us within 7 days of the invoice date at 484-925-1640 or contact@iconiccleanup.com. Raising a concern does not automatically pause the payment due date, but we will work in good faith to resolve any legitimate dispute before charging the card on file.
+If you have a concern about an invoice, you must contact us within 7 days of the invoice date at 484-925-1640 or contact@iconic.land. Raising a concern does not automatically pause the payment due date, but we will work in good faith to resolve any legitimate dispute before charging the card on file.
 
 6. Cancellation & Rescheduling Policy
 
@@ -164,7 +167,7 @@ Our total liability for any claim arising from a specific job shall not exceed t
 
 Step 1 — Direct Communication
 
-Contact us first. Most issues can be resolved quickly. Reach us at 484-925-1640 or contact@iconiccleanup.com. We commit to responding within 2 business days and making a good-faith effort to resolve the matter.
+Contact us first. Most issues can be resolved quickly. Reach us at 484-925-1640 or contact@iconic.land. We commit to responding within 2 business days and making a good-faith effort to resolve the matter.
 
 Step 2 — Mediation
 
@@ -200,20 +203,31 @@ Iconic Cleanup LLC| dba Iconic Landscaping
 
 Phone: 484-925-1640
 
-Email: contact@iconiccleanup.com
+Email: contact@iconic.land
 
 Iconic Cleanup LLC | dba Iconic Landscaping | 859 Temple Road, Pottstown, PA 19465
 
-484-925-1640 |contact@iconiccleanup.com | © 2026 Iconic Cleanup LLC. All rights reserved.`;
+484-925-1640 |contact@iconic.land | © 2026 Iconic Cleanup LLC. All rights reserved.`;
 
 export default function TermsPage() {
   return (
-    <section className="section-shell py-20">
-      <h1 className="section-title">Terms and Conditions</h1>
-      <p className="section-subtitle">Effective Date: February 24, 2026 | Last Updated: February 24, 2026</p>
-      <div className="mt-8 rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft md:p-8">
-        <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-brand-dark/80">{termsText}</pre>
-      </div>
-    </section>
+    <>
+      <SchemaMarkup
+        type="breadcrumbList"
+        payload={{
+          items: [
+            { name: "Home", path: "/" },
+            { name: "Terms and Conditions", path: "/terms" }
+          ]
+        }}
+      />
+      <section className="section-shell py-20">
+        <h1 className="section-title">Terms and Conditions</h1>
+        <p className="section-subtitle">Effective Date: February 24, 2026 | Last Updated: February 24, 2026</p>
+        <div className="mt-8 rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft md:p-8">
+          <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-brand-dark/80">{termsText}</pre>
+        </div>
+      </section>
+    </>
   );
 }
