@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: only light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+img {
+  image-orientation: from-image;
+}
+
+body {
+  @apply bg-brand-light text-brand-dark antialiased;
+  background-image:
+    radial-gradient(circle at 10% 12%, rgba(76, 175, 80, 0.1) 0, rgba(76, 175, 80, 0) 36%),
+    radial-gradient(circle at 90% 78%, rgba(45, 106, 47, 0.1) 0, rgba(45, 106, 47, 0) 38%),
+    linear-gradient(180deg, #f4f5ef 0%, #f7f7f3 100%);
+}
+
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: 86px;
+  }
+}
+
+main {
+  @apply min-h-screen;
+}
+
+.section-shell {
+  @apply mx-auto max-w-7xl px-4 lg:px-8;
+}
+
+.font-display {
+  font-family: "Canva Sans", "Nunito Sans", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+.section-title {
+  font-family: "Canva Sans", "Nunito Sans", "Avenir Next", "Segoe UI", sans-serif;
+  @apply text-3xl font-extrabold tracking-tight text-brand-dark md:text-4xl;
+}
+
+.section-subtitle {
+  @apply mt-3 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg;
+}
+
+.texture-panel {
+  background-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.82),
+      rgba(255, 255, 255, 0.92)
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(45, 106, 47, 0.03) 0,
+      rgba(45, 106, 47, 0.03) 1px,
+      transparent 1px,
+      transparent 12px
+    );
+}
+
+.google-marquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.google-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 38s linear infinite;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.google-marquee:hover .google-marquee-track {
+  animation-play-state: paused;
+}
+
+.google-review-card {
+  width: 320px;
+  border-radius: 1rem;
+  border: 1px solid rgba(45, 106, 47, 0.12);
+  background: white;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.08);
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
