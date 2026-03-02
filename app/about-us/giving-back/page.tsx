@@ -92,14 +92,14 @@ export default function GivingBackPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/86 to-brand-dark/70" />
 
-        <div className="section-shell relative py-16 md:py-24">
+        <div className="section-shell relative py-16 md:py-24 lg:py-28 xl:py-32">
           <p className="inline-flex rounded-full border border-white/35 px-4 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-white/85">
             Giving Back to Our Community
           </p>
-          <h1 className="mt-5 max-w-4xl font-display text-4xl font-extrabold leading-[0.98] md:text-6xl">
+          <h1 className="mt-5 max-w-4xl font-display text-4xl font-extrabold leading-[0.98] md:text-6xl lg:max-w-5xl lg:text-7xl">
             Community First. Always.
           </h1>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/85 md:text-lg">
+          <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/85 md:text-lg lg:max-w-4xl lg:text-xl">
             At Iconic Landscaping, giving back is a core part of who we are. We&apos;re proud to support local schools, organizations, and neighbors year-round.
           </p>
 
@@ -110,7 +110,7 @@ export default function GivingBackPage() {
         </div>
       </section>
 
-      <section className="section-shell py-14 md:py-18">
+      <section className="section-shell py-14 md:py-16 lg:py-20">
         <div className="grid gap-7 lg:grid-cols-[1.05fr_0.95fr]">
           <article className="rounded-2xl border border-brand-primary/12 bg-white p-6 shadow-card md:p-8">
             <h2 className="section-title">Now Accepting Donations: 2026 Winter Coat Drive</h2>
@@ -152,7 +152,7 @@ export default function GivingBackPage() {
         </div>
       </section>
 
-      <section className="section-shell py-8 md:py-12">
+      <section className="section-shell py-8 md:py-12 lg:py-16">
         <h2 className="section-title">Coat Drive Stats</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {coatDriveStats.map((stat) => (
@@ -164,7 +164,7 @@ export default function GivingBackPage() {
         </div>
       </section>
 
-      <section className="section-shell py-12 md:py-16">
+      <section className="section-shell py-12 md:py-16 lg:py-20">
         <h2 className="section-title">Our Resume: Successful Community Initiatives</h2>
         <p className="section-subtitle">A snapshot of the programs and partnerships we&apos;re proud to support.</p>
 
@@ -183,7 +183,7 @@ export default function GivingBackPage() {
         </div>
       </section>
 
-      <section className="section-shell py-12 md:py-16">
+      <section className="section-shell py-12 md:py-16 lg:py-20">
         <div className="rounded-2xl border border-brand-primary/12 bg-brand-dark p-7 text-white shadow-card md:p-10">
           <h2 className="font-display text-3xl font-extrabold md:text-5xl">Help Us Keep This Going</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 md:text-base">

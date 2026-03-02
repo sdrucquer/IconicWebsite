@@ -57,20 +57,20 @@ export function Header() {
         scrolled ? "border-b border-brand-primary/10 bg-white/95 backdrop-blur" : "bg-white/70"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
+      <div className="section-shell flex items-center justify-between py-3">
         <Link href="/" className="inline-flex items-center gap-2" aria-label="Iconic Landscaping home">
-          <BrandLogo compact className="h-10 w-10 object-contain" />
-          <span className="text-sm font-bold uppercase tracking-[0.12em] text-brand-dark md:text-base">
+          <BrandLogo compact className="h-10 w-10 object-contain lg:h-11 lg:w-11" />
+          <span className="text-sm font-bold uppercase tracking-[0.12em] text-brand-dark md:text-base lg:text-[1.05rem]">
             Iconic Landscaping
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-6 lg:flex lg:gap-7 xl:gap-8" aria-label="Main navigation">
           {navLinks.slice(0, 1).map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-[15px] font-semibold text-brand-dark transition-colors hover:text-brand-primary"
+              className="text-[15px] font-semibold text-brand-dark transition-colors hover:text-brand-primary lg:text-base"
             >
               {link.label}
             </Link>
@@ -80,7 +80,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setDesktopServicesOpen((value) => !value)}
-              className="inline-flex items-center gap-1 text-[15px] font-semibold text-brand-dark transition-colors hover:text-brand-primary"
+              className="inline-flex items-center gap-1 text-[15px] font-semibold text-brand-dark transition-colors hover:text-brand-primary lg:text-base"
               aria-label="Toggle services menu"
               aria-expanded={desktopServicesOpen}
             >
@@ -111,26 +111,26 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[15px] font-semibold text-brand-dark transition-colors hover:text-brand-primary"
+              className="text-[15px] font-semibold text-brand-dark transition-colors hover:text-brand-primary lg:text-base"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 lg:flex lg:gap-4">
           <a
             href={CLIENT_HUB_LOGIN_URL}
             target="_blank"
             rel="noreferrer"
-            className="text-sm font-semibold text-brand-dark/80 transition-colors hover:text-brand-primary"
+            className="text-sm font-semibold text-brand-dark/80 transition-colors hover:text-brand-primary lg:text-[15px]"
             aria-label="Open client login"
           >
             Client Login
           </a>
           <a
             href={SMS_LINK}
-            className="inline-flex items-center gap-1 text-sm font-semibold text-brand-dark transition-colors hover:text-brand-primary"
+            className="inline-flex items-center gap-1 text-sm font-semibold text-brand-dark transition-colors hover:text-brand-primary lg:text-[15px]"
             aria-label="Text Iconic Landscaping"
             data-track-event="click_to_text"
             data-track-params='{"source":"header_desktop"}'
@@ -140,7 +140,7 @@ export function Header() {
           <Button
             href="/contact#quote"
             ariaLabel="Open full quote form"
-            className="border-brand-primary bg-brand-primary px-6 py-2.5 text-white hover:border-brand-accent hover:bg-brand-accent"
+            className="border-brand-primary bg-brand-primary px-6 py-2.5 text-white hover:border-brand-accent hover:bg-brand-accent lg:px-7 lg:py-3"
             trackEventName="cta_quote_click"
             trackEventParams={{ source: "header_desktop" }}
           >

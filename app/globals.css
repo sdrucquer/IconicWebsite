@@ -4,6 +4,11 @@
 
 :root {
   color-scheme: only light;
+  --shell-gutter-mobile: 1rem;
+  --shell-gutter-lg: 2rem;
+  --shell-gutter-xl: 2.5rem;
+  --shell-max-lg: 108rem;
+  --shell-max-xl: 124rem;
 }
 
 html {
@@ -28,8 +33,11 @@ main {
   @apply min-h-screen;
 }
 
-.section-shell {
-  @apply mx-auto max-w-7xl px-4 lg:px-8;
+.section-shell,
+.home-shell {
+  width: min(100%, calc(100% - (var(--shell-gutter-mobile) * 2)));
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .font-display {
@@ -43,6 +51,35 @@ main {
 
 .section-subtitle {
   @apply mt-3 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg;
+}
+
+@media (min-width: 1024px) {
+  .section-shell,
+  .home-shell {
+    width: min(var(--shell-max-lg), calc(100% - (var(--shell-gutter-lg) * 2)));
+  }
+
+  .section-title {
+    font-size: 3rem;
+    line-height: 1.04;
+  }
+
+  .section-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    max-width: 70ch;
+  }
+}
+
+@media (min-width: 1536px) {
+  .section-shell,
+  .home-shell {
+    width: min(var(--shell-max-xl), calc(100% - (var(--shell-gutter-xl) * 2)));
+  }
+
+  .section-title {
+    font-size: 3.35rem;
+  }
 }
 
 .texture-panel {
@@ -72,4 +109,17 @@ main {
 .google-review-card-mobile {
   width: min(86vw, 360px);
   flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .google-review-card {
+    width: auto;
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .google-review-card {
+    padding: 1.75rem;
+  }
 }

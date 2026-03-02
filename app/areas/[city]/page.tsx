@@ -68,14 +68,14 @@ export default function AreaCityPage({ params }: AreaPageProps) {
         }}
       />
 
-      <section className="section-shell py-16 md:py-20">
+      <section className="section-shell py-16 md:py-20 lg:py-24">
         <p className="inline-flex rounded-full border border-brand-primary/20 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-primary">
           Local service page
         </p>
-        <h1 className="mt-4 max-w-4xl font-display text-4xl font-extrabold text-brand-dark md:text-6xl">
+        <h1 className="mt-4 max-w-4xl font-display text-4xl font-extrabold text-brand-dark md:text-6xl lg:max-w-5xl lg:text-7xl">
           {area.heroTitle}
         </h1>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg">{area.summary}</p>
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg lg:max-w-4xl lg:text-xl">{area.summary}</p>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Button
@@ -95,7 +95,7 @@ export default function AreaCityPage({ params }: AreaPageProps) {
         </div>
       </section>
 
-      <section className="section-shell py-8 md:py-10">
+      <section className="section-shell py-8 md:py-10 lg:py-14">
         <div className="grid gap-5 md:grid-cols-2">
           <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
             <h2 className="text-2xl font-bold text-brand-dark">What we handle most in {area.name}</h2>
@@ -117,7 +117,7 @@ export default function AreaCityPage({ params }: AreaPageProps) {
         </div>
       </section>
 
-      <section className="section-shell py-12 md:py-16">
+      <section className="section-shell py-12 md:py-16 lg:py-20">
         <h2 className="section-title">Top Services in {area.name}</h2>
         <p className="section-subtitle">Service pages include scope, examples, and detailed FAQs.</p>
         <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -134,7 +134,7 @@ export default function AreaCityPage({ params }: AreaPageProps) {
         </div>
       </section>
 
-      <section className="section-shell py-12 md:py-16">
+      <section className="section-shell py-12 md:py-16 lg:py-20">
         <h2 className="section-title">Frequently Asked Questions for {area.name}</h2>
         <div className="mt-7 space-y-3">
           {area.faqs.map((faq) => (

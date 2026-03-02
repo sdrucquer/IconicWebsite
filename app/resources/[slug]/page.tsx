@@ -72,12 +72,12 @@ export default function ResourceArticlePage({ params }: ResourcePageProps) {
         }}
       />
 
-      <article className="section-shell py-16 md:py-20">
+      <article className="section-shell py-16 md:py-20 lg:py-24">
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-primary/75">
           {article.publishDate} • Updated {article.updatedDate} • {article.readTime}
         </p>
-        <h1 className="mt-3 max-w-4xl font-display text-4xl font-extrabold text-brand-dark md:text-6xl">{article.title}</h1>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg">{article.summary}</p>
+        <h1 className="mt-3 max-w-4xl font-display text-4xl font-extrabold text-brand-dark md:text-6xl lg:max-w-5xl lg:text-7xl">{article.title}</h1>
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg lg:max-w-4xl lg:text-xl">{article.summary}</p>
 
         <div className="relative mt-8 h-[300px] w-full overflow-hidden rounded-2xl border border-brand-primary/10 md:h-[420px]">
           <Image src={article.heroImage} alt={article.title} fill className="object-cover" priority />
@@ -96,7 +96,7 @@ export default function ResourceArticlePage({ params }: ResourcePageProps) {
         </div>
       </article>
 
-      <section className="section-shell py-2 md:py-6">
+      <section className="section-shell py-2 md:py-6 lg:py-10">
         <div className="grid gap-6 lg:grid-cols-2">
           <article className="rounded-2xl border border-brand-primary/12 bg-white p-6 shadow-soft">
             <h2 className="text-2xl font-bold text-brand-dark">Recommended Process</h2>
@@ -123,7 +123,7 @@ export default function ResourceArticlePage({ params }: ResourcePageProps) {
         </div>
       </section>
 
-      <section className="section-shell py-10 md:py-14">
+      <section className="section-shell py-10 md:py-14 lg:py-20">
         <h2 className="section-title">Frequently Asked Questions</h2>
         <div className="mt-7 space-y-3">
           {article.faqs.map((faq) => (
@@ -135,7 +135,7 @@ export default function ResourceArticlePage({ params }: ResourcePageProps) {
         </div>
       </section>
 
-      <section className="section-shell pb-16 md:pb-20">
+      <section className="section-shell pb-16 md:pb-20 lg:pb-24">
         <div className="grid gap-6 md:grid-cols-2">
           <article className="rounded-2xl border border-brand-primary/12 bg-white p-6 shadow-soft">
             <h2 className="text-xl font-bold text-brand-dark">Related Services</h2>

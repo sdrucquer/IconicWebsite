@@ -94,12 +94,12 @@ export function GoogleReviewsScroller() {
   };
 
   return (
-    <section className="py-16 md:py-20" id="reviews">
-      <div className="section-shell">
+    <section className="py-16 md:py-20 lg:py-24 xl:py-28" id="reviews">
+      <div className="home-shell">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="section-title">Verified Client Reviews</h2>
-            <p className="section-subtitle mt-2">
+            <h2 className="section-title lg:text-5xl">Verified Client Reviews</h2>
+            <p className="section-subtitle mt-2 lg:text-xl">
               <span className="inline-flex items-center gap-1 align-middle text-amber-500">
                 <Star className="h-4 w-4 fill-current" />
                 <Star className="h-4 w-4 fill-current" />
@@ -182,9 +182,9 @@ export function GoogleReviewsScroller() {
           </div>
         </div>
 
-        <div className="mt-8 hidden gap-4 md:grid md:grid-cols-3">
+        <div className="mt-8 hidden gap-4 md:grid md:grid-cols-3 lg:mt-10 lg:gap-7 xl:gap-8">
           {reviews.map((review) => (
-            <article key={review.name} className="google-review-card min-h-[220px]">
+            <article key={review.name} className="google-review-card min-h-[220px] lg:min-h-[280px] xl:min-h-[300px]">
               <div className="mb-3 flex items-center justify-between">
                 <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-accent text-sm font-bold text-white">
                   {review.initials}
@@ -198,8 +198,8 @@ export function GoogleReviewsScroller() {
                   {review.sourceLabel} <ExternalLink className="h-3 w-3" />
                 </Link>
               </div>
-              <p className="text-sm italic leading-7 text-brand-dark/80">&ldquo;{review.quote}&rdquo;</p>
-              <p className="mt-4 text-sm font-bold text-brand-dark">{review.name}</p>
+              <p className="text-sm italic leading-7 text-brand-dark/80 lg:text-base lg:leading-8">&ldquo;{review.quote}&rdquo;</p>
+              <p className="mt-4 text-sm font-bold text-brand-dark lg:text-base">{review.name}</p>
             </article>
           ))}
         </div>

@@ -28,20 +28,20 @@ export default function ResourcesPage() {
         }}
       />
 
-      <section className="section-shell py-16 md:py-20">
+      <section className="section-shell py-16 md:py-20 lg:py-24 xl:py-28">
         <p className="inline-flex rounded-full border border-brand-primary/20 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-primary">
           Resources
         </p>
-        <h1 className="mt-4 max-w-4xl font-display text-4xl font-extrabold text-brand-dark md:text-6xl">
+        <h1 className="mt-4 max-w-4xl font-display text-4xl font-extrabold text-brand-dark md:text-6xl lg:max-w-5xl lg:text-7xl">
           Local Landscaping Guides for Better Property Decisions
         </h1>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg">
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg lg:max-w-4xl lg:text-xl">
           Actionable guidance for homeowners across Pottstown and nearby communities, focused on real project scope, timing, and quality outcomes.
         </p>
       </section>
 
-      <section className="section-shell pb-16 md:pb-20">
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <section className="section-shell pb-16 md:pb-20 lg:pb-24">
+        <div className="grid gap-6 md:grid-cols-2 lg:gap-7 xl:grid-cols-3">
           {resourceArticles.map((article) => (
             <article key={article.slug} className="overflow-hidden rounded-2xl border border-brand-primary/10 bg-white shadow-soft">
               <div className="relative h-52 w-full">
@@ -65,7 +65,7 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      <section className="section-shell pb-16 md:pb-20">
+      <section className="section-shell pb-16 md:pb-20 lg:pb-24">
         <div className="rounded-2xl border border-brand-primary/12 bg-brand-dark p-7 text-white shadow-card md:p-10">
           <h2 className="font-display text-3xl font-extrabold md:text-5xl">Need help applying this to your property?</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 md:text-base">

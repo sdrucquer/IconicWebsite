@@ -60,20 +60,20 @@ export default function ServiceAreaPage() {
 
       <section className="relative overflow-hidden bg-brand-dark text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-deep to-brand-primary opacity-90" />
-        <div className="section-shell relative py-16 md:py-20">
+        <div className="section-shell relative py-16 md:py-20 lg:py-24 xl:py-28">
           <p className="inline-block rounded-full border border-white/25 px-4 py-1 text-xs uppercase tracking-[0.14em] text-white/80">
             Where We Work
           </p>
-          <h1 className="mt-5 max-w-3xl font-display text-4xl font-extrabold leading-tight md:text-6xl">
+          <h1 className="mt-5 max-w-3xl font-display text-4xl font-extrabold leading-tight md:text-6xl lg:max-w-5xl lg:text-7xl">
             Serving the Greater Pottstown Area
           </h1>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/78 md:text-lg">
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/78 md:text-lg lg:max-w-4xl lg:text-xl">
             We know these roads. We&apos;ve worked in these neighborhoods. Local crew, local knowledge.
           </p>
         </div>
       </section>
 
-      <section className="section-shell py-16 md:py-20">
+      <section className="section-shell py-16 md:py-20 lg:py-24">
         <h2 className="font-display text-3xl font-bold text-brand-dark md:text-4xl">Where We Work</h2>
         <p className="mt-3 text-sm leading-relaxed text-brand-dark/75 md:text-base">
           These are our core service areas. We take all job sizes here.
@@ -116,7 +116,7 @@ export default function ServiceAreaPage() {
         </div>
       </section>
 
-      <section className="section-shell pb-16 md:pb-20">
+      <section className="section-shell pb-16 md:pb-20 lg:pb-24">
         <h2 className="font-display text-3xl font-bold text-brand-dark md:text-4xl">How We Decide If We Can Help</h2>
         <p className="mt-3 text-sm leading-relaxed text-brand-dark/75 md:text-base">
           If you&apos;re outside our listed areas, here&apos;s how we think about it.
@@ -143,7 +143,7 @@ export default function ServiceAreaPage() {
         </div>
       </section>
 
-      <section className="bg-brand-dark py-20 text-center text-white">
+      <section className="bg-brand-dark py-20 text-center text-white lg:py-24 xl:py-28">
         <div className="section-shell">
           <h2 className="font-display text-3xl font-extrabold md:text-5xl">In Our Area? Let&apos;s Talk.</h2>
           <p className="mx-auto mt-3 max-w-xl text-white/75">

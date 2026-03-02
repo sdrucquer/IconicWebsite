@@ -28,18 +28,18 @@ export default function ContactPage() {
         }}
       />
 
-      <section className="section-shell py-14 md:py-20">
+      <section className="section-shell py-14 md:py-20 lg:py-24 xl:py-28">
         <div
           id="quote"
-          className="mx-auto max-w-4xl rounded-2xl border border-brand-primary/15 border-t-4 border-t-brand-primary bg-white p-6 shadow-card md:p-8"
+          className="mx-auto max-w-4xl rounded-2xl border border-brand-primary/15 border-t-4 border-t-brand-primary bg-white p-6 shadow-card md:p-8 lg:max-w-6xl lg:p-10 xl:p-12"
         >
           <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-brand-primary/80">
             Fast response. No spam.
           </p>
-          <h1 className="mt-4 font-display text-3xl font-extrabold leading-tight text-brand-dark md:text-4xl">
+          <h1 className="mt-4 font-display text-3xl font-extrabold leading-tight text-brand-dark md:text-4xl lg:text-5xl">
             Start Your Quote with Iconic Landscaping
           </h1>
-          <p className="mt-3 text-base leading-relaxed text-brand-dark/75">
+          <p className="mt-3 text-base leading-relaxed text-brand-dark/75 lg:text-lg">
             Tell us what you need and we&apos;ll follow up quickly with clear next steps.
           </p>
 
@@ -93,7 +93,7 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-6">
+        <div className="mt-10 grid gap-6 lg:mt-12 lg:gap-8">
           <TrustProofPanel title="Why homeowners trust our team" />
           <FaqTeaser />
         </div>

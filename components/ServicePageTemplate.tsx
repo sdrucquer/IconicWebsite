@@ -51,7 +51,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         }}
       />
 
-      <section className="relative overflow-hidden bg-brand-dark py-20 text-white md:py-24">
+      <section className="relative overflow-hidden bg-brand-dark py-20 text-white md:py-24 lg:py-28 xl:py-32">
         <Image
           src={detail.heroImage}
           alt={`${service.name} project by Iconic Landscaping`}
@@ -64,10 +64,10 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
           <p className="inline-block rounded-full border border-white/30 px-4 py-1 text-xs uppercase tracking-[0.12em] text-white/85">
             Landscaping Services in Pottstown, PA
           </p>
-          <h1 className="mt-5 max-w-4xl font-display text-4xl font-extrabold leading-[0.98] md:text-6xl">
+          <h1 className="mt-5 max-w-4xl font-display text-4xl font-extrabold leading-[0.98] md:text-6xl lg:max-w-5xl lg:text-7xl">
             {detail.heroTitle ?? `${service.name} Services in Pottstown, PA`}
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/85 md:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/85 md:text-lg lg:max-w-4xl lg:text-xl">
             {detail.heroSubtitle ?? service.tagline}
           </p>
 
@@ -105,7 +105,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         </div>
       </section>
 
-      <section className="section-shell py-10 md:py-14">
+      <section className="section-shell py-10 md:py-14 lg:py-20">
         <div className="mb-5 md:mb-7">
           <h2 className="section-title">{detail.topSectionTitle ?? "What You Can Expect"}</h2>
           <p className="section-subtitle">
@@ -124,7 +124,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         </div>
       </section>
 
-      <section className="section-shell py-16">
+      <section className="section-shell py-16 lg:py-20">
         <div className="grid gap-10 lg:grid-cols-2">
           <article>
             <h2 className="section-title">What&apos;s Included</h2>
@@ -151,7 +151,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         </div>
       </section>
 
-      <section className="section-shell py-6">
+      <section className="section-shell py-6 lg:py-10">
         <h2 className="section-title">Recent Project Examples</h2>
         <div className="mt-6 grid gap-5 md:grid-cols-3">
           {detail.gallery.map((src, index) => (
@@ -165,7 +165,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         </div>
       </section>
 
-      <section className="section-shell py-16">
+      <section className="section-shell py-16 lg:py-20">
         <div className="grid gap-10 lg:grid-cols-2">
           <article>
             <h2 className="section-title">Ideal For Properties That Need</h2>
@@ -195,7 +195,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         </div>
       </section>
 
-      <section className="section-shell py-16">
+      <section className="section-shell py-16 lg:py-20">
         <h2 className="section-title">Related Services</h2>
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {related.map((item) => (
@@ -224,7 +224,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         </div>
       </section>
 
-      <section className="bg-brand-primary py-16 text-white">
+      <section className="bg-brand-primary py-16 text-white lg:py-20 xl:py-24">
         <div className="section-shell text-center">
           <h2 className="font-display text-3xl font-extrabold md:text-5xl">
             {detail.ctaTitle ?? `Need ${service.name.toLowerCase()} done right?`}

@@ -19,7 +19,7 @@ const quickLinks = [
 export function Footer() {
   return (
     <footer className="mt-20 bg-brand-dark text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-[70px] lg:grid-cols-4 lg:px-8">
+      <div className="section-shell grid gap-10 py-[70px] lg:grid-cols-4 lg:gap-12 xl:gap-14">
         <div>
           <BrandLogo className="h-12 w-auto object-contain" fallbackClassName="text-white" />
           <p className="mt-3 text-sm text-white/75">Premium Landscaping in the Greater Pottstown Area</p>
