@@ -4,6 +4,9 @@ export const CLIENT_HUB_LOGIN_URL = QUOTE_URL;
 export const JOBBER_CLIENT_HUB_ID = "47e9aef5-f7e8-4b33-b846-68955da31e6e-2241732";
 export const JOBBER_FORM_URL =
   "https://clienthub.getjobber.com/client_hubs/47e9aef5-f7e8-4b33-b846-68955da31e6e/public/work_request/embedded_work_request_form?form_id=2241732";
+// Hosted Jobber request form URL for same-tab quote starts.
+// Update to the exact share URL from Jobber if it changes.
+export const JOBBER_REQUEST_FORM_URL = JOBBER_FORM_URL;
 export const GOOGLE_REVIEWS_URL = "https://share.google/BJd1JzSnaTFgVPsAu";
 
 export const BUSINESS_NAME = "Iconic Landscaping";

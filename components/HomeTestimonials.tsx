@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { TestimonialCard } from "@/components/TestimonialCard";
 
 const testimonials = [
@@ -36,18 +35,9 @@ export function HomeTestimonials() {
   return (
     <div>
       <div className="relative min-h-[220px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={testimonials[index].name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-            className="absolute inset-0"
-          >
-            <TestimonialCard name={testimonials[index].name} quote={testimonials[index].quote} />
-          </motion.div>
-        </AnimatePresence>
+        <div key={testimonials[index].name} className="absolute inset-0 transition-opacity duration-300">
+          <TestimonialCard name={testimonials[index].name} quote={testimonials[index].quote} />
+        </div>
       </div>
 
       <div className="mt-6 flex justify-center gap-2">

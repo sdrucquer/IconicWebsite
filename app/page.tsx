@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Metadata } from "next";
 import {
   ArrowRight,
@@ -12,13 +13,10 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { Button } from "@/components/Button";
-import { GoogleReviewsScroller } from "@/components/GoogleReviewsScroller";
-import { JobberQuoteEmbed } from "@/components/JobberQuoteEmbed";
 import { ProcessStep } from "@/components/ProcessStep";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { FaqTeaser } from "@/components/FaqTeaser";
 import { ServiceCard } from "@/components/ServiceCard";
-import { StickyQuoteBar } from "@/components/StickyQuoteBar";
 import { WorkGallery } from "@/components/WorkGallery";
 import { getServiceIcon } from "@/components/ServiceIcon";
 import { allServiceAreas, services } from "@/data/services";
@@ -31,7 +29,7 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     "Get a fast, no-pressure landscaping quote from Iconic Landscaping. Serving Pottstown, PA and surrounding areas with premium local service.",
   path: "/",
-  ogImagePath: "/photos/edging-trim.jpg"
+  ogImagePath: "/photos/mowing.jpg"
 });
 
 const trustStrip = [
@@ -82,6 +80,26 @@ const pillars = [
   }
 ];
 
+const GoogleReviewsScroller = dynamic(
+  () => import("@/components/GoogleReviewsScroller").then((mod) => mod.GoogleReviewsScroller),
+  { ssr: false }
+);
+
+const LeadCaptureForm = dynamic(
+  () => import("@/components/LeadCaptureForm").then((mod) => mod.LeadCaptureForm),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="mt-6 h-72 animate-pulse rounded-2xl border border-brand-primary/15 bg-brand-light/30" />
+    )
+  }
+);
+
+const StickyQuoteBar = dynamic(
+  () => import("@/components/StickyQuoteBar").then((mod) => mod.StickyQuoteBar),
+  { ssr: false }
+);
+
 export default function HomePage() {
   return (
     <>
@@ -95,11 +113,13 @@ export default function HomePage() {
         }}
       />
 
-      <section className="relative overflow-hidden bg-brand-dark text-white">
+      <div className="pb-[86px] lg:pb-0">
+        <section className="relative overflow-hidden bg-brand-dark text-white">
         <Image
-          src="/photos/edging-trim.jpg"
+          src="/photos/mowing.jpg"
           alt="Clean landscaped property in Pottstown"
           fill
+          sizes="100vw"
           className="object-cover"
           placeholder="blur"
           blurDataURL={GREEN_BLUR_PLACEHOLDER}
@@ -156,11 +176,11 @@ export default function HomePage() {
               </a>
             </aside>
           </div>
-          <p className="mt-4 text-center text-xs font-semibold text-white/75 lg:hidden">Scroll down for the full quote form ↓</p>
+          <p className="mt-4 text-center text-xs font-semibold text-white/75 lg:hidden">Scroll down to start your quote ↓</p>
         </div>
       </section>
 
-      <section className="bg-[#111810] text-white">
+        <section className="bg-[#111810] text-white">
         <div className="section-shell">
           <div className="grid grid-cols-2 gap-2 py-2 md:grid-cols-4 md:gap-0 md:py-0">
             {trustStrip.map((item, index) => (
@@ -178,7 +198,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-shell py-10 md:py-14">
+        <section className="section-shell py-10 md:py-14">
         <div className="rounded-2xl border border-brand-primary/15 bg-[#faf8f3] p-5 shadow-card md:p-7">
           <h2 className="font-display text-2xl font-extrabold text-brand-dark md:text-3xl">Why homeowners choose Iconic</h2>
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -199,10 +219,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <GoogleReviewsScroller />
-      <WorkGallery />
+        <GoogleReviewsScroller />
+        <WorkGallery />
 
-      <section className="section-shell py-16 md:py-20">
+        <section className="section-shell py-16 md:py-20">
         <h2 className="section-title">Most Requested Services</h2>
         <p className="section-subtitle">
           Start with our most requested services, then we customize scope to your property.
@@ -228,7 +248,7 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <section id="how-it-works" className="section-shell py-12 md:py-14">
+        <section id="how-it-works" className="section-shell py-12 md:py-14">
         <h2 className="section-title">How It Works</h2>
         <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center">
           <ProcessStep
@@ -263,7 +283,7 @@ export default function HomePage() {
         </Button>
       </section>
 
-      <section className="section-shell py-10 md:py-12">
+        <section className="section-shell py-10 md:py-12">
         <h2 className="section-title">Serving the Greater Pottstown Area</h2>
         <p className="section-subtitle">We actively serve all areas listed below.</p>
         <div className="mt-8 flex flex-wrap gap-2">
@@ -296,22 +316,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-shell py-16 md:py-20">
-        <JobberQuoteEmbed
-          variant="section"
-          anchorId="quote"
-          minHeight={620}
-          title="Get Your Free Quote"
-          subtitle="Tell us about your property and we will follow up quickly with clear next steps."
-          showCallFallback
-        />
+        <section className="section-shell py-16 md:py-20">
+        <div
+          id="quote"
+          className="mx-auto max-w-4xl rounded-2xl border border-brand-primary/15 border-t-4 border-t-brand-primary bg-white p-5 shadow-card md:p-7"
+        >
+          <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-brand-primary/80">
+            Fast response. No spam.
+          </p>
+          <h2 className="mt-4 font-display text-[1.6rem] font-extrabold leading-tight text-brand-dark md:text-[1.9rem]">
+            Start Your Free Quote
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-brand-dark/75 md:text-base">
+            Quick form now, real follow-up from our local team. We typically respond within 24 hours.
+          </p>
+          <ul className="mt-5 space-y-2.5 text-sm text-brand-dark/85">
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
+              Local team serving Greater Pottstown
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
+              Detailed scope and transparent pricing
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
+              Most quote requests get a response within 24 hours
+            </li>
+          </ul>
+          <LeadCaptureForm source="home_quote_section" variant="compact" className="mt-6" />
+        </div>
       </section>
 
-      <section className="section-shell py-4 md:py-8">
+        <section className="section-shell py-4 md:py-8">
         <FaqTeaser />
       </section>
 
-      <section className="relative overflow-hidden bg-brand-primary py-20 text-white">
+        <section className="relative overflow-hidden bg-brand-primary py-20 text-white">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -left-20 top-1/2 h-56 w-56 -translate-y-1/2 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute -right-20 top-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
@@ -338,7 +379,8 @@ export default function HomePage() {
             Or text {PHONE_DISPLAY}
           </a>
         </div>
-      </section>
+        </section>
+      </div>
 
       <StickyQuoteBar />
     </>

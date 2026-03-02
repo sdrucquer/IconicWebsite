@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 import { services } from "@/data/services";
@@ -158,94 +157,86 @@ export function Header() {
         </button>
       </div>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="max-h-[calc(100vh-80px)] overflow-y-auto border-t border-brand-primary/10 bg-white px-4 pb-6 pt-2 overscroll-contain lg:hidden"
+      <div
+        className={`overflow-hidden px-4 overscroll-contain transition-[max-height,opacity] duration-300 lg:hidden ${
+          mobileOpen
+            ? "max-h-[calc(100vh-80px)] border-t border-brand-primary/10 bg-white pb-6 pt-2 opacity-100"
+            : "max-h-0 bg-transparent pb-0 pt-0 opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="flex flex-col gap-2 overflow-y-auto">
+          <Link href="/" onClick={() => setMobileOpen(false)} className="rounded-lg px-3 py-2 hover:bg-brand-light">
+            Home
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileServicesOpen((value) => !value)}
+            className="inline-flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-semibold uppercase tracking-wide text-brand-dark/70 hover:bg-brand-light"
+            aria-label="Toggle mobile services list"
+            aria-expanded={mobileServicesOpen}
           >
-            <div className="flex flex-col gap-2">
-              <Link href="/" onClick={() => setMobileOpen(false)} className="rounded-lg px-3 py-2 hover:bg-brand-light">
-                Home
-              </Link>
-              <button
-                type="button"
-                onClick={() => setMobileServicesOpen((value) => !value)}
-                className="inline-flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-semibold uppercase tracking-wide text-brand-dark/70 hover:bg-brand-light"
-                aria-label="Toggle mobile services list"
-                aria-expanded={mobileServicesOpen}
-              >
-                Services
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform ${mobileServicesOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-              <AnimatePresence initial={false}>
-                {mobileServicesOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="mb-1 flex flex-col gap-1 pt-1">
-                      {services.map((service) => (
-                        <Link
-                          key={service.slug}
-                          href={`/services/${service.slug}`}
-                          onClick={() => setMobileOpen(false)}
-                          className="rounded-lg px-3 py-2 text-sm text-brand-dark/85 hover:bg-brand-light"
-                        >
-                          {service.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              {navLinks.slice(1).map((link) => (
+            Services
+            <ChevronDown
+              className={`h-4 w-4 transition-transform ${mobileServicesOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+          <div
+            className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-200 ${
+              mobileServicesOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+            }`}
+          >
+            <div className="mb-1 min-h-0 flex flex-col gap-1 pt-1">
+              {services.map((service) => (
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  key={service.slug}
+                  href={`/services/${service.slug}`}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2 hover:bg-brand-light"
+                  className="rounded-lg px-3 py-2 text-sm text-brand-dark/85 hover:bg-brand-light"
                 >
-                  {link.label}
+                  {service.name}
                 </Link>
               ))}
-              <a
-                href={SMS_LINK}
-                className="rounded-lg px-3 py-2 font-semibold hover:bg-brand-light"
-                aria-label="Text Iconic Landscaping"
-                data-track-event="click_to_text"
-                data-track-params='{"source":"header_mobile"}'
-              >
-                Text {PHONE_DISPLAY}
-              </a>
-              <a
-                href={CLIENT_HUB_LOGIN_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-lg px-3 py-2 font-semibold hover:bg-brand-light"
-                aria-label="Open client login"
-              >
-                Client Login
-              </a>
-              <Button
-                href="/contact#quote"
-                ariaLabel="Open full quote form"
-                className="mt-2 w-full"
-                trackEventName="cta_quote_click"
-                trackEventParams={{ source: "header_mobile" }}
-              >
-                Get a Free Quote
-              </Button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+          {navLinks.slice(1).map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="rounded-lg px-3 py-2 hover:bg-brand-light"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <a
+            href={SMS_LINK}
+            className="rounded-lg px-3 py-2 font-semibold hover:bg-brand-light"
+            aria-label="Text Iconic Landscaping"
+            data-track-event="click_to_text"
+            data-track-params='{"source":"header_mobile"}'
+          >
+            Text {PHONE_DISPLAY}
+          </a>
+          <a
+            href={CLIENT_HUB_LOGIN_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-lg px-3 py-2 font-semibold hover:bg-brand-light"
+            aria-label="Open client login"
+          >
+            Client Login
+          </a>
+          <Button
+            href="/contact#quote"
+            ariaLabel="Open full quote form"
+            className="mt-2 w-full"
+            trackEventName="cta_quote_click"
+            trackEventParams={{ source: "header_mobile" }}
+          >
+            Get a Free Quote
+          </Button>
+        </div>
+      </div>
     </header>
   );
 }

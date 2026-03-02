@@ -3,6 +3,10 @@
 import { useEffect } from "react";
 import { JOBBER_CLIENT_HUB_ID, JOBBER_FORM_URL, PHONE_DISPLAY, SMS_LINK } from "@/lib/constants";
 
+/**
+ * @deprecated Inline Jobber embed retained temporarily for rollback only.
+ * Prefer direct hosted form CTA via JobberQuoteCta.
+ */
 type JobberQuoteEmbedProps = {
   title?: string;
   subtitle?: string;

@@ -7,8 +7,8 @@ export function StickyQuoteBar() {
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-brand-primary/15 bg-white p-3 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] lg:hidden">
       <div className="mx-auto grid max-w-2xl grid-cols-2 items-center gap-2">
         <a
-          href="/contact#quote"
-          aria-label="Open full quote form"
+          href="#quote"
+          aria-label="Jump to quote form"
           data-track-event="cta_quote_click"
           data-track-params='{"source":"sticky_bar"}'
           className="inline-flex h-12 items-center justify-center rounded-full bg-brand-accent px-3 text-sm font-bold text-white"

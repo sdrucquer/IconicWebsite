@@ -49,32 +49,11 @@ export function WorkGallery() {
         Swipe to see more →
       </p>
 
-      <div className="mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 md:hidden">
-        {galleryPhotos.map((photo) => (
-          <article
-            key={`mobile-${photo.src}`}
-            className="group relative aspect-[4/3] min-w-[88%] snap-start overflow-hidden rounded-xl border border-brand-primary/12 bg-white shadow-soft"
-          >
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-            <div className="absolute inset-0 bg-transparent transition-colors duration-300 group-hover:bg-[rgba(28,74,30,0.72)]" />
-            <div className="absolute inset-x-0 bottom-0 p-3">
-              <p className="text-xs font-semibold text-white drop-shadow-sm">{photo.label}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <div className="mt-8 hidden grid-cols-1 gap-3 md:grid md:grid-cols-3">
+      <div className="mt-5 grid auto-cols-[88%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-2 md:mt-8 md:grid-flow-row md:grid-cols-3 md:snap-none md:overflow-visible">
         {galleryPhotos.map((photo) => (
           <article
             key={photo.src}
-            className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-brand-primary/12 bg-white shadow-soft"
+            className="group relative aspect-[4/3] snap-start overflow-hidden rounded-xl border border-brand-primary/12 bg-white shadow-soft"
           >
             <Image
               src={photo.src}

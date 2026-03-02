@@ -10,10 +10,6 @@ html {
   scroll-behavior: smooth;
 }
 
-img {
-  image-orientation: from-image;
-}
-
 body {
   @apply bg-brand-light text-brand-dark antialiased;
   background-image:
@@ -64,23 +60,6 @@ main {
     );
 }
 
-.google-marquee {
-  overflow: hidden;
-  width: 100%;
-}
-
-.google-marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marqueeScroll 38s linear infinite;
-  gap: 1rem;
-  padding: 0 1rem;
-}
-
-.google-marquee:hover .google-marquee-track {
-  animation-play-state: paused;
-}
-
 .google-review-card {
   width: 320px;
   border-radius: 1rem;
@@ -90,11 +69,7 @@ main {
   box-shadow: 0 10px 30px rgba(26, 26, 26, 0.08);
 }
 
-@keyframes marqueeScroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-50% - 0.5rem));
-  }
+.google-review-card-mobile {
+  width: min(86vw, 360px);
+  flex-shrink: 0;
 }
