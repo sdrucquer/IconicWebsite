@@ -4,10 +4,13 @@ Project photos used by the homepage and service pages:
 - leaf-cleanup-before.jpg
 - leaf-cleanup-working.jpg
 - leaf-cleanup-after.jpg
-- mowing.jpg
 - edging-trim.jpg
 - bush-trimming.jpg
 - brush-cleanup.jpg
 - brush-cleanup-during.jpg
+
+New organized folders:
+- home/
+- services/<slug>/
 
 These are real local photos imported from your media library.

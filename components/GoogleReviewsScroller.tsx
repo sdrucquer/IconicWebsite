@@ -94,11 +94,13 @@ export function GoogleReviewsScroller() {
   };
 
   return (
-    <section className="py-16 md:py-20 lg:py-24 xl:py-28" id="reviews">
+    <section className="py-10 md:py-14 lg:py-20 xl:py-24" id="reviews">
       <div className="home-shell">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="section-title lg:text-5xl">Verified Client Reviews</h2>
+            <h2 className="font-display text-[1.75rem] font-extrabold tracking-tight text-brand-dark md:text-4xl lg:text-5xl">
+              Verified Client Reviews
+            </h2>
             <p className="section-subtitle mt-2 lg:text-xl">
               <span className="inline-flex items-center gap-1 align-middle text-amber-500">
                 <Star className="h-4 w-4 fill-current" />
@@ -109,10 +111,20 @@ export function GoogleReviewsScroller() {
               </span>{" "}
               4.6 average across 40+ Google reviews from local homeowners.
             </p>
+            <Link
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noreferrer"
+              data-track-event="reviews_google_cta_click"
+              data-track-params='{"source":"reviews_section"}'
+              className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-brand-primary underline-offset-4 hover:text-brand-accent hover:underline"
+            >
+              Read reviews on Google <ExternalLink className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
 
-        <div className="mt-8 md:hidden">
+        <div className="mt-6 md:hidden">
           <div
             ref={carouselRef}
             className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 pr-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -125,7 +137,7 @@ export function GoogleReviewsScroller() {
                 ref={(el) => {
                   cardRefs.current[index] = el;
                 }}
-                className="google-review-card google-review-card-mobile min-h-[220px] snap-start shrink-0"
+                className="google-review-card google-review-card-mobile min-h-[190px] snap-start shrink-0"
               >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-accent text-sm font-bold text-white">
@@ -140,13 +152,13 @@ export function GoogleReviewsScroller() {
                     {review.sourceLabel} <ExternalLink className="h-3 w-3" />
                   </Link>
                 </div>
-                <p className="text-sm italic leading-7 text-brand-dark/80">&ldquo;{review.quote}&rdquo;</p>
-                <p className="mt-4 text-sm font-bold text-brand-dark">{review.name}</p>
+                <p className="text-sm italic leading-6 text-brand-dark/80">&ldquo;{review.quote}&rdquo;</p>
+                <p className="mt-3 text-sm font-bold text-brand-dark">{review.name}</p>
               </article>
             ))}
           </div>
 
-          <div className="mt-4 flex items-center justify-center gap-3">
+          <div className="mt-3 flex items-center justify-center gap-3">
             <button
               type="button"
               onClick={() => scrollToIndex((activeIndex - 1 + reviews.length) % reviews.length)}
@@ -202,19 +214,6 @@ export function GoogleReviewsScroller() {
               <p className="mt-4 text-sm font-bold text-brand-dark lg:text-base">{review.name}</p>
             </article>
           ))}
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <Link
-            href={GOOGLE_REVIEWS_URL}
-            target="_blank"
-            rel="noreferrer"
-            data-track-event="reviews_google_cta_click"
-            data-track-params='{"source":"reviews_section"}'
-            className="inline-flex items-center gap-2 rounded-full border border-brand-primary bg-white px-7 py-3.5 text-base font-semibold text-brand-primary hover:bg-brand-light"
-          >
-            Read reviews on Google <ExternalLink className="h-4 w-4" />
-          </Link>
         </div>
       </div>
     </section>

@@ -8,7 +8,6 @@ import {
   ClipboardCheck,
   Clock3,
   MapPin,
-  MessageSquare,
   PhoneCall,
   ShieldCheck
 } from "lucide-react";
@@ -29,15 +28,8 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     "Get a fast, no-pressure landscaping quote from Iconic Landscaping. Serving Pottstown, PA and surrounding areas with premium local service.",
   path: "/",
-  ogImagePath: "/photos/mowing.jpg"
+  ogImagePath: "/photos/home/hero.jpg"
 });
-
-const trustStrip = [
-  { title: "4.6 Google Rating", detail: "40+ verified reviews" },
-  { title: "500+ Customers", detail: "500+ in Greater Pottstown." },
-  { title: "Licensed & Insured", detail: "Covered on every property" },
-  { title: "Local Team", detail: "Student-run in Pottstown since 2023" }
-];
 
 const featuredServiceSlugs = new Set([
   "bed-cleanup",
@@ -53,29 +45,21 @@ const serviceMeta: Record<string, string> = {
   "spring-cleanup": "Full seasonal reset before peak growth"
 };
 
-const pillars = [
+const trustPoints = [
   {
-    title: "We Show Up (On Time)",
-    copy: "Reliable scheduling windows with a crew that respects your day.",
-    stat: "500+ Customers",
+    label: "500+ Customers",
+    icon: <CheckCircle2 className="h-5 w-5" />
+  },
+  {
+    label: "On-Time Scheduling",
     icon: <Clock3 className="h-5 w-5" />
   },
   {
-    title: "You'll Always Know What's Happening",
-    copy: "Clear updates before, during, and after every job.",
-    stat: "Same-day responses",
-    icon: <MessageSquare className="h-5 w-5" />
-  },
-  {
-    title: "We're Local - You've Seen Our Crew",
-    copy: "Pottstown-born team committed to nearby neighborhoods.",
-    stat: "Est. 2023 in Pottstown",
+    label: "Local to Pottstown",
     icon: <MapPin className="h-5 w-5" />
   },
   {
-    title: "Licensed & Insured on Every Job",
-    copy: "Professional coverage and process on every property.",
-    stat: "Covered every visit",
+    label: "Licensed & Insured",
     icon: <ShieldCheck className="h-5 w-5" />
   }
 ];
@@ -116,7 +100,7 @@ export default function HomePage() {
       <div className="pb-[86px] lg:pb-0">
         <section className="relative overflow-hidden bg-brand-dark text-white lg:min-h-[620px] xl:min-h-[700px]">
         <Image
-          src="/photos/mowing.jpg"
+          src="/photos/home/hero.jpg"
           alt="Clean landscaped property in Pottstown"
           fill
           sizes="100vw"
@@ -126,8 +110,8 @@ export default function HomePage() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,30,10,0.88)] via-[rgba(10,30,10,0.62)] to-[rgba(10,30,10,0.28)]" />
-        <div className="relative home-shell py-8 md:py-14 lg:flex lg:min-h-[620px] lg:items-center lg:py-24 xl:min-h-[700px] xl:py-28">
-          <div className="grid items-start gap-6 lg:w-full lg:grid-cols-[minmax(0,1fr)_minmax(520px,640px)] lg:items-center lg:gap-14 xl:gap-20">
+        <div className="relative home-shell py-10 md:py-16 lg:flex lg:min-h-[620px] lg:items-center lg:py-24 xl:min-h-[700px] xl:py-28">
+          <div className="grid items-start gap-10 md:gap-12 lg:w-full lg:grid-cols-[minmax(0,1fr)_minmax(520px,640px)] lg:items-center lg:gap-14 xl:gap-20">
             <div className="order-1">
               <p className="inline-block rounded-full border border-white/25 px-3 py-1 text-[0.7rem] uppercase tracking-[0.12em] text-white/80">
                 📍 Pottstown, PA
@@ -135,8 +119,8 @@ export default function HomePage() {
               <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.4rem,7vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.02em] lg:max-w-none lg:text-[clamp(3.9rem,5.8vw,7.25rem)]">
                 Make Your Property Iconic.
               </h1>
-              <p className="mt-4 max-w-xl text-[1.15rem] leading-relaxed text-white/78 lg:max-w-[62ch] lg:text-[1.4rem]">
-                Premium landscaping from a local Pottstown crew that communicates clearly and executes clean.
+              <p className="mt-6 max-w-xl text-[1.03rem] leading-[1.55] text-white/78 md:text-[1.1rem] lg:max-w-[62ch] lg:text-[1.35rem]">
+                Premium landscaping in Pottstown with fast quotes and clear communication.
               </p>
             </div>
 
@@ -145,15 +129,15 @@ export default function HomePage() {
               <ul className="mt-4 space-y-2.5 text-sm text-brand-dark/85 lg:space-y-3 lg:text-base">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Fast quote response and scheduling clarity
+                  Fast quote turnaround
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Clear pricing and scope before work begins
+                  Clear scope and pricing
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Local, licensed, and insured crew
+                  Local, licensed, insured crew
                 </li>
               </ul>
               <Button
@@ -167,7 +151,7 @@ export default function HomePage() {
               </Button>
               <a
                 href={SMS_LINK}
-                className="mt-3 inline-flex w-full items-center justify-center gap-2 text-sm font-semibold text-brand-dark/70 hover:text-brand-primary lg:text-base"
+                className="mt-2 inline-flex w-full items-center justify-center gap-1.5 text-xs font-semibold text-brand-dark/60 underline-offset-4 hover:text-brand-primary hover:underline lg:text-sm"
                 aria-label="Text us"
                 data-track-event="click_to_text"
                 data-track-params='{"source":"home_hero"}'
@@ -176,51 +160,32 @@ export default function HomePage() {
               </a>
             </aside>
           </div>
-          <p className="mt-4 text-center text-xs font-semibold text-white/75 lg:hidden">Scroll down to start your quote ↓</p>
-        </div>
-      </section>
-
-        <section className="bg-[#111810] text-white">
-        <div className="home-shell">
-          <div className="grid grid-cols-2 gap-2 py-2 md:grid-cols-4 md:gap-0 md:py-0 lg:py-2 xl:py-3">
-            {trustStrip.map((item, index) => (
-              <article
-                key={item.title}
-                className={`rounded-md px-3 py-2 md:rounded-none md:px-5 md:py-5 lg:px-9 lg:py-8 xl:px-10 ${index < trustStrip.length - 1 ? "md:border-r md:border-white/15" : ""}`}
-              >
-                <p className={`text-sm font-semibold lg:text-[1.05rem] xl:text-[1.12rem] ${index === 0 ? "text-brand-accent" : "text-white"}`}>
-                  {item.title}
-                </p>
-                <p className="mt-1 text-xs text-white/72 lg:text-[0.98rem]">{item.detail}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-        <section className="home-shell py-10 md:py-14 lg:py-20 xl:py-24">
-        <div className="rounded-2xl border border-brand-primary/15 bg-[#faf8f3] p-5 shadow-card md:p-7 lg:p-10 xl:p-12">
-          <h2 className="font-display text-2xl font-extrabold text-brand-dark md:text-3xl lg:text-4xl xl:text-[2.6rem]">Why homeowners choose Iconic</h2>
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6 xl:grid-cols-4 xl:gap-7">
-            {pillars.map((pillar) => (
-              <article
-                key={pillar.title}
-                className="rounded-xl border border-slate-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] md:p-6 lg:p-7"
-              >
-                <div className="mb-3 inline-flex items-center justify-center rounded-full bg-[#ebf5ec] p-2.5 text-brand-primary lg:p-3">
-                  {pillar.icon}
-                </div>
-                <h3 className="text-base font-bold text-brand-dark lg:text-lg">{pillar.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-brand-dark/75 lg:text-base">{pillar.copy}</p>
-                <p className="mt-3 text-sm font-bold text-brand-primary lg:text-base">{pillar.stat}</p>
-              </article>
-            ))}
-          </div>
         </div>
       </section>
 
         <GoogleReviewsScroller />
         <WorkGallery />
+
+        <section className="home-shell py-8 md:py-12 lg:py-16 xl:py-20">
+          <div className="rounded-2xl border border-brand-primary/15 bg-[#faf8f3] p-5 shadow-card md:p-7 lg:p-9">
+            <h2 className="font-display text-2xl font-extrabold text-brand-dark md:text-3xl lg:text-4xl">
+              Why Homeowners Choose Iconic
+            </h2>
+            <div className="mt-4 grid grid-cols-2 gap-3 md:mt-6 md:gap-4">
+              {trustPoints.map((point) => (
+                <article key={point.label} className="rounded-xl border border-slate-200 bg-white p-4 shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
+                  <div className="inline-flex items-center justify-center rounded-full bg-[#ebf5ec] p-2 text-brand-primary">
+                    {point.icon}
+                  </div>
+                  <p className="mt-2 text-sm font-semibold leading-snug text-brand-dark md:text-base">{point.label}</p>
+                </article>
+              ))}
+            </div>
+            <p className="mt-4 text-sm text-brand-dark/70 md:text-base">
+              Reliable communication. Clean work. No surprises.
+            </p>
+          </div>
+        </section>
 
         <section className="home-shell py-16 md:py-20 lg:py-24 xl:py-28">
         <h2 className="section-title lg:text-5xl">Most Requested Services</h2>

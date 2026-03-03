@@ -107,7 +107,7 @@ main {
 }
 
 .google-review-card-mobile {
-  width: min(86vw, 360px);
+  width: min(72vw, 300px);
   flex-shrink: 0;
 }
 
@@ -121,5 +121,59 @@ main {
 @media (min-width: 1536px) {
   .google-review-card {
     padding: 1.75rem;
+  }
+}
+
+.social-proof-ticker {
+  background: #111810;
+  color: #ffffff;
+}
+
+.social-proof-shell {
+  min-height: 76px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+
+.social-proof-static {
+  text-align: center;
+}
+
+.social-proof-stars {
+  color: rgba(217, 180, 95, 0.95);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  font-size: 1rem;
+}
+
+.social-proof-line {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.social-proof-line-muted {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+@media (max-width: 767px) {
+  .social-proof-shell {
+    min-height: 72px;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .social-proof-stars {
+    font-size: 0.95rem;
+  }
+
+  .social-proof-line {
+    font-size: 0.83rem;
   }
 }

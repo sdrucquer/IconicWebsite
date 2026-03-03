@@ -33,7 +33,7 @@ export const resourceArticles: ResourceArticle[] = [
     title: "Spring Cleanup Checklist for Pottstown Homeowners",
     summary:
       "A practical spring cleanup plan for suburban properties in and around Pottstown, including timing, priorities, and common mistakes.",
-    heroImage: "/photos/mowing.jpg",
+    heroImage: "/photos/home/hero.jpg",
     publishDate: "2026-03-02",
     updatedDate: "2026-03-02",
     author: "Iconic Landscaping Team",

@@ -2,34 +2,29 @@ import Image from "next/image";
 
 const galleryPhotos = [
   {
-    src: "/photos/mowing.jpg",
-    alt: "Lawn mowing in progress on a residential property",
-    label: "Mowing - Pottstown"
+    src: "/photos/home/after/after-1.jpg",
+    alt: "Completed landscaping after photo 1",
+    label: "Spring Cleanup - Pottstown"
   },
   {
-    src: "/photos/bush-trimming.jpg",
-    alt: "Bush trimming and structure reset in front landscaping",
-    label: "Bush Trimming - Royersford"
+    src: "/photos/home/after/after-2.jpg",
+    alt: "Completed landscaping after photo 2",
+    label: "Bed Cleanup + Mulch - Pottstown"
   },
   {
-    src: "/photos/brush-cleanup-during.jpg",
-    alt: "Brush cleanup and overgrowth clearing in progress",
-    label: "Brush Cleanup - Douglassville"
+    src: "/photos/home/after/after-3.jpg",
+    alt: "Completed landscaping after photo 3",
+    label: "Landscape Refresh - Royersford"
   },
   {
-    src: "/photos/team-crew.jpg",
-    alt: "Iconic Landscaping team on site",
-    label: "Local Crew - Greater Pottstown"
+    src: "/photos/home/after/after-4.jpg",
+    alt: "Completed landscaping after photo 4",
+    label: "Property Cleanup - Douglassville"
   },
   {
-    src: "/photos/leaf-cleanup-before.jpg",
-    alt: "Property before leaf cleanup with heavy coverage",
-    label: "Leaf Cleanup (Before) - Spring City"
-  },
-  {
-    src: "/photos/edging-trim.jpg",
-    alt: "Clean edging and trim detail around planting beds",
-    label: "Edging - Chester Springs"
+    src: "/photos/home/after/after-5.jpg",
+    alt: "Completed landscaping after photo 5",
+    label: "Curb Appeal Upgrade - Chester Springs"
   }
 ];
 

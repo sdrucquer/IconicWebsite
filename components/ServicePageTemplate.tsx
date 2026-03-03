@@ -7,17 +7,31 @@ import { Button } from "@/components/Button";
 import { ServiceCard } from "@/components/ServiceCard";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { getServiceIcon } from "@/components/ServiceIcon";
+import { BeforeAfterScrollReveal } from "@/components/BeforeAfterScrollReveal";
 import { PHONE_DISPLAY, PHONE_LINK } from "@/lib/constants";
 
 type ServicePageTemplateProps = {
   service: Service;
 };
 
+function getGalleryImageLabel(src: string, index: number) {
+  const normalized = src.toLowerCase();
+
+  if (normalized.includes("/before.")) return "Before";
+  if (normalized.includes("/during.")) return "During";
+  if (normalized.includes("/after.")) return "After";
+
+  return `Project #${index + 1}`;
+}
+
 export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
   const related = service.related
     .map((slug) => serviceMap[slug])
     .filter((item): item is Service => Boolean(item));
   const detail = serviceDetails[service.slug];
+  const beforeImage = detail.gallery.find((src) => src.toLowerCase().includes("/before."));
+  const afterImage = detail.gallery.find((src) => src.toLowerCase().includes("/after."));
+  const showBedCleanupMorph = service.slug === "bed-cleanup" && Boolean(beforeImage) && Boolean(afterImage);
 
   return (
     <>
@@ -151,19 +165,28 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
         </div>
       </section>
 
-      <section className="section-shell py-6 lg:py-10">
-        <h2 className="section-title">Recent Project Examples</h2>
-        <div className="mt-6 grid gap-5 md:grid-cols-3">
-          {detail.gallery.map((src, index) => (
-            <div key={`${src}-${index}`} className="overflow-hidden rounded-2xl border border-brand-primary/10 bg-white shadow-soft">
-              <div className="relative h-64 w-full">
-                <Image src={src} alt={`${service.name} project example ${index + 1}`} fill className="object-cover" />
+      {showBedCleanupMorph && beforeImage && afterImage ? (
+        <BeforeAfterScrollReveal
+          beforeSrc={beforeImage}
+          afterSrc={afterImage}
+          beforeAlt="Bed cleanup project before service"
+          afterAlt="Bed cleanup project after service"
+        />
+      ) : (
+        <section className="section-shell py-6 lg:py-10">
+          <h2 className="section-title">Recent Project Examples</h2>
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
+            {detail.gallery.map((src, index) => (
+              <div key={`${src}-${index}`} className="overflow-hidden rounded-2xl border border-brand-primary/10 bg-white shadow-soft">
+                <div className="relative h-64 w-full">
+                  <Image src={src} alt={`${service.name} project example ${index + 1}`} fill className="object-cover" />
+                </div>
+                <p className="px-4 py-3 text-sm font-semibold text-brand-dark">{getGalleryImageLabel(src, index)}</p>
               </div>
-              <p className="px-4 py-3 text-sm font-semibold text-brand-dark">Project #{index + 1}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="section-shell py-16 lg:py-20">
         <div className="grid gap-10 lg:grid-cols-2">

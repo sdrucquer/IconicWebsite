@@ -25,8 +25,8 @@ export type ServiceDetails = {
 
 export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
   "bed-cleanup": {
-    heroImage: "/photos/property-finish.jpg",
-    gallery: ["/photos/property-finish.jpg", "/photos/leaf-cleanup-before.jpg", "/photos/leaf-cleanup-after.jpg"],
+    heroImage: "/photos/services/bed-cleanup/hero.jpg",
+    gallery: ["/photos/services/bed-cleanup/before.jpg", "/photos/services/bed-cleanup/during.jpg", "/photos/services/bed-cleanup/after.jpg"],
     heroTitle: "Professional Bed Cleanup in Pottstown and Surrounding Areas",
     heroSubtitle: "Transform your garden with expert bed cleanup services from Iconic Landscaping.",
     topSectionTitle: "Why Choose Our Bed Cleanup Service",
@@ -71,8 +71,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ctaButtonLabel: "Get an Estimate"
   },
   mulching: {
-    heroImage: "/photos/property-finish.jpg",
-    gallery: ["/photos/property-finish.jpg", "/photos/edging-trim.jpg", "/photos/team-crew.jpg"],
+    heroImage: "/photos/services/mulching/hero.jpg",
+    gallery: ["/photos/services/mulching/before.jpg", "/photos/services/mulching/during.jpg", "/photos/services/mulching/after.jpg"],
     idealFor: [
       "Beds with fading, thin, or uneven mulch coverage.",
       "Properties where weeds keep returning through old mulch.",
@@ -99,8 +99,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   "leaf-cleanup": {
-    heroImage: "/photos/leaf-cleanup-working.jpg",
-    gallery: ["/photos/leaf-cleanup-before.jpg", "/photos/leaf-cleanup-working.jpg", "/photos/leaf-cleanup-after.jpg"],
+    heroImage: "/photos/services/leaf-cleanup/hero.jpg",
+    gallery: ["/photos/services/leaf-cleanup/before.jpg", "/photos/services/leaf-cleanup/during.jpg", "/photos/services/leaf-cleanup/after.jpg"],
     idealFor: [
       "Yards with heavy seasonal leaf buildup.",
       "Properties with wooded edges and hard-to-clear corners.",
@@ -127,8 +127,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   "bush-trimming": {
-    heroImage: "/photos/bush-trimming.jpg",
-    gallery: ["/photos/bush-trimming.jpg", "/photos/property-finish.jpg", "/photos/edging-trim.jpg"],
+    heroImage: "/photos/services/bush-trimming/hero.jpg",
+    gallery: ["/photos/services/bush-trimming/before.jpg", "/photos/services/bush-trimming/during.jpg", "/photos/services/bush-trimming/after.jpg"],
     idealFor: [
       "Overgrown shrubs affecting property appearance.",
       "Bushes blocking windows, walkways, or lighting.",
@@ -155,8 +155,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   "brush-cleanup": {
-    heroImage: "/photos/brush-cleanup.jpg",
-    gallery: ["/photos/brush-cleanup.jpg", "/photos/brush-cleanup-during.jpg", "/photos/property-finish.jpg"],
+    heroImage: "/photos/services/brush-cleanup/hero.jpg",
+    gallery: ["/photos/services/brush-cleanup/before.jpg", "/photos/services/brush-cleanup/during.jpg", "/photos/services/brush-cleanup/after.jpg"],
     idealFor: [
       "Areas with invasive growth and unmanaged brush.",
       "Fence lines and edges overtaken by vines.",
@@ -183,8 +183,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   edging: {
-    heroImage: "/photos/edging-trim.jpg",
-    gallery: ["/photos/edging-trim.jpg", "/photos/property-finish.jpg", "/photos/team-crew.jpg"],
+    heroImage: "/photos/services/edging/hero.jpg",
+    gallery: ["/photos/services/edging/before.jpg", "/photos/services/edging/during.jpg", "/photos/services/edging/after.jpg"],
     idealFor: [
       "Homes needing cleaner visual separation of beds and lawn.",
       "Properties where existing bed lines have softened.",
@@ -211,8 +211,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   weeding: {
-    heroImage: "/photos/property-finish.jpg",
-    gallery: ["/photos/property-finish.jpg", "/photos/leaf-cleanup-before.jpg", "/photos/leaf-cleanup-after.jpg"],
+    heroImage: "/photos/services/weeding/hero.jpg",
+    gallery: ["/photos/services/weeding/before.jpg", "/photos/services/weeding/during.jpg", "/photos/services/weeding/after.jpg"],
     idealFor: [
       "Beds with recurring weed pressure.",
       "Properties where ornamentals are being crowded out.",
@@ -239,8 +239,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   planting: {
-    heroImage: "/photos/property-finish.jpg",
-    gallery: ["/photos/property-finish.jpg", "/photos/team-crew.jpg", "/photos/edging-trim.jpg"],
+    heroImage: "/photos/services/planting/hero.jpg",
+    gallery: ["/photos/services/planting/before.jpg", "/photos/services/planting/during.jpg", "/photos/services/planting/after.jpg"],
     idealFor: [
       "Homeowners refreshing curb appeal with new color and structure.",
       "Beds that need seasonal updates.",
@@ -267,8 +267,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   "off-site-removal": {
-    heroImage: "/photos/brush-cleanup-during.jpg",
-    gallery: ["/photos/brush-cleanup-during.jpg", "/photos/leaf-cleanup-after.jpg", "/photos/brush-cleanup.jpg"],
+    heroImage: "/photos/services/off-site-removal/hero.jpg",
+    gallery: ["/photos/services/off-site-removal/before.jpg", "/photos/services/off-site-removal/during.jpg", "/photos/services/off-site-removal/after.jpg"],
     idealFor: [
       "Cleanup projects producing heavy debris volume.",
       "Properties where curb piles are not desired.",
@@ -295,8 +295,8 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ]
   },
   "spring-cleanup": {
-    heroImage: "/photos/mowing.jpg",
-    gallery: ["/photos/mowing.jpg", "/photos/leaf-cleanup-after.jpg", "/photos/property-finish.jpg"],
+    heroImage: "/photos/services/spring-cleanup/hero.jpg",
+    gallery: ["/photos/services/spring-cleanup/before.jpg", "/photos/services/spring-cleanup/during.jpg", "/photos/services/spring-cleanup/after.jpg"],
     idealFor: [
       "Properties coming out of winter with debris and overgrowth.",
       "Homeowners preparing for regular seasonal maintenance.",
