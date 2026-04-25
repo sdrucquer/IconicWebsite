@@ -26,12 +26,12 @@ const serviceBundles = [
   },
   {
     title: "Seasonal Recovery",
-    items: ["Leaf Cleanup", "Spring Cleanup", "Bush Trimming"],
+    items: ["Leaf Removal", "Spring Cleanup", "Bush Trimming"],
     copy: "Built for properties coming out of rough weather or heavy seasonal debris."
   },
   {
     title: "Overgrowth Control",
-    items: ["Brush Cleanup", "Off-Site Removal", "Weeding"],
+    items: ["Brush Cleanup", "Off-Site Debris Removal", "Bed Cleanup"],
     copy: "Clears dense growth and gets unmanaged areas back to clean, usable condition."
   }
 ];

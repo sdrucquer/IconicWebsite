@@ -109,7 +109,7 @@ export function GoogleReviewsScroller() {
                 <Star className="h-4 w-4 fill-current" />
                 <Star className="h-4 w-4 fill-current opacity-60" />
               </span>{" "}
-              4.6 average across 40+ Google reviews from local homeowners.
+              4.6 average across 56 Google reviews from local homeowners.
             </p>
             <Link
               href={GOOGLE_REVIEWS_URL}

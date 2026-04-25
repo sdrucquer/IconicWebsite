@@ -6,7 +6,6 @@ import {
   Shovel,
   Trash2,
   Trees,
-  Sprout,
   Truck
 } from "lucide-react";
 
@@ -26,8 +25,6 @@ export function getServiceIcon(slug: string) {
       return <Trees className={iconClass} />;
     case "edging":
       return <Shovel className={iconClass} />;
-    case "weeding":
-      return <Sprout className={iconClass} />;
     case "planting":
       return <Shrub className={iconClass} />;
     case "off-site-removal":

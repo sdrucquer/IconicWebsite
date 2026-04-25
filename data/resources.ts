@@ -122,7 +122,7 @@ export const resourceArticles: ResourceArticle[] = [
       "Final detail pass and hardscape cleanup"
     ],
     costRange: "Installed projects commonly range from $350-$2,000+ based on volume and prep requirements",
-    relatedServiceSlugs: ["mulching", "bed-cleanup", "edging", "weeding"],
+    relatedServiceSlugs: ["mulching", "bed-cleanup", "edging"],
     relatedAreaSlugs: ["pottstown", "royersford", "chester-springs"],
     faqs: [
       {
@@ -138,16 +138,16 @@ export const resourceArticles: ResourceArticle[] = [
   },
   {
     slug: "leaf-cleanup-timing-pennsylvania",
-    title: "Leaf Cleanup Timing in Pennsylvania: When to Book and Why",
+    title: "Leaf Removal Timing in Pennsylvania: When to Book and Why",
     summary:
-      "A local timing framework for fall and late-season leaf cleanup so turf and beds are protected before winter damage sets in.",
+      "A local timing framework for fall and late-season leaf removal so turf and beds are protected before winter damage sets in.",
     heroImage: "/photos/leaf-cleanup-working.jpg",
     publishDate: "2026-03-02",
     updatedDate: "2026-03-02",
     author: "Iconic Landscaping Team",
     readTime: "4 min",
     intro:
-      "The best leaf cleanup plan is not one visit at the end. Properties with heavy tree cover often need staged cleanup windows to avoid lawn matting.",
+      "The best leaf removal plan is not one visit at the end. Properties with heavy tree cover often need staged cleanup windows to avoid lawn matting.",
     sections: [
       {
         heading: "Why delayed cleanup causes problems",
@@ -180,7 +180,7 @@ export const resourceArticles: ResourceArticle[] = [
           "Many homes with moderate to heavy tree cover do. A two-visit plan usually protects lawn health and avoids extreme end-of-season buildup."
       },
       {
-        question: "Can leaf cleanup include bed detail work?",
+        question: "Can leaf removal include bed detail work?",
         answer: "Yes. Cleanup can include beds, fence lines, and transitions so the property has a complete finish."
       }
     ]

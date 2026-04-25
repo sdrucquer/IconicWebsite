@@ -1,183 +1,387 @@
+export type ServiceReview = {
+  quote: string;
+  author: string;
+  location?: string;
+};
+
 export type Service = {
   slug: string;
   name: string;
   shortDescription: string;
   tagline: string;
   included: string[];
+  notIncluded?: string[];
   whyItMatters: string[];
+  whoNeedsIt: string;
+  bestSeason: string;
+  pricingGuidance: string;
+  addOns: string[];
   related: string[];
+  reviews: ServiceReview[];
+  mulchTypes?: string[];
 };
 
 export const services: Service[] = [
   {
+    slug: "spring-cleanup",
+    name: "Spring Cleanup",
+    shortDescription:
+      "Clear winter debris, dead growth, and messy beds so your property is ready for spring and summer.",
+    tagline: "Get your property ready for the season with one clean, organized reset.",
+    included: [
+      "Removal of dead plant material, leaves, and winter debris from beds",
+      "Bed edging to redefine clean borders",
+      "Final walkthrough before the crew leaves",
+      "Off-site debris removal available as an add-on"
+    ],
+    notIncluded: ["Planting", "Sod work", "Mowing"],
+    whyItMatters: [
+      "Winter leaves behind matted leaves, dead growth, and tired bed edges. A spring cleanup resets the property before growth accelerates.",
+      "Homeowners often combine spring cleanup with mulching, edging, and bush trimming so the property is handled in one efficient visit."
+    ],
+    whoNeedsIt:
+      "Homeowners who want their property looking sharp after winter, especially people listing homes, HOA neighborhoods, and annual seasonal clients.",
+    bestSeason: "March through April. Spring books fast, so early scheduling matters.",
+    pricingGuidance:
+      "Contact us for a free quote. Pricing depends on property size, debris volume, bed count, and add-on services.",
+    addOns: ["Mulching", "Edging", "Bush Trimming", "Off-Site Debris Removal"],
+    related: ["bed-cleanup", "mulching", "leaf-cleanup"],
+    reviews: [
+      {
+        quote:
+          "Iconic did a wonderful job with our spring clean up and mulching. They were professional, dependable and hardworking.",
+        author: "Zoe Baker",
+        location: "Pottstown"
+      },
+      {
+        quote: "Everyone was professional, hard working, and great with communication. I will definitely use again!",
+        author: "Jody March"
+      },
+      {
+        quote: "They worked during a torrential downpour and still managed to do an excellent job.",
+        author: "Lisa Hickey"
+      }
+    ]
+  },
+  {
     slug: "bed-cleanup",
     name: "Bed Cleanup",
-    shortDescription: "Debris out, weeds handled, edges reset and beds prepped for mulch.",
-    tagline: "Reset your planting beds so the rest of your property looks intentional.",
+    shortDescription: "Weed removal, debris removal, and clean bed edges for flower beds that look sharp again.",
+    tagline: "Overgrown beds, messy edges, and weeds taking over? We handle the reset.",
     included: [
-      "Removal of sticks, dead plants, and seasonal debris",
-      "Targeted weeding with roots pulled whenever possible",
-      "Fresh bed edging to define borders",
-      "Final prep so beds are ready for mulch or planting"
+      "Weed removal and clearing of unwanted growth",
+      "Clean edging along all bed borders",
+      "Debris removal from beds",
+      "Final walkthrough before the crew leaves"
     ],
     whyItMatters: [
-      "Most yards look messy because the beds are neglected, not because the whole property is in bad shape. A proper cleanup instantly sharpens curb appeal and makes maintenance easier the rest of the season.",
-      "Our bed cleanups are priced by section based on labor and difficulty, so you get a fair quote tied to actual work instead of a vague flat number."
+      "Most yards look messy because the beds are neglected, not because the entire property is in bad shape. A proper bed cleanup quickly improves curb appeal.",
+      "When bed cleanup is paired with mulch, clients usually need far less weeding throughout the season."
     ],
-    related: ["mulching", "weeding", "edging"]
+    whoNeedsIt:
+      "Homeowners with established beds that need seasonal maintenance or a reset, especially mid-season when beds get ahead of people.",
+    bestSeason: "Spring and fall, with availability throughout the active season.",
+    pricingGuidance:
+      "Contact us for a free quote. Pricing depends on buildup, bed complexity, property size, and whether it is bundled with other services.",
+    addOns: ["Mulching", "Edging", "Off-Site Debris Removal", "Bush Trimming"],
+    related: ["mulching", "edging", "spring-cleanup"],
+    reviews: [
+      {
+        quote:
+          "I needed clearing out of weeds and new mulch. The guys were friendly, professional and did a really nice job.",
+        author: "Kathy J. Schaffer",
+        location: "Pottstown"
+      },
+      {
+        quote: "Iconic was prompt in communicating through texts and emails. Group followed instructions, worked carefully, and cleaned up well.",
+        author: "Jean Herbranson"
+      },
+      {
+        quote:
+          "They were communicative, hardworking, and great. You can tell they care about what they're doing and that they are doing work that they are proud of.",
+        author: "Amanda Yoder",
+        location: "Spring City"
+      }
+    ]
   },
   {
     slug: "mulching",
     name: "Mulching",
-    shortDescription: "Installed mulch that locks in moisture, suppresses weeds, and finishes the property.",
-    tagline: "The clean, finished look every well-kept property needs.",
+    shortDescription:
+      "Fresh mulch installed to the right depth for cleaner beds, better moisture retention, and instant curb appeal.",
+    tagline: "Our most popular service because the before and after is immediate.",
     included: [
-      "Mulch quantity planning and full delivery coordination",
-      "Installation with even coverage and clean transitions",
-      "Black mulch option (our most requested color)",
-      "Complete install process handled by our crew"
+      "Bulk mulch delivery coordinated with the client",
+      "Existing mulch depth checked before ordering",
+      "Installation to a clean, proper finished depth",
+      "Clean edges around all mulched areas",
+      "Debris cleared before install"
     ],
+    notIncluded: ["Grading", "Drainage work"],
     whyItMatters: [
-      "Fresh mulch does more than look good. It keeps soil moisture stable, reduces weed pressure, and protects plant roots through weather swings.",
-      "Our installed base rate starts at $130 per yard. We source, coordinate, and install, so you do not have to manage deliveries or materials."
+      "Fresh mulch protects beds, retains moisture, suppresses weeds, and gives the property a finished look.",
+      "We measure existing mulch first and only add what is needed, so clients are not overcharged for unnecessary material."
     ],
-    related: ["bed-cleanup", "edging", "planting"]
-  },
-  {
-    slug: "leaf-cleanup",
-    name: "Leaf Cleanup",
-    shortDescription: "Seasonal leaf clearing to keep turf healthy and properties tidy.",
-    tagline: "Clear leaves before they smother your lawn and beds.",
-    included: [
-      "Blow-out and collection from lawn and beds",
-      "Detailed cleanup around fences, shrubs, and walkways",
-      "Bagging and removal from site when needed",
-      "Final pass for a clean, even finish"
+    whoNeedsIt: "Any homeowner with garden beds, especially after cleanup in spring or before winter protection in fall.",
+    bestSeason: "March through May and September through October.",
+    pricingGuidance:
+      "Contact us for a free quote. Smaller jobs start around $250. Larger jobs with 3+ yards often run about $130-$140 per yard for materials and labor combined. Most bundled cleanup and mulch jobs are $500+.",
+    addOns: ["Bed Cleanup", "Edging", "Off-Site Debris Removal"],
+    related: ["bed-cleanup", "edging", "planting"],
+    reviews: [
+      {
+        quote:
+          "I reached out to Iconic Landscaping to clean and mulch my flowerbeds. I was very impressed with response times, scheduling and updates.",
+        author: "Wendy Hanna",
+        location: "Royersford"
+      },
+      {
+        quote:
+          "They are very professional and communication was great. They did an awesome job creating a new flower bed and mulching all existing beds.",
+        author: "Karen Michaels",
+        location: "Chester Springs"
+      },
+      {
+        quote:
+          "My yard looks great. They cleared away 12 bags of debris, edged, trimmed and mulched. They were professional, respectful and worked really hard.",
+        author: "Denise Schmidt",
+        location: "Pottstown"
+      }
     ],
-    whyItMatters: [
-      "Leaf buildup traps moisture and blocks light, which can stress turf and create muddy, matted sections in spring.",
-      "Regular cleanup protects lawn health and keeps your home looking maintained even in heavy leaf season."
-    ],
-    related: ["spring-cleanup", "off-site-removal", "bed-cleanup"]
-  },
-  {
-    slug: "bush-trimming",
-    name: "Bush Trimming",
-    shortDescription: "Structured trimming that keeps shrubs healthy and visually balanced.",
-    tagline: "Shape overgrowth into clean lines without overcutting.",
-    included: [
-      "Selective trimming for shape and structure",
-      "Height and spread control around windows and walkways",
-      "Dead growth removal to promote healthier regrowth",
-      "Debris cleanup after trimming"
-    ],
-    whyItMatters: [
-      "Overgrown bushes quickly make a property look neglected and can block light, paths, and visibility.",
-      "A proper trim keeps shrubs clean and full while preserving the natural look of your landscape design."
-    ],
-    related: ["spring-cleanup", "bed-cleanup", "brush-cleanup"]
-  },
-  {
-    slug: "brush-cleanup",
-    name: "Brush Cleanup",
-    shortDescription: "Cutback and removal of invasive plants, dense overgrowth, and tangled vines.",
-    tagline: "Take back areas that have become too overgrown to maintain.",
-    included: [
-      "Removal of invasive brush and dense growth",
-      "Cutting back unmanaged vines and thickets",
-      "Clearing fence lines, bed edges, and transitions",
-      "Haul-away and off-site disposal of all cleared material"
-    ],
-    whyItMatters: [
-      "Brush spreads fast and can overwhelm beds, trees, and fence lines if left alone for even one season.",
-      "We clear it fully and haul everything off-site so the area is usable, visible, and ready for future improvements."
-    ],
-    related: ["off-site-removal", "spring-cleanup", "bush-trimming"]
+    mulchTypes: [
+      "Black dyed mulch",
+      "Brown dyed mulch",
+      "Red dyed mulch",
+      "Double shredded hardwood mulch",
+      "Triple shredded hardwood mulch",
+      "Premium hardwood mulch",
+      "Natural hardwood mulch",
+      "Pine bark mulch",
+      "Mini pine bark nuggets",
+      "Large pine bark nuggets",
+      "Hemlock bark mulch",
+      "Hardwood bark mulch",
+      "Cedar mulch",
+      "Cedar chips",
+      "Wood chips",
+      "Playground mulch",
+      "Leaf compost",
+      "Leaf mulch",
+      "Mushroom compost",
+      "Compost blends",
+      "Garden soil and compost mix",
+      "Pine straw",
+      "Straw mulch"
+    ]
   },
   {
     slug: "edging",
     name: "Edging",
-    shortDescription: "Crisp bed and hardscape lines that make the whole property look finished.",
-    tagline: "One of the highest-impact upgrades for immediate curb appeal.",
+    shortDescription: "Crisp bed, walkway, and driveway lines that make the whole property look intentional.",
+    tagline: "Sharp edges separate a yard that looks okay from one that looks finished.",
     included: [
-      "Fresh edge creation along planting beds",
-      "Re-cutting and cleaning up existing edges",
-      "Hardscape transitions around paths and patios",
-      "Final detail pass for consistent line quality"
+      "Precision edging along bed borders, walkways, and driveways",
+      "Cleanup of edging debris",
+      "Clean visual definition before mulch or after cleanup"
     ],
     whyItMatters: [
-      "Clean edging creates definition between lawn, beds, and hardscaping. It is one of the fastest ways to make a property look professionally maintained.",
-      "When paired with bed cleanup and mulch, edging gives your landscape sharp lines that hold the overall look together."
+      "Clean edges create definition between beds, turf, and hardscaping. It is one of the fastest visual upgrades on a property.",
+      "Edging is included with spring cleanup and bed cleanup, and it can be booked as a standalone service when a property needs a polished finish."
     ],
-    related: ["mulching", "bed-cleanup", "weeding"]
+    whoNeedsIt: "Homeowners who want a polished look, usually as part of cleanup or mulching.",
+    bestSeason: "Spring through fall.",
+    pricingGuidance:
+      "Contact us for a free quote. Edging is included with spring cleanup and bed cleanup. Standalone pricing depends on linear footage and property size.",
+    addOns: ["Bed Cleanup", "Mulching", "Spring Cleanup"],
+    related: ["mulching", "bed-cleanup", "spring-cleanup"],
+    reviews: [
+      {
+        quote:
+          "My yard looks great. They cleared away 12 bags of debris, edged, trimmed and mulched. They were professional, respectful and worked really hard.",
+        author: "Denise Schmidt",
+        location: "Pottstown"
+      },
+      {
+        quote: "Guys did an excellent job of edging and mulching. Clean, polite and hard working students! Recommend!",
+        author: "D.",
+        location: "Google Review"
+      }
+    ]
   },
   {
-    slug: "weeding",
-    name: "Weeding",
-    shortDescription: "Hands-on weed removal that restores beds without damaging valuable plants.",
-    tagline: "Keep weed pressure down before it takes over your landscape.",
+    slug: "bush-trimming",
+    name: "Bush Trimming",
+    shortDescription: "Shrub and bush shaping that cleans up overgrowth without getting into tree work.",
+    tagline: "Overgrown shrubs can make an otherwise clean property look neglected.",
     included: [
-      "Hand pulling throughout planting beds",
-      "Root removal when conditions allow",
-      "Targeted cleanup around ornamentals and perennials",
-      "Debris collection and disposal"
+      "Trimming and shaping of shrubs and bushes",
+      "Cleanup and removal of all trimmings",
+      "Intentional form around windows, walkways, and beds"
+    ],
+    notIncluded: ["Tree trimming", "Tree removal", "Climbing", "Tree work of any kind"],
+    whyItMatters: [
+      "Overgrown bushes block windows, walkways, and sightlines. A good trim makes the landscape look maintained again.",
+      "We specialize in shrubs and bushes only, which keeps the scope clear and prevents confusion with tree work."
+    ],
+    whoNeedsIt: "Homeowners with established shrubs that need seasonal shaping, especially in late spring and summer.",
+    bestSeason: "Late spring and summer.",
+    pricingGuidance:
+      "Contact us for a free quote. Pricing depends on the number of bushes, size, and complexity of the trim.",
+    addOns: ["Bed Cleanup", "Off-Site Debris Removal"],
+    related: ["spring-cleanup", "bed-cleanup", "off-site-removal"],
+    reviews: [
+      {
+        quote: "Boys did a wonderful job trimming very tall bushes in front of my home. Thank you very much.",
+        author: "Jennifer Jeschke"
+      },
+      {
+        quote:
+          "These guys were on point! They arrived early, had everything they needed, asked questions about what exactly we wanted and made our lives 100 times easier.",
+        author: "Philip Brady",
+        location: "Chester Springs"
+      }
+    ]
+  },
+  {
+    slug: "off-site-removal",
+    name: "Off-Site Debris Removal",
+    shortDescription: "Job debris hauled away and composted so no piles are left behind.",
+    tagline: "We haul it away so you do not have to.",
+    included: [
+      "Full removal of job debris from the property",
+      "Transport to proper disposal or composting facility",
+      "No piles left on the lawn, walkway, or driveway"
     ],
     whyItMatters: [
-      "Weeds compete with ornamentals for nutrients and water, and they quickly turn good beds into patchy, overgrown areas.",
-      "Consistent weeding protects your investment in mulch and plantings while keeping the property looking cared for week to week."
+      "Cleanup is not complete until the debris is gone. Off-site removal creates a cleaner finish and saves the client a dump run.",
+      "Organic debris is hauled to local partners like Arborganic Acres where it is naturally composted instead of going to a landfill."
     ],
-    related: ["bed-cleanup", "mulching", "planting"]
+    whoNeedsIt: "Clients who want a fully clean finish after spring cleanup, bed cleanup, trimming, brush cleanup, or leaf removal.",
+    bestSeason: "Available all season.",
+    pricingGuidance: "Contact us for a free quote. Pricing depends on debris volume and load size.",
+    addOns: ["Spring Cleanup", "Bed Cleanup", "Bush Trimming", "Leaf Removal", "Brush Cleanup"],
+    related: ["brush-cleanup", "leaf-cleanup", "spring-cleanup"],
+    reviews: [
+      {
+        quote: "My yard looks great. They cleared away 12 bags of debris, edged, trimmed and mulched.",
+        author: "Denise Schmidt",
+        location: "Pottstown"
+      },
+      {
+        quote: "They cleared a TON of leaves around my property and somehow managed to do it on a cold and windy day.",
+        author: "Susan Westington",
+        location: "Collegeville"
+      }
+    ]
   },
   {
     slug: "planting",
     name: "Planting",
-    shortDescription: "Seasonal planting to add color, structure, and long-term curb appeal.",
-    tagline: "Install the right plants in the right places for lasting results.",
+    shortDescription: "Flower and small-plant installation for existing beds, new beds, and tired-looking areas.",
+    tagline: "Add color and structure without guessing where everything should go.",
     included: [
-      "Plant placement guidance based on sunlight and spacing",
-      "Installation of annuals, shrubs, and accent plants",
-      "Bed prep and set-in watering",
-      "Site cleanup after installation"
+      "Installation of flowers and smaller plants",
+      "Full bed installations and single plant installs",
+      "Client-supplied plants installed with care",
+      "Iconic-sourced plants available upon request",
+      "Final walkthrough before the crew leaves"
     ],
+    notIncluded: ["Large tree installation", "Sapling installation", "Trees of any size"],
     whyItMatters: [
-      "Strategic planting adds depth and personality to a property and helps create a polished first impression.",
-      "We focus on practical placement so your landscape still looks good weeks and months later, not just on day one."
+      "Planting brings color, depth, and personality to a property, especially after beds have been cleaned and edged.",
+      "We can work with client-supplied plants or source plants for the project, then guide placement during the quote walkthrough."
     ],
-    related: ["mulching", "bed-cleanup", "weeding"]
+    whoNeedsIt: "Homeowners adding flowers or smaller plants to existing beds, starting a new bed, or refreshing a tired area.",
+    bestSeason: "Spring and early summer for best establishment.",
+    pricingGuidance:
+      "Contact us for a free quote. Pricing depends on number of plants, bed size, and whether sourcing is required.",
+    addOns: ["Bed Cleanup", "Mulching", "Edging"],
+    related: ["mulching", "bed-cleanup", "edging"],
+    reviews: [
+      {
+        quote:
+          "They are very professional and communication was great. They did an awesome job creating a new flower bed and mulching all existing beds.",
+        author: "Karen Michaels",
+        location: "Chester Springs"
+      },
+      {
+        quote:
+          "Courteous, hard-working students who know and respect my property. They tackle a variety of yard work tasks from weeding and cultivating flower beds to leaf removal and more.",
+        author: "Andrew Lohan"
+      }
+    ]
   },
   {
-    slug: "off-site-removal",
-    name: "Off-Site Removal",
-    shortDescription: "Reliable haul-away for debris, brush, and organic waste from cleanup jobs.",
-    tagline: "No leftover piles. We remove and dispose of everything responsibly.",
+    slug: "brush-cleanup",
+    name: "Brush Cleanup",
+    shortDescription: "Dense brush, bramble, and overgrowth cleared from wooded edges and neglected areas.",
+    tagline: "One of our most dramatic before-and-after services.",
     included: [
-      "Loading and haul-away of leaves, brush, and debris",
-      "Removal after bed cleanups and seasonal resets",
-      "Responsible disposal at approved facilities",
-      "Final sweep so the site is left clean"
+      "Clearing of overgrown brush, bramble, and dense undergrowth",
+      "Path creation and restoration",
+      "Removal of debris from cleared areas",
+      "Off-site debris removal available as an add-on"
     ],
+    notIncluded: ["Tree removal", "Tree cutting", "Tree work of any kind"],
     whyItMatters: [
-      "Cleanup is not complete until the material is gone. Piles left at curb or in corners can undo the look you paid for.",
-      "Our crew handles the full removal process so your property is actually finished when we leave."
+      "Brush can take over property edges, wooded zones, and fence lines until the space becomes unusable.",
+      "We clear undergrowth and brush, reveal clean sightlines, and can haul everything away for a complete reset."
     ],
-    related: ["brush-cleanup", "leaf-cleanup", "spring-cleanup"]
+    whoNeedsIt:
+      "Homeowners with overgrown property edges, wooded sections, neglected areas, or properties being prepared for sale or renovation.",
+    bestSeason: "Spring through fall.",
+    pricingGuidance:
+      "Contact us for a free quote. Brush cleanup is priced by scope and usually assessed in person before quoting.",
+    addOns: ["Off-Site Debris Removal", "Bed Cleanup"],
+    related: ["off-site-removal", "bed-cleanup", "bush-trimming"],
+    reviews: [
+      {
+        quote:
+          "Their communication via text was prompt, and when they needed an additional day the estimate remained unchanged. They do not simply complete a job and move on, but ensure every detail is addressed.",
+        author: "Chris Saitta",
+        location: "Glenmoore"
+      }
+    ]
   },
   {
-    slug: "spring-cleanup",
-    name: "Spring Cleanup",
-    shortDescription: "A full-property reset to launch the season looking clean and maintained.",
-    tagline: "Start spring with everything cleaned, trimmed, and ready to grow.",
+    slug: "leaf-cleanup",
+    name: "Leaf Removal",
+    shortDescription:
+      "Leaf removal from lawns, beds, and property edges with off-site composting instead of landfill disposal.",
+    tagline: "We handle leaf removal all season long, not just in fall.",
     included: [
-      "Leaf and storm debris cleanup across the property",
-      "Bed cleanup and weed control",
-      "Light bush trimming and shape-up work",
-      "Final detail pass and haul-away"
+      "Full leaf removal from lawn, beds, and property edges",
+      "Bagging and off-site haul to composting facility",
+      "Available standalone or as part of fall cleanup"
     ],
     whyItMatters: [
-      "Winter leaves behind debris, overgrowth, and tired beds. A spring cleanup gives your entire property a clean slate before growth season begins.",
-      "This is our most complete seasonal service and the fastest path to getting your landscape back in shape."
+      "Heavy leaf buildup traps moisture, blocks light, and can stress turf if it sits too long.",
+      "Leaves are hauled to Arborganic Acres in Pottstown where they are naturally composted. Nothing goes to a landfill."
     ],
-    related: ["leaf-cleanup", "bed-cleanup", "bush-trimming"]
+    whoNeedsIt:
+      "Homeowners who do not want to spend their weekend raking, especially before winter or on wooded properties with heavy leaf volume.",
+    bestSeason: "Peak demand is October through November, with availability all season.",
+    pricingGuidance: "Contact us for a free quote. Pricing depends on property size and leaf volume.",
+    addOns: ["Fall Cleanup", "Off-Site Debris Removal", "Bush Trimming"],
+    related: ["off-site-removal", "spring-cleanup", "bed-cleanup"],
+    reviews: [
+      {
+        quote:
+          "They cleared a TON of leaves around my property and somehow managed to do it on a cold and windy day. They are a hard working crew that I would not hesitate to hire again.",
+        author: "Susan Westington",
+        location: "Collegeville"
+      },
+      {
+        quote:
+          "We just recently had fall cleanup done by Iconic Cleanup Landscaping. They kept me well informed the entire time. They do a great job.",
+        author: "Susan Smith"
+      },
+      {
+        quote:
+          "Courteous, hard-working students who know and respect my property. They tackle a variety of yard work tasks from weeding and cultivating flower beds to leaf removal and more.",
+        author: "Andrew Lohan"
+      }
+    ]
   }
 ];
 
@@ -194,15 +398,13 @@ export const serviceAreasPrimary = [
 export const serviceAreasSecondary = [
   "Phoenixville",
   "Collegeville",
-  "Birdsboro",
-  "Gilbertsville",
-  "Elverson",
-  "Glenmore",
-  "Downingtown",
-  "Boyertown"
+  "Glenmoore",
+  "Birdsboro"
 ];
 
-export const allServiceAreas = [
+export const proofBackedServiceAreas = [
   ...serviceAreasPrimary,
   ...serviceAreasSecondary
 ];
+
+export const allServiceAreas = proofBackedServiceAreas;

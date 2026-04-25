@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import { MapPin, MessageCircle } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/Button";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
-import { serviceAreasPrimary, serviceAreasSecondary } from "@/data/services";
+import { areas, mentionedSecondaryAreas } from "@/data/areas";
 import { SMS_LINK, PHONE_DISPLAY } from "@/lib/constants";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -19,16 +20,12 @@ const PRIMARY_NOTES: Record<string, string> = {
   "Chester Springs": "Full service",
   Royersford: "Full service",
   Douglassville: "Full service",
-  "Spring City": "Full service"
+  "Spring City": "Full service",
+  Phoenixville: "Larger jobs",
+  Collegeville: "Seasonal cleanup"
 };
 
-const primaryAreas = serviceAreasPrimary
-  .filter((name) => PRIMARY_NOTES[name])
-  .map((name) => ({ name, note: PRIMARY_NOTES[name] }));
-
-const extendedAreas = serviceAreasSecondary.filter(
-  (area) => !PRIMARY_NOTES[area]
-);
+const publishedAreas = areas.map((area) => ({ ...area, note: PRIMARY_NOTES[area.name] ?? "Service area" }));
 
 const decisionPoints = [
   {
@@ -76,18 +73,19 @@ export default function ServiceAreaPage() {
       <section className="section-shell py-16 md:py-20 lg:py-24">
         <h2 className="font-display text-3xl font-bold text-brand-dark md:text-4xl">Where We Work</h2>
         <p className="mt-3 text-sm leading-relaxed text-brand-dark/75 md:text-base">
-          These are our core service areas. We take all job sizes here.
+          These service areas have dedicated pages with local details, reviews, and recommended service options.
         </p>
 
         <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
-          {primaryAreas.map((area) => (
-            <article key={area.name} className="rounded-2xl border-2 border-brand-primary bg-white p-5 shadow-soft">
+          {publishedAreas.map((area) => (
+            <Link key={area.slug} href={`/areas/${area.slug}`} className="rounded-2xl border-2 border-brand-primary bg-white p-5 shadow-soft transition-colors hover:bg-brand-light">
               <div className="mb-2 inline-flex items-center justify-center rounded-full bg-brand-light p-2 text-brand-primary">
                 <MapPin className="h-4 w-4" />
               </div>
               <h3 className="font-display text-lg font-bold text-brand-dark">{area.name}</h3>
               <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-brand-primary">{area.note}</p>
-            </article>
+              <p className="mt-2 text-xs text-brand-dark/60">{area.county}</p>
+            </Link>
           ))}
         </div>
 
@@ -105,13 +103,16 @@ export default function ServiceAreaPage() {
         </div>
 
         <p className="text-sm leading-relaxed text-brand-dark/75 md:text-base">
-          We serve these areas too, typically for larger jobs. Not sure? Just text us.
+          We also serve these areas for larger jobs, but they do not have dedicated local pages yet. Not sure? Just text us.
         </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          {extendedAreas.map((area) => (
-            <span key={area} className="rounded-full border border-brand-dark/15 bg-white px-4 py-2 text-sm text-brand-dark/60">
-              {area}
-            </span>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {mentionedSecondaryAreas.map((area) => (
+            <article key={area.name} className="rounded-2xl border border-brand-dark/15 bg-white p-5 shadow-soft">
+              <p className="font-display text-lg font-bold text-brand-dark">{area.name}, {area.region}</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-brand-primary">{area.note}</p>
+              <p className="mt-3 text-sm leading-relaxed text-brand-dark/70">&ldquo;{area.review}&rdquo;</p>
+              <p className="mt-2 text-sm font-semibold text-brand-dark">{area.author}</p>
+            </article>
           ))}
         </div>
       </section>

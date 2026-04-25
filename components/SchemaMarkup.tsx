@@ -94,13 +94,17 @@ const baseBusiness = {
     "Douglassville",
     "Spring City",
     "Phoenixville",
-    "Collegeville"
+    "Collegeville",
+    "Glenmoore",
+    "Birdsboro"
   ],
   hasMap: MAP_DIRECTIONS_URL,
+  foundingDate: "2023-03",
+  slogan: "Make Your Property Iconic.",
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: "4.6",
-    reviewCount: "40"
+    reviewCount: "56"
   }
 };
 

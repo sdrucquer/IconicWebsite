@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, MapPin, Quote } from "lucide-react";
 import { Button } from "@/components/Button";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { areaMap, areas } from "@/data/areas";
@@ -56,6 +56,7 @@ export default function AreaServicePage({ params }: AreaServicePageProps) {
   const relatedInArea = services
     .filter((candidate) => area.featuredServiceSlugs.includes(candidate.slug) && candidate.slug !== service.slug)
     .slice(0, 3);
+  const localReview = area.reviews[0] ?? service.reviews[0];
 
   return (
     <>
@@ -97,7 +98,17 @@ export default function AreaServicePage({ params }: AreaServicePageProps) {
         <h1 className="mt-4 max-w-4xl font-display text-4xl font-extrabold text-brand-dark md:text-6xl lg:max-w-5xl lg:text-7xl">
           {service.name} in {area.name}, {area.region}
         </h1>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg lg:max-w-4xl lg:text-xl">{service.tagline}</p>
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg lg:max-w-4xl lg:text-xl">
+          {service.tagline} In {area.name}, we focus on clear scope, fast communication, and a finished property that matches the quote.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="rounded-full border border-brand-primary/20 bg-white px-3 py-1 text-sm font-semibold text-brand-primary">
+            {area.county}
+          </span>
+          <span className="rounded-full border border-brand-primary/20 bg-white px-3 py-1 text-sm font-semibold text-brand-primary">
+            {area.tier === "primary" ? "Core service area" : "Larger jobs prioritized"}
+          </span>
+        </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Button
@@ -133,11 +144,39 @@ export default function AreaServicePage({ params }: AreaServicePageProps) {
 
           <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
             <h2 className="text-2xl font-bold text-brand-dark">Why this matters in {area.name}</h2>
+            <p className="mt-4 text-sm leading-relaxed text-brand-dark/80">{area.whyCustomersHireUs}</p>
             <div className="mt-4 space-y-3 text-sm leading-relaxed text-brand-dark/80">
               {service.whyItMatters.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="section-shell py-10 md:py-12 lg:py-16">
+        <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+          <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
+            <h2 className="text-2xl font-bold text-brand-dark">Local service notes</h2>
+            <div className="mt-4 space-y-4 text-sm leading-relaxed text-brand-dark/75">
+              <p>{area.seasonalNeeds}</p>
+              <p><strong className="text-brand-dark">Best time to book:</strong> {service.bestSeason}</p>
+              <p><strong className="text-brand-dark">Pricing:</strong> {service.pricingGuidance}</p>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {area.landmarks.map((landmark) => (
+                <span key={landmark} className="inline-flex items-center gap-1 rounded-full bg-brand-light px-3 py-1 text-xs font-semibold text-brand-primary">
+                  <MapPin className="h-3 w-3" /> {landmark}
+                </span>
+              ))}
+            </div>
+          </article>
+
+          <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
+            <Quote className="h-5 w-5 text-brand-primary" />
+            <h2 className="mt-3 text-2xl font-bold text-brand-dark">Proof from local clients</h2>
+            <p className="mt-4 text-sm leading-relaxed text-brand-dark/75">&ldquo;{localReview.quote}&rdquo;</p>
+            <p className="mt-4 text-sm font-bold text-brand-dark">{localReview.author}, {area.name}</p>
           </article>
         </div>
       </section>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin, Quote } from "lucide-react";
 import { Button } from "@/components/Button";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { ServiceCard } from "@/components/ServiceCard";
@@ -76,6 +76,12 @@ export default function AreaCityPage({ params }: AreaPageProps) {
           {area.heroTitle}
         </h1>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-dark/75 md:text-lg lg:max-w-4xl lg:text-xl">{area.summary}</p>
+        <div className="mt-5 flex flex-wrap gap-2 text-sm font-semibold text-brand-primary">
+          <span className="rounded-full border border-brand-primary/20 bg-white px-3 py-1">{area.county}</span>
+          <span className="rounded-full border border-brand-primary/20 bg-white px-3 py-1">
+            {area.tier === "primary" ? "Core service area" : "Larger jobs prioritized"}
+          </span>
+        </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Button
@@ -108,11 +114,35 @@ export default function AreaCityPage({ params }: AreaPageProps) {
 
           <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
             <h2 className="text-2xl font-bold text-brand-dark">Why homeowners choose us locally</h2>
+            <p className="mt-3 text-sm leading-relaxed text-brand-dark/75">{area.whyCustomersHireUs}</p>
             <ul className="mt-4 space-y-2 text-sm text-brand-dark/80">
               {area.proofPoints.map((item) => (
                 <li key={item}>• {item}</li>
               ))}
             </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="section-shell py-10 md:py-12 lg:py-16">
+        <div className="grid gap-5 lg:grid-cols-3">
+          <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
+            <h2 className="text-xl font-bold text-brand-dark">Property types</h2>
+            <p className="mt-3 text-sm leading-relaxed text-brand-dark/75">{area.propertyTypes}</p>
+          </article>
+          <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
+            <h2 className="text-xl font-bold text-brand-dark">Seasonal needs</h2>
+            <p className="mt-3 text-sm leading-relaxed text-brand-dark/75">{area.seasonalNeeds}</p>
+          </article>
+          <article className="rounded-2xl border border-brand-primary/10 bg-white p-6 shadow-soft">
+            <h2 className="text-xl font-bold text-brand-dark">Nearby areas</h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {area.landmarks.map((landmark) => (
+                <span key={landmark} className="inline-flex items-center gap-1 rounded-full bg-brand-light px-3 py-1 text-xs font-semibold text-brand-primary">
+                  <MapPin className="h-3 w-3" /> {landmark}
+                </span>
+              ))}
+            </div>
           </article>
         </div>
       </section>
@@ -130,6 +160,19 @@ export default function AreaCityPage({ params }: AreaPageProps) {
               icon={getServiceIcon(service.slug)}
               ctaLabel="View local service page"
             />
+          ))}
+        </div>
+      </section>
+
+      <section className="section-shell py-12 md:py-16 lg:py-20">
+        <h2 className="section-title">Local Reviews</h2>
+        <div className="mt-7 grid gap-4 md:grid-cols-3">
+          {area.reviews.slice(0, 3).map((review) => (
+            <article key={`${review.author}-${review.quote}`} className="rounded-xl border border-brand-primary/10 bg-white p-5 shadow-soft">
+              <Quote className="h-5 w-5 text-brand-primary" />
+              <p className="mt-3 text-sm leading-relaxed text-brand-dark/75">&ldquo;{review.quote}&rdquo;</p>
+              <p className="mt-4 text-sm font-bold text-brand-dark">{review.author}, {area.name}</p>
+            </article>
           ))}
         </div>
       </section>

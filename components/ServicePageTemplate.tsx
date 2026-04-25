@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, Clock3, ShieldCheck } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, Clock3, Quote, ShieldCheck } from "lucide-react";
 import { Service, serviceMap } from "@/data/services";
 import { serviceDetails } from "@/data/service-details";
 import { Button } from "@/components/Button";
@@ -139,7 +139,7 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
       </section>
 
       <section className="section-shell py-16 lg:py-20">
-        <div className="grid gap-10 lg:grid-cols-2">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           <article>
             <h2 className="section-title">What&apos;s Included</h2>
             <ul className="mt-6 space-y-3">
@@ -154,13 +154,59 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
             </ul>
           </article>
 
+          <article className="rounded-2xl border border-brand-primary/12 bg-white p-6 shadow-soft lg:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-primary">Good fit for</p>
+            <p className="mt-3 text-sm leading-relaxed text-brand-dark/80 md:text-base">{service.whoNeedsIt}</p>
+            <div className="mt-6 grid gap-4">
+              <div className="rounded-xl bg-brand-light p-4">
+                <p className="text-sm font-bold text-brand-dark">Best time to book</p>
+                <p className="mt-1 text-sm leading-relaxed text-brand-dark/75">{service.bestSeason}</p>
+              </div>
+              <div className="rounded-xl bg-brand-light p-4">
+                <p className="text-sm font-bold text-brand-dark">Pricing guidance</p>
+                <p className="mt-1 text-sm leading-relaxed text-brand-dark/75">{service.pricingGuidance}</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="section-shell py-10 lg:py-14">
+        <div className="grid gap-8 lg:grid-cols-2">
           <article>
             <h2 className="section-title">Why It Matters</h2>
-            <div className="mt-6 space-y-4 text-sm leading-relaxed text-brand-dark/80 md:text-base">
+            <div className="mt-5 space-y-4 text-sm leading-relaxed text-brand-dark/80 md:text-base">
               {service.whyItMatters.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
+          </article>
+
+          <article>
+            <h2 className="section-title">Common Add-Ons</h2>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {service.addOns.map((item) => (
+                <span key={item} className="rounded-full border border-brand-primary/20 bg-white px-4 py-2 text-sm font-semibold text-brand-primary">
+                  {item}
+                </span>
+              ))}
+            </div>
+            {service.notIncluded?.length ? (
+              <div className="mt-6 rounded-2xl border border-brand-dark/10 bg-white p-5">
+                <p className="text-sm font-bold text-brand-dark">Not included</p>
+                <p className="mt-2 text-sm leading-relaxed text-brand-dark/70">
+                  {service.notIncluded.join(", ")}.
+                </p>
+              </div>
+            ) : null}
+            {service.mulchTypes?.length ? (
+              <div className="mt-6 rounded-2xl border border-brand-primary/10 bg-white p-5">
+                <p className="text-sm font-bold text-brand-dark">Mulch options</p>
+                <p className="mt-2 text-sm leading-relaxed text-brand-dark/70">
+                  We can source common dyed, hardwood, bark, cedar, compost, and specialty mulch options. We confirm the finish and quantity during quoting.
+                </p>
+              </div>
+            ) : null}
           </article>
         </div>
       </section>
@@ -215,6 +261,22 @@ export function ServicePageTemplate({ service }: ServicePageTemplateProps) {
               ))}
             </div>
           </article>
+        </div>
+      </section>
+
+      <section className="section-shell py-10 lg:py-14">
+        <h2 className="section-title">What Customers Say</h2>
+        <div className="mt-7 grid gap-4 md:grid-cols-3">
+          {service.reviews.slice(0, 3).map((review) => (
+            <article key={`${review.author}-${review.quote}`} className="rounded-2xl border border-brand-primary/12 bg-white p-5 shadow-soft">
+              <Quote className="h-5 w-5 text-brand-primary" />
+              <p className="mt-3 text-sm leading-relaxed text-brand-dark/80">&ldquo;{review.quote}&rdquo;</p>
+              <p className="mt-4 text-sm font-bold text-brand-dark">
+                {review.author}
+                {review.location ? <span className="font-medium text-brand-dark/55">, {review.location}</span> : null}
+              </p>
+            </article>
+          ))}
         </div>
       </section>
 

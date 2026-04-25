@@ -18,7 +18,8 @@ import { FaqTeaser } from "@/components/FaqTeaser";
 import { ServiceCard } from "@/components/ServiceCard";
 import { WorkGallery } from "@/components/WorkGallery";
 import { getServiceIcon } from "@/components/ServiceIcon";
-import { allServiceAreas, services } from "@/data/services";
+import { areas } from "@/data/areas";
+import { services } from "@/data/services";
 import { PHONE_DISPLAY, SMS_LINK } from "@/lib/constants";
 import { GREEN_BLUR_PLACEHOLDER } from "@/lib/placeholder";
 import { buildPageMetadata } from "@/lib/seo";
@@ -26,7 +27,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   title: "Landscaping Services in Pottstown, PA",
   description:
-    "Get a fast, no-pressure landscaping quote from Iconic Landscaping. Serving Pottstown, PA and surrounding areas with premium local service.",
+    "Premium residential landscaping in Pottstown, PA and surrounding areas. Reliable crew, clear communication, and results you'll notice.",
   path: "/",
   ogImagePath: "/photos/home/hero.jpg"
 });
@@ -40,10 +41,33 @@ const featuredServiceSlugs = new Set([
 const featuredServices = services.filter((service) => featuredServiceSlugs.has(service.slug));
 
 const serviceMeta: Record<string, string> = {
-  "bed-cleanup": "Your beds cleared, edged, and ready",
+  "bed-cleanup": "Your beds cleaned, edged, and ready",
   mulching: "Installed start to finish, we handle everything",
   "spring-cleanup": "Full seasonal reset before peak growth"
 };
+
+const answerBlocks = [
+  {
+    question: "What services does Iconic Landscaping offer?",
+    answer:
+      "Iconic Landscaping offers spring cleanup, bed cleanup, mulching, planting, edging, bush trimming, brush cleanup, leaf removal, and off-site debris removal. We serve residential and commercial properties, but we do not offer mowing or tree work."
+  },
+  {
+    question: "What areas does Iconic Landscaping serve?",
+    answer:
+      "We serve Pottstown, Chester Springs, Royersford, Douglassville, Spring City, Phoenixville, Collegeville, Glenmoore, Birdsboro, and surrounding areas in Montgomery, Chester, and Berks Counties."
+  },
+  {
+    question: "How fast do you respond to quote requests?",
+    answer:
+      "We respond to all quote requests within 24 hours, usually the same day. For complex jobs, we schedule a property visit before sending a detailed itemized quote."
+  },
+  {
+    question: "Do you haul away debris?",
+    answer:
+      "Yes. Debris can be hauled off-site to local composting partners like Arborganic Acres, where organic material is naturally composted instead of sent to a landfill."
+  }
+];
 
 const trustPoints = [
   {
@@ -120,7 +144,7 @@ export default function HomePage() {
                 Make Your Property Iconic.
               </h1>
               <p className="mt-6 max-w-xl text-[1.03rem] leading-[1.55] text-white/78 md:text-[1.1rem] lg:max-w-[62ch] lg:text-[1.35rem]">
-                Premium landscaping in Pottstown with fast quotes and clear communication.
+                Premium residential landscaping in Pottstown and surrounding areas. Reliable crew, clear communication, results you&apos;ll notice.
               </p>
             </div>
 
@@ -129,15 +153,15 @@ export default function HomePage() {
               <ul className="mt-4 space-y-2.5 text-sm text-brand-dark/85 lg:space-y-3 lg:text-base">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Fast quote turnaround
+                  Response within 24 hours
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Clear scope and pricing
+                  Clear itemized quotes
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Local, licensed, insured crew
+                  Licensed, insured, electric-equipment crew
                 </li>
               </ul>
               <Button
@@ -182,7 +206,7 @@ export default function HomePage() {
               ))}
             </div>
             <p className="mt-4 text-sm text-brand-dark/70 md:text-base">
-              Reliable communication. Clean work. No surprises.
+              Reliable communication. Clean work. Final walkthrough before we leave.
             </p>
           </div>
         </section>
@@ -250,15 +274,19 @@ export default function HomePage() {
 
         <section className="home-shell py-10 md:py-12 lg:py-16 xl:py-20">
         <h2 className="section-title lg:text-5xl">Serving the Greater Pottstown Area</h2>
-        <p className="section-subtitle lg:text-xl">We actively serve all areas listed below.</p>
-        <div className="mt-8 flex flex-wrap gap-2 lg:mt-10 lg:gap-3">
-          {allServiceAreas.map((area) => (
-            <span
-              key={area}
-              className="rounded-full border border-brand-primary/25 bg-white px-4 py-2 text-sm font-semibold text-brand-primary lg:text-base"
+        <p className="section-subtitle lg:text-xl">Explore the towns where our crew already has real local work, reviews, and repeat clients.</p>
+        <div className="mt-8 grid gap-3 md:grid-cols-2 lg:mt-10 lg:grid-cols-3">
+          {areas.map((area) => (
+            <Link
+              key={area.slug}
+              href={`/areas/${area.slug}`}
+              className="rounded-2xl border border-brand-primary/15 bg-white p-4 shadow-soft transition-colors hover:border-brand-primary"
             >
-              {area}
-            </span>
+              <span className="block font-semibold text-brand-primary">{area.name}, {area.region}</span>
+              <span className="mt-1 block text-xs uppercase tracking-[0.08em] text-brand-dark/55">
+                {area.tier === "primary" ? "Core service area" : "Larger jobs prioritized"}
+              </span>
+            </Link>
           ))}
         </div>
         <p className="mt-4 text-sm text-brand-dark/70 lg:text-base">Not on the list? Text us - we may still be able to help.</p>
@@ -268,16 +296,18 @@ export default function HomePage() {
         >
           Check if we serve your area <ArrowRight className="h-4 w-4" />
         </Link>
-        <div className="mt-5 flex flex-wrap gap-2 text-sm lg:text-base">
-          <Link href="/areas/pottstown" className="font-semibold text-brand-primary hover:text-brand-accent">
-            Pottstown landscaping
-          </Link>
-          <Link href="/areas/royersford" className="font-semibold text-brand-primary hover:text-brand-accent">
-            Royersford landscaping
-          </Link>
-          <Link href="/areas/spring-city" className="font-semibold text-brand-primary hover:text-brand-accent">
-            Spring City landscaping
-          </Link>
+      </section>
+
+        <section className="home-shell py-12 md:py-16 lg:py-20">
+        <h2 className="section-title lg:text-5xl">Quick Answers</h2>
+        <p className="section-subtitle lg:text-xl">Clear answers before you request a quote.</p>
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          {answerBlocks.map((item) => (
+            <article key={item.question} className="rounded-2xl border border-brand-primary/12 bg-white p-5 shadow-soft md:p-6">
+              <h3 className="text-lg font-bold text-brand-dark">{item.question}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-brand-dark/75 md:text-base">{item.answer}</p>
+            </article>
+          ))}
         </div>
       </section>
 

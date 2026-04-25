@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
@@ -17,6 +18,7 @@ const navLinks = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopServicesOpen, setDesktopServicesOpen] = useState(false);
@@ -50,6 +52,11 @@ export function Header() {
       setMobileServicesOpen(false);
     }
   }, [mobileOpen]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+    setDesktopServicesOpen(false);
+  }, [pathname]);
 
   return (
     <header

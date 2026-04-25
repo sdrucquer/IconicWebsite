@@ -2,12 +2,12 @@ const trustPoints = [
   {
     label: "Google Rating",
     value: "4.6 stars",
-    detail: "40+ verifiable reviews"
+    detail: "56 verifiable reviews"
   },
   {
     label: "Customers Served",
     value: "500+",
-    detail: "Across the Greater Pottstown area"
+    detail: "Served since 2023"
   },
   {
     label: "Response Time",

@@ -45,24 +45,19 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "How does Iconic Landscaping approach bed cleanup in the community?",
+        question: "How long does bed cleanup take?",
         answer:
-          "We start with a detailed walkthrough, then complete debris removal, targeted pruning, and bed reset work. We finish with a final review to confirm scope and quality."
+          "Most residential bed cleanup jobs take 1-4 hours. Larger or heavily overgrown properties take longer, and we quote accurately upfront so there are no surprises."
       },
       {
-        question: "How often should I schedule bed cleanup services?",
+        question: "Will you haul everything away?",
         answer:
-          "Most properties benefit from seasonal cleanups. Frequency depends on plant density, debris volume, and how quickly beds overgrow."
+          "Yes. Off-site debris removal is available as an add-on, and it will be listed clearly on your quote."
       },
       {
-        question: "Will your team help with plant pruning during cleanup?",
+        question: "How often should I get bed cleanup done?",
         answer:
-          "Yes. We include careful pruning of overgrown or damaged plant material when it supports bed health and appearance."
-      },
-      {
-        question: "Is bed cleanup suitable for all types of gardens?",
-        answer:
-          "Yes. We tailor cleanup scope to your specific bed layout, plant types, and property goals."
+          "Most clients schedule bed cleanup once or twice a season, usually spring and fall. Larger properties may benefit from a mid-summer visit too."
       }
     ],
     ctaTitle: "Revitalize Your Garden Today",
@@ -85,16 +80,16 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "How often should mulch be refreshed?",
-        answer: "Most homes benefit from annual refreshes, especially after winter weather and heavy rain."
+        question: "Do you supply the mulch?",
+        answer: "Yes. We handle ordering and delivery coordination so you do not need to source anything yourself."
       },
       {
-        question: "Do you offer black mulch?",
-        answer: "Yes. Black mulch is our most requested finish for strong curb appeal."
+        question: "How much mulch do I need?",
+        answer: "We calculate mulch quantity during the quote process based on bed size and existing depth. There is no guesswork on your end."
       },
       {
-        question: "Can I combine mulch with edging?",
-        answer: "Yes. Edging before mulch gives the cleanest and longest-lasting visual result."
+        question: "Should I do bed cleanup before mulching?",
+        answer: "Yes. We recommend cleaning beds first, then mulching in the same visit for a cleaner and longer-lasting result."
       }
     ]
   },
@@ -113,16 +108,16 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "Do you service one-time fall cleanups?",
-        answer: "Yes. We handle one-time projects as well as recurring seasonal cleanup visits."
+        question: "Is leaf removal only available in fall?",
+        answer: "No. Fall is peak season, but we offer leaf removal year-round when properties need it."
       },
       {
-        question: "Will leaf cleanup help my lawn?",
-        answer: "Yes. Removing leaf mats reduces moisture buildup and helps turf breathe and recover."
+        question: "Where do the leaves go?",
+        answer: "Leaves are hauled to Arborganic Acres in Pottstown, a commercial composting facility where they are naturally composted."
       },
       {
-        question: "Can leaves be hauled away?",
-        answer: "Yes. We can include off-site removal so you are not left with piles or bags."
+        question: "Is leaf removal part of fall cleanup?",
+        answer: "Yes. Leaf removal is a core part of fall cleanup and can also be booked as a standalone service."
       }
     ]
   },
@@ -141,12 +136,12 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "How aggressive is your trimming approach?",
-        answer: "We focus on structure and health first, then refine for curb appeal. We avoid harsh overcutting."
+        question: "Do you do tree trimming?",
+        answer: "No. We specialize in shrubs and bushes only. We do not offer tree work of any kind."
       },
       {
-        question: "Can you trim multiple shrub types?",
-        answer: "Yes. We routinely trim mixed landscapes with different shrub species and growth patterns."
+        question: "How do I know if my bushes need trimming?",
+        answer: "If they have grown past their natural shape, block windows or walkways, or have not been trimmed this season, it is probably time."
       },
       {
         question: "Do you haul away clippings?",
@@ -169,16 +164,16 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "How do you price brush cleanup?",
-        answer: "Pricing depends on density, access, and haul-away volume. We provide clear scope before start."
+        question: "How overgrown is too overgrown?",
+        answer: "We can handle large, heavily overgrown areas. The only limitation is trees, because we do not cut or remove trees of any size."
       },
       {
-        question: "Can you clear overgrown fence lines?",
-        answer: "Yes. Fence lines are one of the most common brush cleanup requests we receive."
+        question: "Do you haul away everything you clear?",
+        answer: "Yes. Off-site removal to a composting facility is available as an add-on unless you prefer material left on site."
       },
       {
-        question: "Do you remove everything off-site?",
-        answer: "Yes. We can fully remove brush and debris from the property when requested."
+        question: "Can you create a walking path through a wooded area?",
+        answer: "Yes. Path clearing and restoration is one of our specialties within brush cleanup."
       }
     ]
   },
@@ -197,44 +192,12 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "Should edging be done before mulch?",
-        answer: "Yes. Edging first gives a cleaner border and helps mulch look intentional."
+        question: "Is edging included with other services?",
+        answer: "Yes. Edging is included with spring cleanup and bed cleanup, and it can also be booked as a standalone service."
       },
       {
-        question: "Does edging make a noticeable difference?",
-        answer: "Yes. It is one of the fastest ways to sharpen a property’s appearance."
-      },
-      {
-        question: "Can edging be done as a standalone service?",
-        answer: "Yes, but many clients combine it with bed cleanup or mulching for best results."
-      }
-    ]
-  },
-  weeding: {
-    heroImage: "/photos/services/weeding/hero.jpg",
-    gallery: ["/photos/services/weeding/before.jpg", "/photos/services/weeding/during.jpg", "/photos/services/weeding/after.jpg"],
-    idealFor: [
-      "Beds with recurring weed pressure.",
-      "Properties where ornamentals are being crowded out.",
-      "Homeowners trying to keep beds manageable all season."
-    ],
-    expectations: [
-      "Hands-on removal focused on bed quality.",
-      "Targeted cleanup around existing plantings.",
-      "Debris removal and visual reset of bed areas."
-    ],
-    faqs: [
-      {
-        question: "Do you pull weeds by hand?",
-        answer: "Yes. We prioritize manual removal in active beds, including roots when conditions allow."
-      },
-      {
-        question: "Can weeding be scheduled regularly?",
-        answer: "Yes. Recurring service is available for properties that need ongoing upkeep."
-      },
-      {
-        question: "Is weeding included in spring cleanups?",
-        answer: "It can be. Many spring projects include bed weeding as part of full reset work."
+        question: "Why does edging make such a difference?",
+        answer: "Clean edges give a property a finished, maintained look that makes everything else stand out. It is one of the fastest visual upgrades we offer."
       }
     ]
   },
@@ -253,16 +216,16 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "Can you help pick plant types?",
-        answer: "Yes. We help with placement and practical plant choices based on sun and layout."
+        question: "Can I supply my own plants?",
+        answer: "Yes. You can provide the plants and we will handle installation. We can also source plants if you prefer."
       },
       {
-        question: "Do you install both shrubs and seasonal color?",
-        answer: "Yes. We install annuals, shrubs, and other accent plantings."
+        question: "Do you install trees?",
+        answer: "No. We specialize in flowers and smaller plants only. We do not install trees or saplings of any size."
       },
       {
-        question: "Can planting be bundled with bed cleanup?",
-        answer: "Yes. Bed prep and planting is a common combo for faster transformation."
+        question: "Can you help with bed layout?",
+        answer: "Yes. We can work with your vision or guide placement during the quote walkthrough so the finished bed looks intentional."
       }
     ]
   },
@@ -281,12 +244,12 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "What material can be removed?",
-        answer: "Leaves, brush, organic cleanup debris, and related landscaping waste from active projects."
+        question: "Do I need to bag the debris myself?",
+        answer: "No. We handle debris from the active job scope, so no prep is needed on your end."
       },
       {
-        question: "Do you remove material from prior jobs?",
-        answer: "Yes, depending on scope and access. We can review this during your quote."
+        question: "Is off-site removal always included?",
+        answer: "It is available as an add-on to any service. We note it clearly on your quote so you know exactly what is included."
       },
       {
         question: "Can this be added to any service?",
@@ -309,16 +272,16 @@ export const serviceDetails: Record<ServiceSlug, ServiceDetails> = {
     ],
     faqs: [
       {
-        question: "When should spring cleanup be scheduled?",
-        answer: "Early to mid-spring is ideal, before growth accelerates and beds become harder to reset."
+        question: "When should I book spring cleanup?",
+        answer: "As early as February. Our spring schedule fills up fast, and early bookers get the best date options."
       },
       {
-        question: "Is spring cleanup a one-day service?",
-        answer: "Most are completed quickly, but larger properties may require additional crew time."
+        question: "Do you haul away the debris?",
+        answer: "Yes. Off-site removal is available as an add-on to any cleanup job."
       },
       {
         question: "Can spring cleanup include mulch?",
-        answer: "Yes. Cleanup plus edging and mulch is a common package for strong spring curb appeal."
+        answer: "Absolutely. It is one of our most popular combinations: we clean the beds first, then mulch in one crew visit."
       }
     ]
   }
