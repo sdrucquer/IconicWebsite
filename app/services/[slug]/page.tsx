@@ -1,6 +1,15 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { BedCleanupServicePage } from "@/components/BedCleanupServicePage";
+import { BrushCleanupServicePage } from "@/components/BrushCleanupServicePage";
+import { BushTrimmingServicePage } from "@/components/BushTrimmingServicePage";
+import { EdgingServicePage } from "@/components/EdgingServicePage";
+import { LeafCleanupServicePage } from "@/components/LeafCleanupServicePage";
+import { MulchingServicePage } from "@/components/MulchingServicePage";
+import { OffSiteRemovalServicePage } from "@/components/OffSiteRemovalServicePage";
+import { PlantingServicePage } from "@/components/PlantingServicePage";
 import { ServicePageTemplate } from "@/components/ServicePageTemplate";
+import { SpringCleanupServicePage } from "@/components/SpringCleanupServicePage";
 import { serviceDetails } from "@/data/service-details";
 import { serviceMap, services } from "@/data/services";
 import { buildPageMetadata } from "@/lib/seo";
@@ -38,6 +47,42 @@ export default function ServicePage({ params }: ServicePageProps) {
 
   if (!service) {
     notFound();
+  }
+
+  if (service.slug === "spring-cleanup") {
+    return <SpringCleanupServicePage service={service} />;
+  }
+
+  if (service.slug === "bed-cleanup") {
+    return <BedCleanupServicePage service={service} />;
+  }
+
+  if (service.slug === "mulching") {
+    return <MulchingServicePage service={service} />;
+  }
+
+  if (service.slug === "edging") {
+    return <EdgingServicePage service={service} />;
+  }
+
+  if (service.slug === "bush-trimming") {
+    return <BushTrimmingServicePage service={service} />;
+  }
+
+  if (service.slug === "off-site-removal") {
+    return <OffSiteRemovalServicePage service={service} />;
+  }
+
+  if (service.slug === "planting") {
+    return <PlantingServicePage service={service} />;
+  }
+
+  if (service.slug === "brush-cleanup") {
+    return <BrushCleanupServicePage service={service} />;
+  }
+
+  if (service.slug === "leaf-cleanup") {
+    return <LeafCleanupServicePage service={service} />;
   }
 
   return <ServicePageTemplate service={service} />;

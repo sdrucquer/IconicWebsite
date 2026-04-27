@@ -24,6 +24,7 @@ export function Header() {
   const [desktopServicesOpen, setDesktopServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const desktopServicesRef = useRef<HTMLDivElement | null>(null);
+  const quoteHref = pathname === "/" ? "#quote" : "/contact#quote";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -64,13 +65,20 @@ export function Header() {
         scrolled ? "border-b border-brand-primary/10 bg-white/95 backdrop-blur" : "bg-white/70"
       }`}
     >
-      <div className="section-shell flex items-center justify-between py-3">
-        <Link href="/" className="inline-flex items-center gap-2" aria-label="Iconic Landscaping home">
-          <BrandLogo compact className="h-10 w-10 object-contain lg:h-11 lg:w-11" />
-          <span className="text-sm font-bold uppercase tracking-[0.12em] text-brand-dark md:text-base lg:text-[1.05rem]">
-            Iconic Landscaping
-          </span>
+      <div className="section-shell grid grid-cols-[56px_1fr_56px] items-center gap-3 py-3 lg:flex lg:justify-between">
+        <Link href="/" className="inline-flex items-center" aria-label="Iconic Landscaping home">
+          <BrandLogo compact className="h-12 w-12 object-contain lg:h-14 lg:w-14" />
         </Link>
+
+        <Button
+          href={quoteHref}
+          ariaLabel="Get a free quote"
+          className="mx-auto min-h-0 border-brand-forest bg-brand-forest px-6 py-3 text-sm text-brand-cream hover:border-brand-moss hover:bg-brand-moss sm:px-8 sm:text-base lg:hidden"
+          trackEventName="cta_quote_click"
+          trackEventParams={{ source: "header_mobile_pill" }}
+        >
+          Get a Free Quote
+        </Button>
 
         <nav className="hidden items-center gap-6 lg:flex lg:gap-7 xl:gap-8" aria-label="Main navigation">
           {navLinks.slice(0, 1).map((link) => (
@@ -145,7 +153,7 @@ export function Header() {
             <Phone className="h-4 w-4" /> Text {PHONE_DISPLAY}
           </a>
           <Button
-            href="/contact#quote"
+            href={quoteHref}
             ariaLabel="Open full quote form"
             className="border-brand-primary bg-brand-primary px-6 py-2.5 text-white hover:border-brand-accent hover:bg-brand-accent lg:px-7 lg:py-3"
             trackEventName="cta_quote_click"
@@ -234,7 +242,7 @@ export function Header() {
             Client Login
           </a>
           <Button
-            href="/contact#quote"
+            href={quoteHref}
             ariaLabel="Open full quote form"
             className="mt-2 w-full"
             trackEventName="cta_quote_click"

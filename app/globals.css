@@ -16,11 +16,7 @@ html {
 }
 
 body {
-  @apply bg-brand-light text-brand-dark antialiased;
-  background-image:
-    radial-gradient(circle at 10% 12%, rgba(76, 175, 80, 0.1) 0, rgba(76, 175, 80, 0) 36%),
-    radial-gradient(circle at 90% 78%, rgba(45, 106, 47, 0.1) 0, rgba(45, 106, 47, 0) 38%),
-    linear-gradient(180deg, #f4f5ef 0%, #f7f7f3 100%);
+  @apply bg-brand-cream text-brand-ink antialiased;
 }
 
 @media (max-width: 1023px) {
@@ -40,13 +36,113 @@ main {
   margin-right: auto;
 }
 
-.font-display {
-  font-family: "Canva Sans", "Nunito Sans", "Avenir Next", "Segoe UI", sans-serif;
+/* ----------------------------------------------------------
+ * Design system v2 — typographic utilities
+ * Fraunces (display) + Inter (UI), wired in app/layout.tsx
+ * ----------------------------------------------------------*/
+
+/* Typographic utilities set face/size/spacing only.
+ * Color is a separate concern — use Tailwind text-* utilities to override. */
+
+.h-display {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-weight: 580;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+}
+
+.h-section {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-weight: 520;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  font-size: clamp(2rem, 3.6vw, 3.1rem);
+}
+
+.pull {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.25;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+}
+
+.lede {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 768px) {
+  .lede {
+    font-size: 1.15rem;
+  }
+}
+
+.meta {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.32);
+}
+
+.band-tight {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.band-default {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.band-feature {
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
+@media (min-width: 768px) {
+  .band-tight {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .band-default {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+
+  .band-feature {
+    padding-top: 11rem;
+    padding-bottom: 11rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .band-feature {
+    padding-top: 14rem;
+    padding-bottom: 14rem;
+  }
+}
+
+.hairline {
+  border-color: rgba(143, 169, 140, 0.35);
 }
 
 .section-title {
-  font-family: "Canva Sans", "Nunito Sans", "Avenir Next", "Segoe UI", sans-serif;
-  @apply text-3xl font-extrabold tracking-tight text-brand-dark md:text-4xl;
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  @apply text-3xl font-bold tracking-tight text-brand-ink md:text-4xl;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
 }
 
 .section-subtitle {
