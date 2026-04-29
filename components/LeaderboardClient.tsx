@@ -13,7 +13,6 @@ function Podium({ stats }: { stats: PlayerStats[] }) {
 
   if (!gold) return null;
 
-  // Layout: silver | gold | bronze
   const slots = [
     { player: silver, rank: 2, height: "h-24", emoji: "🥈", nameSize: "text-sm", numSize: "text-2xl", bg: "bg-white/10" },
     { player: gold,   rank: 1, height: "h-32", emoji: "🥇", nameSize: "text-base", numSize: "text-4xl", bg: "bg-brand-gold/25", glow: true },
@@ -35,21 +34,18 @@ function Podium({ stats }: { stats: PlayerStats[] }) {
 
         return (
           <div key={player.slug} className="flex flex-col items-center flex-1 max-w-[110px]">
-            {/* Avatar bubble */}
             <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 text-lg font-bold
               ${glow ? "bg-brand-gold text-white shadow-[0_0_20px_rgba(184,146,61,0.5)]" : "bg-white/20 text-white"}`}>
               {firstName[0]}{lastName?.[0] ?? ""}
             </div>
-
-            {/* Name */}
             <p className={`${nameSize} font-semibold text-white text-center leading-tight`}>{firstName}</p>
             <p className="text-[10px] text-white/50 text-center">{lastName}</p>
-
-            {/* Points */}
             <p className={`${numSize} font-display font-medium text-white mt-1 leading-none`}>{player.points}</p>
-            <p className="text-[10px] text-white/50 uppercase tracking-widest mb-2">pts</p>
-
-            {/* Podium block */}
+            <p className="text-[10px] text-white/50 uppercase tracking-widest">pts</p>
+            {/* Submitted / converted mini-stats */}
+            <p className="text-[10px] text-white/40 mb-2 mt-0.5">
+              {player.submissions} sent · {player.conversions} converted
+            </p>
             <div className={`w-full ${height} ${bg} rounded-t-xl flex items-start justify-center pt-2.5
               ${glow ? "ring-1 ring-brand-gold/40" : ""}`}>
               <span className="text-lg">{emoji}</span>
@@ -62,38 +58,37 @@ function Podium({ stats }: { stats: PlayerStats[] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Ranked list — 4th place and below
+// Full ranked list — everyone, sorted by points
 // ---------------------------------------------------------------------------
-function RankedList({ stats }: { stats: PlayerStats[] }) {
+function RankedList({ stats, topCount }: { stats: PlayerStats[]; topCount: number }) {
   const leader = stats[0]?.points ?? 1;
-  const rest = stats.slice(3);
-  const hasAny = rest.some((s) => s.points > 0 || s.submissions > 0);
+  const rows = stats.slice(topCount); // everyone not on the podium
 
-  if (!hasAny) return null;
+  if (rows.length === 0) return null;
 
   return (
     <div className="rounded-2xl bg-white overflow-hidden shadow-[0_4px_24px_rgba(20,44,32,0.08)]">
-      {rest.map((player, i) => {
+      {rows.map((player, i) => {
         const pct = leader > 0 ? Math.round((player.points / leader) * 100) : 0;
-        const isActive = player.points > 0 || player.submissions > 0;
+        const hasActivity = player.submissions > 0;
 
         return (
           <div
             key={player.slug}
-            className={`px-5 py-4 ${i !== rest.length - 1 ? "border-b border-brand-sage/10" : ""} ${!isActive ? "opacity-40" : ""}`}
+            className={`px-5 py-3.5 ${i !== rows.length - 1 ? "border-b border-brand-sage/10" : ""} ${!hasActivity ? "opacity-35" : ""}`}
           >
             <div className="flex items-center gap-3">
-              <span className="w-6 text-sm font-bold text-brand-ink/25 tabular-nums shrink-0">{i + 4}</span>
+              <span className="w-6 text-sm font-bold text-brand-ink/25 tabular-nums shrink-0">{i + topCount + 1}</span>
 
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center justify-between mb-1">
                   <p className="text-sm font-semibold text-brand-ink truncate">{player.name}</p>
-                  <div className="flex items-center gap-2 shrink-0 ml-2">
-                    <span className="text-xs text-brand-ink/40">{player.conversions} converted</span>
-                    <span className="text-sm font-bold text-brand-forest">{player.points} pts</span>
+                  <div className="flex items-center gap-3 shrink-0 ml-2">
+                    <span className="text-xs text-brand-ink/40 tabular-nums">{player.submissions} sent</span>
+                    <span className="text-xs text-brand-ink/40 tabular-nums">{player.conversions} converted</span>
+                    <span className="text-sm font-bold text-brand-forest tabular-nums">{player.points} pts</span>
                   </div>
                 </div>
-                {/* Progress bar toward leader */}
                 <div className="h-1 w-full rounded-full bg-brand-sage/15">
                   <div
                     className="h-1 rounded-full bg-brand-forest/50 transition-all"
@@ -258,18 +253,22 @@ export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, 
           <div className="mt-8 rounded-2xl bg-red-50 border border-red-200 px-6 py-5 text-sm text-red-700">
             Could not load data right now — check back in a moment.
           </div>
-        ) : hasData ? (
-          <div className="mt-4">
-            <RankedList stats={activeStats} />
-          </div>
         ) : (
-          <div className="mt-8 rounded-2xl bg-white shadow-[0_4px_24px_rgba(20,44,32,0.07)] px-6 py-12 text-center">
-            <p className="text-4xl mb-3">🌱</p>
-            <p className="font-display text-xl font-medium text-brand-ink">No converted referrals yet</p>
-            <p className="mt-2 text-sm text-brand-ink/50">
-              First conversion of {tab === "month" ? monthName : "the season"} takes the lead!
-            </p>
-          </div>
+          <>
+            {!hasData && (
+              <div className="mt-6 rounded-2xl bg-white shadow-[0_4px_24px_rgba(20,44,32,0.07)] px-6 py-8 text-center">
+                <p className="text-3xl mb-2">🌱</p>
+                <p className="font-display text-lg font-medium text-brand-ink">No converted referrals yet</p>
+                <p className="mt-1 text-sm text-brand-ink/50">
+                  First conversion of {tab === "month" ? monthName : "the season"} takes the lead!
+                </p>
+              </div>
+            )}
+            {/* Always show full crew ranked list */}
+            <div className="mt-4">
+              <RankedList stats={activeStats} topCount={hasData ? 3 : 0} />
+            </div>
+          </>
         )}
 
         {/* My referral link */}
