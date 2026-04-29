@@ -2,109 +2,81 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Metadata } from "next";
-import {
-  ArrowRight,
-  CheckCircle2,
-  ClipboardCheck,
-  Clock3,
-  MapPin,
-  PhoneCall,
-  ShieldCheck
-} from "lucide-react";
+import { ArrowRight, Leaf, Shovel, Sprout } from "lucide-react";
 import { Button } from "@/components/Button";
-import { ProcessStep } from "@/components/ProcessStep";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
-import { FaqTeaser } from "@/components/FaqTeaser";
-import { ServiceCard } from "@/components/ServiceCard";
-import { WorkGallery } from "@/components/WorkGallery";
-import { getServiceIcon } from "@/components/ServiceIcon";
+import { SectionHeader } from "@/components/SectionHeader";
+import { ServiceCompactCard } from "@/components/ServiceCompactCard";
+import { ProcessList } from "@/components/ProcessList";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
+import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
+import { AfterGallery } from "@/components/AfterGallery";
 import { areas } from "@/data/areas";
-import { services } from "@/data/services";
 import { PHONE_DISPLAY, SMS_LINK } from "@/lib/constants";
 import { GREEN_BLUR_PLACEHOLDER } from "@/lib/placeholder";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Landscaping Services in Pottstown, PA",
+  title: "Landscaping in Pottstown, PA",
   description:
-    "Premium residential landscaping in Pottstown, PA and surrounding areas. Reliable crew, clear communication, and results you'll notice.",
+    "Mulch, beds, cleanups, and seasonal care for homes around Pottstown. Local crew. Clean work. Fast quotes.",
   path: "/",
   ogImagePath: "/photos/home/hero.jpg"
 });
 
-const featuredServiceSlugs = new Set([
-  "bed-cleanup",
-  "mulching",
-  "spring-cleanup"
-]);
-
-const featuredServices = services.filter((service) => featuredServiceSlugs.has(service.slug));
-
-const serviceMeta: Record<string, string> = {
-  "bed-cleanup": "Your beds cleaned, edged, and ready",
-  mulching: "Installed start to finish, we handle everything",
-  "spring-cleanup": "Full seasonal reset before peak growth"
-};
-
-const answerBlocks = [
+const compactServices = [
   {
-    question: "What services does Iconic Landscaping offer?",
-    answer:
-      "Iconic Landscaping offers spring cleanup, bed cleanup, mulching, planting, edging, bush trimming, brush cleanup, leaf removal, and off-site debris removal. We serve residential and commercial properties, but we do not offer mowing or tree work."
+    name: "Spring Cleanup",
+    desc: "Full-property reset after winter. Debris, leaves, the works.",
+    image: "/photos/home/after/after-2.jpg",
+    icon: <Sprout className="h-5 w-5" />,
+    href: "/services/spring-cleanup"
   },
   {
-    question: "What areas does Iconic Landscaping serve?",
-    answer:
-      "We serve Pottstown, Chester Springs, Royersford, Douglassville, Spring City, Phoenixville, Collegeville, Glenmoore, Birdsboro, and surrounding areas in Montgomery, Chester, and Berks Counties."
+    name: "Bed Cleanup",
+    desc: "Edged, weeded, and reset — every bed looks fresh.",
+    image: "/photos/home/bed-cleanup.jpg",
+    icon: <Shovel className="h-5 w-5" />,
+    href: "/services/bed-cleanup"
   },
   {
-    question: "How fast do you respond to quote requests?",
-    answer:
-      "We respond to all quote requests within 24 hours, usually the same day. For complex jobs, we schedule a property visit before sending a detailed itemized quote."
-  },
-  {
-    question: "Do you haul away debris?",
-    answer:
-      "Yes. Debris can be hauled off-site to local composting partners like Arborganic Acres, where organic material is naturally composted instead of sent to a landfill."
+    name: "Mulching",
+    desc: "Premium hardwood mulch laid by hand with crisp, clean edges.",
+    image: "/photos/home/after/after-3.jpg",
+    icon: <Leaf className="h-5 w-5" />,
+    href: "/services/mulching"
   }
 ];
 
-const trustPoints = [
+const processSteps = [
   {
-    label: "500+ Customers",
-    icon: <CheckCircle2 className="h-5 w-5" />
+    duration: "Fast response",
+    title: "Clarity right away",
+    body: "Tell us what you need. We respond within 24 hours so you know next steps fast."
   },
   {
-    label: "On-Time Scheduling",
-    icon: <Clock3 className="h-5 w-5" />
+    duration: "Flexible quoting",
+    title: "Clear, customizable pricing",
+    body: "Itemized quotes you can adjust. Most done online, with free on-site visits if needed."
   },
   {
-    label: "Local to Pottstown",
-    icon: <MapPin className="h-5 w-5" />
-  },
-  {
-    label: "Licensed & Insured",
-    icon: <ShieldCheck className="h-5 w-5" />
+    duration: "Day of",
+    title: "A clean, finished result",
+    body: "We complete the work, walk it with you, and make sure everything is done right before we leave."
   }
 ];
 
-const GoogleReviewsScroller = dynamic(
-  () => import("@/components/GoogleReviewsScroller").then((mod) => mod.GoogleReviewsScroller),
-  { ssr: false }
-);
+const galleryItems = [
+  { src: "/photos/home/after/after-1.jpg", alt: "Finished mulch and edged beds", caption: "Mulching, Pottstown" },
+  { src: "/photos/home/after/after-2.jpg", alt: "Bed cleanup finish", caption: "Bed Cleanup, Chester Springs" },
+  { src: "/photos/home/after/after-3.jpg", alt: "Spring cleanup result", caption: "Spring Cleanup, Royersford" },
+  { src: "/photos/services/mulching/after.jpg", alt: "Premium hardwood mulch installed", caption: "Mulching, Douglassville" },
+  { src: "/photos/services/bed-cleanup/after.jpg", alt: "Bed cleanup with crisp edge", caption: "Bed Cleanup, Spring City" },
+  { src: "/photos/services/spring-cleanup/after.jpg", alt: "Spring cleanup full property", caption: "Spring Cleanup, Phoenixville" }
+];
 
-const LeadCaptureForm = dynamic(
-  () => import("@/components/LeadCaptureForm").then((mod) => mod.LeadCaptureForm),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="mt-6 h-72 animate-pulse rounded-2xl border border-brand-primary/15 bg-brand-light/30" />
-    )
-  }
-);
-
-const StickyQuoteBar = dynamic(
-  () => import("@/components/StickyQuoteBar").then((mod) => mod.StickyQuoteBar),
+const QuickQuoteForm = dynamic(
+  () => import("@/components/QuickQuoteForm").then((m) => m.QuickQuoteForm),
   { ssr: false }
 );
 
@@ -114,270 +86,183 @@ export default function HomePage() {
       <SchemaMarkup
         type="review"
         payload={{
-          author: { "@type": "Person", name: "Susan Smith" },
+          author: { "@type": "Person", name: "Wendy Hanna" },
           reviewRating: { "@type": "Rating", ratingValue: "5" },
           reviewBody:
-            "Highly recommend. Very professional and communication was great. They did an awesome job creating a new flower bed and mulching all existing beds."
+            "I was very impressed with response times, scheduling and updates. The crew was polite, respectful and went above and beyond my expectations."
         }}
       />
 
       <div className="pb-[86px] lg:pb-0">
-        <section className="relative overflow-hidden bg-brand-dark text-white lg:min-h-[620px] xl:min-h-[700px]">
-        <Image
-          src="/photos/home/hero.jpg"
-          alt="Clean landscaped property in Pottstown"
-          fill
-          sizes="100vw"
-          className="object-cover"
-          placeholder="blur"
-          blurDataURL={GREEN_BLUR_PLACEHOLDER}
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,30,10,0.88)] via-[rgba(10,30,10,0.62)] to-[rgba(10,30,10,0.28)]" />
-        <div className="relative home-shell py-10 md:py-16 lg:flex lg:min-h-[620px] lg:items-center lg:py-24 xl:min-h-[700px] xl:py-28">
-          <div className="grid items-start gap-10 md:gap-12 lg:w-full lg:grid-cols-[minmax(0,1fr)_minmax(520px,640px)] lg:items-center lg:gap-14 xl:gap-20">
-            <div className="order-1">
-              <p className="inline-block rounded-full border border-white/25 px-3 py-1 text-[0.7rem] uppercase tracking-[0.12em] text-white/80">
-                📍 Pottstown, PA
-              </p>
-              <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.4rem,7vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.02em] lg:max-w-none lg:text-[clamp(3.9rem,5.8vw,7.25rem)]">
-                Make Your Property Iconic.
-              </h1>
-              <p className="mt-6 max-w-xl text-[1.03rem] leading-[1.55] text-white/78 md:text-[1.1rem] lg:max-w-[62ch] lg:text-[1.35rem]">
-                Premium residential landscaping in Pottstown and surrounding areas. Reliable crew, clear communication, results you&apos;ll notice.
-              </p>
-            </div>
 
-            <aside className="order-2 w-full max-w-[520px] justify-self-end rounded-2xl border border-brand-primary/20 border-t-4 border-t-brand-primary bg-white/95 p-5 text-brand-dark shadow-card backdrop-blur-md md:p-6 lg:max-w-[640px] lg:p-9 xl:p-10">
-              <h2 className="font-display text-[1.3rem] font-extrabold leading-tight md:text-[1.45rem] lg:text-[1.78rem]">Get Your Free Quote</h2>
-              <ul className="mt-4 space-y-2.5 text-sm text-brand-dark/85 lg:space-y-3 lg:text-base">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Response within 24 hours
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Clear itemized quotes
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-                  Licensed, insured, electric-equipment crew
-                </li>
-              </ul>
-              <Button
-                href="#quote"
-                ariaLabel="Start free quote"
-                className="mt-4 w-full"
-                trackEventName="cta_quote_click"
-                trackEventParams={{ source: "home_hero_quote_card" }}
+        {/* ── 1. HERO ── */}
+        <section className="relative overflow-hidden bg-brand-bone">
+          <div className="relative h-[calc(100svh-78px)] min-h-[640px] w-full lg:h-[calc(100vh-82px)] lg:min-h-[680px]">
+            <Image
+              src="/photos/home/hero.jpg"
+              alt="Landscaped property in Pottstown"
+              fill
+              sizes="100vw"
+              className="object-cover"
+              placeholder="blur"
+              blurDataURL={GREEN_BLUR_PLACEHOLDER}
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.35)] to-[rgba(0,0,0,0.65)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.008)_36%,rgba(0,0,0,0.0)_60%)]" />
+            <div className="section-shell relative flex h-full flex-col items-center justify-center pt-6 text-center">
+              <h1 className="hero-title max-w-5xl text-[clamp(3.35rem,12.4vw,6.9rem)] font-medium leading-[0.8] text-white md:text-[clamp(5rem,8.5vw,8.2rem)]">
+                Make Your <br />
+                Property <span className="text-[#9bb593]">Iconic.</span>
+              </h1>
+              <p className="mt-8 max-w-[26rem] text-balance text-xl font-light leading-[1.38] text-white md:max-w-3xl md:text-2xl">
+                Premium landscaping in Pottstown, PA and surrounding areas.
+              </p>
+              <div className="mt-9 flex flex-col items-center gap-14">
+                <Button
+                  href="#quote"
+                  ariaLabel="Get a free quote"
+                  className="border-brand-forest bg-brand-forest px-10 py-4 text-xl text-brand-cream hover:border-brand-moss hover:bg-brand-moss md:px-16 md:py-6 md:text-2xl"
+                  trackEventName="cta_quote_click"
+                  trackEventParams={{ source: "home_hero" }}
+                >
+                  Get a Free Quote
+                </Button>
+                <div className="space-y-4 text-white">
+                  <div className="flex flex-wrap items-center justify-center gap-3 text-base font-bold md:text-lg">
+                    <span className="text-xl leading-none text-yellow-400 md:text-2xl">★★★★★</span>
+                    <span>4.6 ★ (56+ reviews)</span>
+                  </div>
+                  <p className="text-xl font-bold md:text-2xl">500+ Happy Customers</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 3. SERVICES ── */}
+        <section className="section-shell band-tight">
+          <SectionHeader
+            meta="Our services"
+            title="Quality work. Clean results. Every time."
+            lede="We focus on what we do best — three core services, done exceptionally well."
+          />
+          <div className="mt-8 flex flex-col gap-3">
+            {compactServices.map((s) => (
+              <ServiceCompactCard key={s.href} {...s} />
+            ))}
+          </div>
+          <div className="mt-8 flex justify-start">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 rounded-full border border-brand-forest bg-brand-forest px-5 py-3 text-sm font-semibold text-brand-cream transition-colors hover:border-brand-moss hover:bg-brand-moss"
+            >
+              View all services <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+
+        {/* ── 4. RESULTS GALLERY ── */}
+        <section id="work" className="bg-brand-bone band-tight">
+          <div className="section-shell">
+            <SectionHeader
+              meta="Real results"
+              title="Recent work from around town."
+              lede="A handful of properties we&rsquo;ve made iconic in the last few weeks."
+            />
+            <div className="mt-8">
+              <AfterGallery items={galleryItems} />
+            </div>
+          </div>
+        </section>
+
+        {/* ── 5. WHY CHOOSE US ── */}
+        <WhyChooseUs />
+
+        {/* ── 6. HOW IT WORKS ── */}
+        <section className="bg-brand-bone band-tight">
+          <div className="section-shell grid gap-8 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-14">
+            <SectionHeader
+              meta="How it works"
+              title="Three steps to a landscape you&rsquo;ll love."
+              lede="A simple path from first text to finished walkthrough, with room to adjust the scope before work starts."
+              className="lg:sticky lg:top-24"
+            />
+            <ProcessList steps={processSteps} />
+          </div>
+        </section>
+
+        {/* ── 7. TESTIMONIALS ── */}
+        <TestimonialsCarousel />
+
+        {/* ── 8. SERVICE AREA ── */}
+        <section className="section-shell band-tight">
+          <SectionHeader
+            meta="Service area"
+            title="Proudly serving Chester &amp; Montgomery Counties"
+          />
+          <ul className="mt-8 grid gap-px overflow-hidden border-y hairline md:grid-cols-2">
+            {areas.map((area) => (
+              <li
+                key={area.slug}
+                className="border-b hairline last:border-b-0 md:[&:nth-last-child(-n+2)]:border-b-0"
               >
-                Start Free Quote
-              </Button>
+                <Link
+                  href={`/areas/${area.slug}`}
+                  className="group flex items-baseline justify-between gap-6 px-1 py-4 transition-colors hover:bg-brand-bone md:px-4"
+                >
+                  <span className="font-[var(--font-fraunces)] text-lg font-medium text-brand-ink md:text-xl">
+                    {area.name}
+                  </span>
+                  <span className="flex items-baseline gap-3">
+                    <span className="meta hidden sm:inline">{area.region}</span>
+                    <ArrowRight className="h-4 w-4 text-brand-sage transition-transform group-hover:translate-x-1 group-hover:text-brand-forest" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 text-sm text-brand-ink/60">
+            Don&apos;t see your town?{" "}
+            <a
+              href={SMS_LINK}
+              className="font-semibold text-brand-forest underline-offset-4 hover:underline"
+              data-track-event="click_to_text"
+              data-track-params='{"source":"home_areas"}'
+            >
+              Text us
+            </a>{" "}
+            — we travel for the right job.
+          </p>
+        </section>
+
+        {/* ── 9. QUICK QUOTE ── */}
+        <section id="quote" className="bg-brand-forest band-tight">
+          <div className="section-shell grid gap-10 md:grid-cols-2 md:items-center md:gap-14">
+            <div>
+              <h2 className="font-[var(--font-fraunces)] text-3xl font-medium leading-tight tracking-[-0.01em] text-brand-cream md:text-4xl">
+                Ready to make your property iconic?
+              </h2>
+              <p className="mt-4 max-w-md text-base font-normal leading-relaxed text-[#E7DDCB] md:text-lg">
+                Free quotes. No pressure. We respond in 24 hours or less.
+              </p>
               <a
                 href={SMS_LINK}
-                className="mt-2 inline-flex w-full items-center justify-center gap-1.5 text-xs font-semibold text-brand-dark/60 underline-offset-4 hover:text-brand-primary hover:underline lg:text-sm"
-                aria-label="Text us"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-cream underline-offset-4 hover:underline"
                 data-track-event="click_to_text"
-                data-track-params='{"source":"home_hero"}'
+                data-track-params='{"source":"home_quote"}'
               >
-                <PhoneCall className="h-4 w-4" /> Text {PHONE_DISPLAY}
+                Or text {PHONE_DISPLAY}
               </a>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-        <GoogleReviewsScroller />
-        <WorkGallery />
-
-        <section className="home-shell py-8 md:py-12 lg:py-16 xl:py-20">
-          <div className="rounded-2xl border border-brand-primary/15 bg-[#faf8f3] p-5 shadow-card md:p-7 lg:p-9">
-            <h2 className="font-display text-2xl font-extrabold text-brand-dark md:text-3xl lg:text-4xl">
-              Why Homeowners Choose Iconic
-            </h2>
-            <div className="mt-4 grid grid-cols-2 gap-3 md:mt-6 md:gap-4">
-              {trustPoints.map((point) => (
-                <article key={point.label} className="rounded-xl border border-slate-200 bg-white p-4 shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
-                  <div className="inline-flex items-center justify-center rounded-full bg-[#ebf5ec] p-2 text-brand-primary">
-                    {point.icon}
-                  </div>
-                  <p className="mt-2 text-sm font-semibold leading-snug text-brand-dark md:text-base">{point.label}</p>
-                </article>
-              ))}
             </div>
-            <p className="mt-4 text-sm text-brand-dark/70 md:text-base">
-              Reliable communication. Clean work. Final walkthrough before we leave.
-            </p>
+            <div className="rounded-xl bg-brand-bone p-5 md:p-6">
+              <QuickQuoteForm source="home_quote_section" />
+            </div>
           </div>
         </section>
 
-        <section className="home-shell py-16 md:py-20 lg:py-24 xl:py-28">
-        <h2 className="section-title lg:text-5xl">Most Requested Services</h2>
-        <p className="section-subtitle lg:text-xl">
-          Start with our most requested services, then we customize scope to your property.
-        </p>
-        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4 lg:mt-12 lg:gap-7">
-          {featuredServices.map((service) => (
-            <ServiceCard
-              key={service.slug}
-              title={service.name}
-              description={service.shortDescription}
-              href={`/services/${service.slug}`}
-              icon={getServiceIcon(service.slug)}
-              ctaLabel="Get a Quote for This"
-              meta={serviceMeta[service.slug]}
-            />
-          ))}
-        </div>
-        <Link
-          href="/services"
-          className="mt-8 inline-flex items-center gap-2 rounded-full border border-brand-primary/25 bg-white px-5 py-3 text-sm font-semibold text-brand-primary hover:border-brand-primary lg:text-base"
-        >
-          View All Services <ArrowRight className="h-4 w-4" />
-        </Link>
-      </section>
-
-        <section id="how-it-works" className="home-shell py-12 md:py-14 lg:py-20 xl:py-24">
-        <h2 className="section-title lg:text-5xl">How It Works</h2>
-        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center lg:gap-6 xl:gap-8">
-          <ProcessStep
-            step={1}
-            title="Start a Quote"
-            description="Fill out our quick form or text us directly to start a quote."
-            icon={<ClipboardCheck className="h-6 w-6" />}
-          />
-          <span className="hidden text-3xl font-bold text-brand-accent md:inline-flex md:justify-center lg:text-4xl">→</span>
-          <ProcessStep
-            step={2}
-            title="We Walk the Property"
-            description="We review your property details and send a clear itemized quote - usually same day. For larger jobs or complex scopes, we'll schedule an in-person walkthrough to confirm pricing."
-            icon={<MapPin className="h-6 w-6" />}
-          />
-          <span className="hidden text-3xl font-bold text-brand-accent md:inline-flex md:justify-center lg:text-4xl">→</span>
-          <ProcessStep
-            step={3}
-            title="We Get to Work"
-            description="Once approved, we schedule the job. Before any work starts we walk the full property with you to confirm scope and expectations. We finish the same way - a final walkthrough before we leave."
-            icon={<CheckCircle2 className="h-6 w-6" />}
-          />
-        </div>
-        <Button
-          href="#quote"
-          ariaLabel="Start with step one"
-          className="mt-8 lg:mt-10"
-          trackEventName="cta_quote_click"
-          trackEventParams={{ source: "home_how_it_works" }}
-        >
-          Start with Step 1
-        </Button>
-      </section>
-
-        <section className="home-shell py-10 md:py-12 lg:py-16 xl:py-20">
-        <h2 className="section-title lg:text-5xl">Serving the Greater Pottstown Area</h2>
-        <p className="section-subtitle lg:text-xl">Explore the towns where our crew already has real local work, reviews, and repeat clients.</p>
-        <div className="mt-8 grid gap-3 md:grid-cols-2 lg:mt-10 lg:grid-cols-3">
-          {areas.map((area) => (
-            <Link
-              key={area.slug}
-              href={`/areas/${area.slug}`}
-              className="rounded-2xl border border-brand-primary/15 bg-white p-4 shadow-soft transition-colors hover:border-brand-primary"
-            >
-              <span className="block font-semibold text-brand-primary">{area.name}, {area.region}</span>
-              <span className="mt-1 block text-xs uppercase tracking-[0.08em] text-brand-dark/55">
-                {area.tier === "primary" ? "Core service area" : "Larger jobs prioritized"}
-              </span>
-            </Link>
-          ))}
-        </div>
-        <p className="mt-4 text-sm text-brand-dark/70 lg:text-base">Not on the list? Text us - we may still be able to help.</p>
-        <Link
-          href="/service-area"
-          className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-primary hover:text-brand-accent lg:text-base"
-        >
-          Check if we serve your area <ArrowRight className="h-4 w-4" />
-        </Link>
-      </section>
-
-        <section className="home-shell py-12 md:py-16 lg:py-20">
-        <h2 className="section-title lg:text-5xl">Quick Answers</h2>
-        <p className="section-subtitle lg:text-xl">Clear answers before you request a quote.</p>
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {answerBlocks.map((item) => (
-            <article key={item.question} className="rounded-2xl border border-brand-primary/12 bg-white p-5 shadow-soft md:p-6">
-              <h3 className="text-lg font-bold text-brand-dark">{item.question}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-brand-dark/75 md:text-base">{item.answer}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-        <section className="home-shell py-16 md:py-20 lg:py-24 xl:py-28">
-        <div
-          id="quote"
-          className="mx-auto max-w-4xl rounded-2xl border border-brand-primary/15 border-t-4 border-t-brand-primary bg-white p-5 shadow-card md:p-7 lg:max-w-7xl lg:p-10 xl:p-12"
-        >
-          <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-brand-primary/80">
-            Fast response. No spam.
-          </p>
-          <h2 className="mt-4 font-display text-[1.6rem] font-extrabold leading-tight text-brand-dark md:text-[1.9rem] lg:text-[2.2rem] xl:text-[2.45rem]">
-            Start Your Free Quote
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed text-brand-dark/75 md:text-base lg:text-lg">
-            Quick form now, real follow-up from our local team. We typically respond within 24 hours.
-          </p>
-          <ul className="mt-5 space-y-2.5 text-sm text-brand-dark/85 lg:text-base">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-              Local team serving Greater Pottstown
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-              Detailed scope and transparent pricing
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-brand-primary" />
-              Most quote requests get a response within 24 hours
-            </li>
-          </ul>
-          <LeadCaptureForm source="home_quote_section" variant="compact" className="mt-6 lg:mt-8" />
-        </div>
-      </section>
-
-        <section className="home-shell py-4 md:py-8 lg:py-10">
-        <FaqTeaser />
-      </section>
-
-        <section className="relative overflow-hidden bg-brand-primary py-20 text-white lg:py-24 xl:py-28">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-20 top-1/2 h-56 w-56 -translate-y-1/2 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -right-20 top-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-        </div>
-        <div className="home-shell relative text-center">
-          <h2 className="font-display text-3xl font-extrabold md:text-5xl lg:text-6xl">Make Your Property Iconic.</h2>
-          <p className="mx-auto mt-3 max-w-xl text-white/85 lg:text-xl">Fast response. Clear pricing. Local team.</p>
-          <Button
-            href="#quote"
-            ariaLabel="Open quote form"
-            className="mt-8 min-h-[52px] border-[#1C4A1E] bg-[#1C4A1E] px-9 text-base font-bold text-white hover:border-[#163a18] hover:bg-[#163a18] lg:min-h-[58px] lg:text-lg"
-            trackEventName="cta_quote_click"
-            trackEventParams={{ source: "home_final_cta" }}
-          >
-            Get My Free Quote
-          </Button>
-          <a
-            href={SMS_LINK}
-            className="mt-4 inline-flex text-sm font-semibold text-white/90 underline-offset-2 hover:underline lg:text-base"
-            aria-label="Text Iconic Landscaping"
-            data-track-event="click_to_text"
-            data-track-params='{"source":"home_final_cta"}'
-          >
-            Or text {PHONE_DISPLAY}
-          </a>
-        </div>
-        </section>
       </div>
 
-      <StickyQuoteBar />
     </>
   );
 }

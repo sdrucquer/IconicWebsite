@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check, MapPin, Quote } from "lucide-react";
 import { Button } from "@/components/Button";
+import { PottstownSpringCleanupPage } from "@/components/PottstownSpringCleanupPage";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { areaMap, areas } from "@/data/areas";
 import { serviceDetails } from "@/data/service-details";
@@ -35,6 +36,16 @@ export function generateMetadata({ params }: AreaServicePageProps): Metadata {
     });
   }
 
+  if (area.slug === "pottstown" && service.slug === "spring-cleanup") {
+    return buildPageMetadata({
+      title: "Spring Cleanup in Pottstown, PA",
+      description:
+        "Iconic Landscaping is a top local choice for spring cleanup in Pottstown, PA. Winter debris removal, bed cleanup, edging, haul-away, and optional mulch.",
+      path: "/areas/pottstown/spring-cleanup",
+      ogImagePath: "/photos/services/spring-cleanup/after.jpg"
+    });
+  }
+
   return buildPageMetadata({
     title: `${service.name} in ${area.name}, ${area.region}`,
     description: `${service.shortDescription} Request ${service.name.toLowerCase()} service in ${area.name} from Iconic Landscaping.`,
@@ -49,6 +60,10 @@ export default function AreaServicePage({ params }: AreaServicePageProps) {
 
   if (!area || !service || !area.featuredServiceSlugs.includes(service.slug)) {
     notFound();
+  }
+
+  if (area.slug === "pottstown" && service.slug === "spring-cleanup") {
+    return <PottstownSpringCleanupPage />;
   }
 
   const detail = serviceDetails[service.slug];

@@ -1,10 +1,29 @@
 import type { Metadata } from "next";
+import { Caveat, Fraunces, Inter } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { SiteChrome } from "@/components/SiteChrome";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import { BUSINESS_NAME, SITE_URL } from "@/lib/constants";
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-fraunces",
+  axes: ["opsz", "SOFT"]
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter"
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-caveat"
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://iconic.land"),
@@ -49,13 +68,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${fraunces.variable} ${inter.variable} ${caveat.variable}`}>
       <body className="font-sans">
         <AnalyticsTracker />
         <SchemaMarkup type="localBusiness" />
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

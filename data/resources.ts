@@ -32,15 +32,22 @@ export const resourceArticles: ResourceArticle[] = [
     slug: "spring-cleanup-checklist-pottstown",
     title: "Spring Cleanup Checklist for Pottstown Homeowners",
     summary:
-      "A practical spring cleanup plan for suburban properties in and around Pottstown, including timing, priorities, and common mistakes.",
-    heroImage: "/photos/home/hero.jpg",
+      "A sequence-driven spring cleanup plan for suburban properties in Pottstown, Royersford, and the surrounding area: what to do first, what to skip, and how to avoid common mistakes.",
+    heroImage: "/photos/services/spring-cleanup/after.jpg",
     publishDate: "2026-03-02",
     updatedDate: "2026-03-02",
     author: "Iconic Landscaping Team",
     readTime: "6 min",
     intro:
-      "The best spring cleanups are sequence-driven. Start in the wrong order and you lose time, miss debris zones, and pay twice for labor. This checklist is how local crews keep projects efficient and clean.",
+      "The best spring cleanups are sequence-driven. Start in the wrong order and you lose time, miss debris zones, and pay twice for labor: once for the cleanup and once for the re-do.",
     sections: [
+      {
+        heading: "Why sequence matters more than effort",
+        body: [
+          "Most yards in Pottstown, Royersford, and the surrounding area share the same shape after winter: leaves lodged against fences, broken stick debris in beds, mulch thinned by snow and wind, and bed edges that have softened or disappeared.",
+          "The fix is a fixed sequence. Five steps, every property, regardless of size."
+        ]
+      },
       {
         heading: "Start with debris and access",
         body: [
@@ -64,13 +71,13 @@ export const resourceArticles: ResourceArticle[] = [
       }
     ],
     processSteps: [
-      "Property walkthrough and scope confirmation",
+      "Property walkthrough and scope",
       "Debris removal and initial blow-out",
       "Bed cleanup and edge definition",
       "Selective trimming and detail pass",
-      "Final cleanup with optional off-site removal"
+      "Final cleanup with haul-away"
     ],
-    costRange: "$350-$1,600+ depending on lot size, debris volume, and add-on services",
+    costRange: "Depending on lot size, debris volume, and add-ons like mulch installation or planting.",
     relatedServiceSlugs: ["spring-cleanup", "leaf-cleanup", "bed-cleanup", "off-site-removal"],
     relatedAreaSlugs: ["pottstown", "spring-city"],
     faqs: [
@@ -83,6 +90,16 @@ export const resourceArticles: ResourceArticle[] = [
         question: "Is spring cleanup the same as weekly maintenance?",
         answer:
           "No. Spring cleanup is a reset service. Weekly maintenance keeps the property in that improved state afterward."
+      },
+      {
+        question: "Can mulch installation be added to a cleanup?",
+        answer:
+          "Yes. Mulch goes down after bed cleanup and edging, so it is the natural last step. Pricing is itemized so you can include or skip it without affecting the cleanup price."
+      },
+      {
+        question: "Do I need to be home for the work?",
+        answer:
+          "Not for the cleanup itself. Most customers are not home during the work. We recommend a brief final walkthrough in person or over text with photos so the result matches what you expected."
       }
     ]
   },
