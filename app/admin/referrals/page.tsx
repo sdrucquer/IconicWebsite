@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CREW } from "@/data/crew";
+import { jobberGraphQL } from "@/lib/jobber";
 
 export const metadata: Metadata = {
   title: "Referral Dashboard | Iconic Landscaping",
@@ -26,101 +27,26 @@ type CrewStats = {
 };
 
 // ---------------------------------------------------------------------------
-// Jobber helpers — token rotation mirrors /api/submit-quote so both routes
-// stay in sync. Every exchange issues a new refresh token; we persist it back
-// to the Vercel env var so cold starts always start with the current token.
+// Jobber helpers — token management is handled by lib/jobber.ts
 // ---------------------------------------------------------------------------
-async function persistRefreshToken(token: string) {
-  const accessToken = process.env.VERCEL_ACCESS_TOKEN;
-  const projectId = process.env.VERCEL_PROJECT_ID;
-  const teamId = process.env.VERCEL_TEAM_ID;
-  if (!accessToken || !projectId) return;
-
-  try {
-    const url = `https://api.vercel.com/v10/projects/${projectId}/env${teamId ? `?teamId=${teamId}` : ""}`;
-    const listRes = await fetch(url, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      cache: "no-store",
-    });
-    if (!listRes.ok) return;
-    const list = await listRes.json();
-    const existing = (list.envs as { key: string; id: string }[])?.find(
-      (e) => e.key === "JOBBER_REFRESH_TOKEN"
-    );
-    if (!existing) return;
-
-    await fetch(
-      `https://api.vercel.com/v10/projects/${projectId}/env/${existing.id}${teamId ? `?teamId=${teamId}` : ""}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ value: token }),
-        cache: "no-store",
-      }
-    );
-  } catch {
-    // Non-fatal — access token still works for this request
-  }
-}
-
-async function getJobberToken(): Promise<string> {
-  const refreshToken = process.env.JOBBER_REFRESH_TOKEN ?? "";
-
-  const res = await fetch("https://api.getjobber.com/api/oauth/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-      client_id: process.env.JOBBER_CLIENT_ID ?? "",
-      client_secret: process.env.JOBBER_CLIENT_SECRET ?? "",
-    }),
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`Jobber auth failed: ${res.status}`);
-  const json = await res.json();
-
-  // Persist the rotated refresh token so the next cold start uses it
-  if (json.refresh_token && json.refresh_token !== refreshToken) {
-    void persistRefreshToken(json.refresh_token as string);
-  }
-
-  return json.access_token as string;
-}
-
 async function fetchAllFlyerRequests(): Promise<JobberRequest[]> {
-  const token = await getJobberToken();
   const all: JobberRequest[] = [];
   let cursor: string | null = null;
 
   while (true) {
-    const res = await fetch("https://api.getjobber.com/api/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        "X-JOBBER-GRAPHQL-VERSION": "2026-04-16",
-      },
-      body: JSON.stringify({
-        query: `
-          query Requests($after: String) {
-            requests(first: 100, after: $after) {
-              nodes { id title createdAt requestStatus }
-              pageInfo { hasNextPage endCursor }
-            }
-          }
-        `,
-        variables: { after: cursor },
-      }),
-      cache: "no-store",
-    });
+    const json = await jobberGraphQL(
+      `query Requests($after: String) {
+        requests(first: 100, after: $after) {
+          nodes { id title createdAt requestStatus }
+          pageInfo { hasNextPage endCursor }
+        }
+      }`,
+      { after: cursor }
+    ) as Record<string, unknown>;
 
-    const json = await res.json();
-    const nodes: JobberRequest[] = json.data?.requests?.nodes ?? [];
-    const pageInfo = json.data?.requests?.pageInfo;
+    const data = json.data as Record<string, unknown> | undefined;
+    const nodes: JobberRequest[] = (data?.requests as Record<string, unknown> | undefined)?.nodes as JobberRequest[] ?? [];
+    const pageInfo = (data?.requests as Record<string, unknown> | undefined)?.pageInfo as Record<string, unknown> | undefined;
 
     all.push(...nodes.filter((n) => /\[Flyer:/i.test(n.title)));
 

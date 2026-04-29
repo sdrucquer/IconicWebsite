@@ -19,6 +19,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@upstash/redis": "^1.37.0",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.453.0",
     "next": "14.2.14",

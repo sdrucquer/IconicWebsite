@@ -1,127 +1,11 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-
-// ---------------------------------------------------------------------------
-// Token cache — reused within a warm Vercel instance so we don't authenticate
-// on every single request. Re-authenticates when expired or missing.
-//
-// Refresh token rotation: Jobber issues a new refresh_token on every exchange.
-// We persist the latest one in JOBBER_REFRESH_TOKEN_LIVE (an env var we update
-// via the Vercel API) so cold starts always have the current token.
-// ---------------------------------------------------------------------------
-let cachedToken: string | null = null;
-let tokenExpiresAt = 0;
-let cachedRefreshToken: string | null = null; // latest rotated token, in-memory
-
-async function persistRefreshToken(token: string) {
-  // Write the new refresh token back to the Vercel environment variable so
-  // the next cold start picks it up. Requires VERCEL_ACCESS_TOKEN + VERCEL_PROJECT_ID.
-  const accessToken = process.env.VERCEL_ACCESS_TOKEN;
-  const projectId = process.env.VERCEL_PROJECT_ID;
-  const teamId = process.env.VERCEL_TEAM_ID; // optional, only needed for team projects
-  if (!accessToken || !projectId) return; // skip silently if not configured
-
-  const url = `https://api.vercel.com/v10/projects/${projectId}/env${teamId ? `?teamId=${teamId}` : ""}`;
-  console.log(`[submit-quote] persistRefreshToken: listing env vars for project ${projectId.slice(0, 8)}...`);
-
-  try {
-    // Find the existing env var ID first
-    const listRes = await fetch(url, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      cache: "no-store",
-    });
-    if (!listRes.ok) {
-      console.log(`[submit-quote] persistRefreshToken: list failed (${listRes.status}): ${await listRes.text()}`);
-      return;
-    }
-    const list = await listRes.json();
-    const existing = (list.envs as { key: string; id: string }[])?.find(
-      (e) => e.key === "JOBBER_REFRESH_TOKEN"
-    );
-    if (!existing) {
-      console.log("[submit-quote] persistRefreshToken: JOBBER_REFRESH_TOKEN not found in env list");
-      return;
-    }
-
-    // Patch the value
-    const patchRes = await fetch(`https://api.vercel.com/v10/projects/${projectId}/env/${existing.id}${teamId ? `?teamId=${teamId}` : ""}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ value: token }),
-      cache: "no-store",
-    });
-    if (patchRes.ok) {
-      console.log(`[submit-quote] persistRefreshToken: updated JOBBER_REFRESH_TOKEN to ${token.slice(0, 8)}...`);
-    } else {
-      console.log(`[submit-quote] persistRefreshToken: patch failed (${patchRes.status}): ${await patchRes.text()}`);
-    }
-  } catch (err) {
-    console.log("[submit-quote] persistRefreshToken error:", err);
-  }
-}
-
-async function getJobberToken(): Promise<string> {
-  const now = Date.now();
-  if (cachedToken && now < tokenExpiresAt - 60_000) {
-    return cachedToken;
-  }
-
-  // Use the latest rotated refresh token if we have one in memory,
-  // otherwise fall back to the env var (first cold start after deploy).
-  const refreshToken = cachedRefreshToken ?? process.env.JOBBER_REFRESH_TOKEN ?? "";
-  console.log(`[submit-quote] Using refresh token: ${refreshToken.slice(0, 8)}... client_id: ${(process.env.JOBBER_CLIENT_ID ?? "").slice(0, 8)}...`);
-
-  const res = await fetch("https://api.getjobber.com/api/oauth/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-      client_id: process.env.JOBBER_CLIENT_ID ?? "",
-      client_secret: process.env.JOBBER_CLIENT_SECRET ?? "",
-    }),
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error(`Jobber auth failed (${res.status}): ${await res.text()}`);
-  }
-
-  const json = await res.json();
-  cachedToken = json.access_token as string;
-  tokenExpiresAt = now + (json.expires_in as number) * 1000;
-
-  // Capture the new refresh token Jobber issued and persist it
-  if (json.refresh_token && json.refresh_token !== refreshToken) {
-    cachedRefreshToken = json.refresh_token as string;
-    void persistRefreshToken(cachedRefreshToken);
-  }
-
-  return cachedToken;
-}
+import { jobberGraphQL } from "@/lib/jobber";
 
 // ---------------------------------------------------------------------------
 // Jobber — create client + request via GraphQL (two-step flow)
 // ---------------------------------------------------------------------------
-async function jobberGraphQL(query: string, variables: Record<string, unknown>, token: string) {
-  const res = await fetch("https://api.getjobber.com/api/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      "X-JOBBER-GRAPHQL-VERSION": "2026-04-16",
-    },
-    body: JSON.stringify({ query, variables }),
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`Jobber GraphQL HTTP error: ${res.status}`);
-  return res.json();
-}
-
-async function createJobberRequest(data: SubmitPayload, token: string) {
+async function createJobberRequest(data: SubmitPayload) {
   // Step 1 — Create the client
   const clientMutation = `
     mutation ClientCreate($input: ClientCreateInput!) {
@@ -149,16 +33,17 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
     clientInput.emails = [{ address: data.email, primary: true }];
   }
 
-  const clientJson = await jobberGraphQL(clientMutation, { input: clientInput }, token);
+  const clientJson = await jobberGraphQL(clientMutation, { input: clientInput }) as Record<string, unknown>;
   console.log("[submit-quote] clientCreate response:", JSON.stringify(clientJson));
 
-  const clientErrors = clientJson.data?.clientCreate?.userErrors as { message: string }[] | undefined;
+  const clientData = clientJson.data as Record<string, unknown> | undefined;
+  const clientErrors = (clientData?.clientCreate as Record<string, unknown> | undefined)?.userErrors as { message: string }[] | undefined;
   if (clientErrors?.length) throw new Error(`Jobber client errors: ${clientErrors.map((e) => e.message).join(", ")}`);
 
-  const clientId = clientJson.data?.clientCreate?.client?.id as string;
+  const clientId = ((clientData?.clientCreate as Record<string, unknown> | undefined)?.client as Record<string, unknown> | undefined)?.id as string;
   if (!clientId) throw new Error("Jobber clientCreate returned no client ID");
 
-  const propertyId = clientJson.data?.clientCreate?.client?.properties?.[0]?.id as string | undefined;
+  const propertyId = (((clientData?.clientCreate as Record<string, unknown> | undefined)?.client as Record<string, unknown> | undefined)?.properties as Record<string, unknown>[] | undefined)?.[0]?.id as string | undefined;
 
   // Step 2 — Create the request linked to the new client
   const requestMutation = `
@@ -176,16 +61,16 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
       ...(propertyId ? { propertyId } : {}),
       title: `Quote Request — ${data.serviceNeeded} [Flyer: ${data.referredBy}]`,
     },
-  }, token);
+  }) as Record<string, unknown>;
   console.log("[submit-quote] requestCreate response:", JSON.stringify(requestJson));
 
-  const requestErrors = requestJson.data?.requestCreate?.userErrors as { message: string }[] | undefined;
+  const requestData = requestJson.data as Record<string, unknown> | undefined;
+  const requestErrors = (requestData?.requestCreate as Record<string, unknown> | undefined)?.userErrors as { message: string }[] | undefined;
   if (requestErrors?.length) throw new Error(`Jobber request errors: ${requestErrors.map((e) => e.message).join(", ")}`);
 
-  const requestId = requestJson.data?.requestCreate?.request?.id as string;
+  const requestId = ((requestData?.requestCreate as Record<string, unknown> | undefined)?.request as Record<string, unknown> | undefined)?.id as string;
 
-  // Add a note to the request so the crew referral is visible on the quote,
-  // job, and invoice when the request is converted through the workflow.
+  // Add a note so the crew referral is visible on the quote, job, and invoice
   if (requestId) {
     try {
       const lines = [
@@ -197,7 +82,7 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
         "",
         "Scope is unconfirmed — verify during assessment.",
       ].filter((l) => l !== null).join("\n");
-      await addJobberNote(requestId, lines, token);
+      await addJobberNote(requestId, lines);
     } catch (err) {
       // Note failure is non-fatal — the request was already created successfully.
       console.warn("[submit-quote] Could not add note:", err);
@@ -210,7 +95,7 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
 // ---------------------------------------------------------------------------
 // Jobber — attach a pinned internal note to the request
 // ---------------------------------------------------------------------------
-async function addJobberNote(requestId: string, message: string, token: string) {
+async function addJobberNote(requestId: string, message: string) {
   const mutation = `
     mutation RequestCreateNote($requestId: EncodedId!, $input: RequestCreateNoteInput!) {
       requestCreateNote(requestId: $requestId, input: $input) {
@@ -223,11 +108,11 @@ async function addJobberNote(requestId: string, message: string, token: string) 
   const json = await jobberGraphQL(mutation, {
     requestId,
     input: { message, pinned: true },
-  }, token);
+  }) as Record<string, unknown>;
 
   console.log("[submit-quote] requestCreateNote response:", JSON.stringify(json));
-  const userErrors = json.data?.requestCreateNote?.userErrors as { message: string }[] | undefined;
-  console.log("[submit-quote] note created:", json.data?.requestCreateNote?.requestNote?.id);
+  const noteData = json.data as Record<string, unknown> | undefined;
+  const userErrors = (noteData?.requestCreateNote as Record<string, unknown> | undefined)?.userErrors as { message: string }[] | undefined;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join(", "));
 }
 
@@ -239,7 +124,7 @@ async function sendFallbackEmail(data: SubmitPayload, reason: string) {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST ?? "smtp.gmail.com",
     port: Number(process.env.SMTP_PORT ?? 587),
-    secure: false, // TLS via STARTTLS
+    secure: false,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -339,8 +224,7 @@ export async function POST(request: Request) {
 
   // Step 1 — Try Jobber
   try {
-    const token = await getJobberToken();
-    await createJobberRequest(data, token);
+    await createJobberRequest(data);
     return NextResponse.json({ ok: true });
   } catch (jobberError) {
     const reason =
