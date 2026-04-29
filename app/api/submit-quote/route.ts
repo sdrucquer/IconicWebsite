@@ -188,12 +188,16 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
   // job, and invoice when the request is converted through the workflow.
   if (requestId) {
     try {
-      const noteParts = [
-        `Service: ${data.serviceNeeded}`,
-        data.referredBy !== "unknown" ? `Flyer referral: ${data.referredBy}` : null,
-        data.notes ? `Notes: ${data.notes}` : null,
-      ].filter(Boolean).join("\n");
-      await addJobberNote(requestId, noteParts, token);
+      const lines = [
+        "Initial request via flyer form",
+        "──────────────────────────────",
+        `Service interest: ${data.serviceNeeded}`,
+        data.referredBy !== "unknown" ? `Referred by crew: ${data.referredBy}` : null,
+        data.notes ? `Customer notes: "${data.notes}"` : null,
+        "",
+        "Scope is unconfirmed — verify during assessment.",
+      ].filter((l) => l !== null).join("\n");
+      await addJobberNote(requestId, lines, token);
     } catch (err) {
       // Note failure is non-fatal — the request was already created successfully.
       console.warn("[submit-quote] Could not add note:", err);
