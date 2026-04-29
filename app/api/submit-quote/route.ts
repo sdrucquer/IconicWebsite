@@ -126,7 +126,7 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
   const clientMutation = `
     mutation ClientCreate($input: ClientCreateInput!) {
       clientCreate(input: $input) {
-        client { id }
+        client { id properties { nodes { id } } }
         userErrors { message }
       }
     }
@@ -158,6 +158,8 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
   const clientId = clientJson.data?.clientCreate?.client?.id as string;
   if (!clientId) throw new Error("Jobber clientCreate returned no client ID");
 
+  const propertyId = clientJson.data?.clientCreate?.client?.properties?.nodes?.[0]?.id as string | undefined;
+
   // Step 2 — Create the request linked to the new client
   const requestMutation = `
     mutation RequestCreate($input: RequestCreateInput!) {
@@ -171,6 +173,7 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
   const requestJson = await jobberGraphQL(requestMutation, {
     input: {
       clientId,
+      ...(propertyId ? { propertyId } : {}),
       title: `Quote Request — ${data.serviceNeeded} [Flyer: ${data.referredBy}]`,
     },
   }, token);
@@ -230,6 +233,7 @@ async function addJobberNote(subjectId: string, content: string, token: string) 
   if (!res.ok) throw new Error(`Note HTTP error: ${res.status}`);
 
   const json = await res.json();
+  console.log("[submit-quote] noteCreate response:", JSON.stringify(json));
   const userErrors = json.data?.noteCreate?.userErrors as { message: string }[] | undefined;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join(", "));
 }
