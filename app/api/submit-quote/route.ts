@@ -60,6 +60,7 @@ async function getJobberToken(): Promise<string> {
   // Use the latest rotated refresh token if we have one in memory,
   // otherwise fall back to the env var (first cold start after deploy).
   const refreshToken = cachedRefreshToken ?? process.env.JOBBER_REFRESH_TOKEN ?? "";
+  console.log(`[submit-quote] Using refresh token: ${refreshToken.slice(0, 8)}... client_id: ${(process.env.JOBBER_CLIENT_ID ?? "").slice(0, 8)}...`);
 
   const res = await fetch("https://api.getjobber.com/api/oauth/token", {
     method: "POST",
