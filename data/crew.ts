@@ -9,11 +9,21 @@ export type CrewMember = {
 };
 
 export const CREW: CrewMember[] = [
-  { slug: "danb",     name: "Dan B."      },
-  { slug: "ryand",    name: "Ryan D."     },
-  { slug: "jaydenh",  name: "Jayden H."   },
-  { slug: "anthonyg", name: "Anthony G."  },
-  { slug: "carsonm",  name: "Carson M."   },
-  { slug: "mattj",    name: "Matt J."     },
-  { slug: "shanind",  name: "Shanin D."   },
+  { slug: "anthonym",  name: "Anthony Mackrides"  },
+  { slug: "carsonm",   name: "Carson Moscariello" },
+  { slug: "gavinc",    name: "Gavin Cinkowski"    },
+  { slug: "jaydenh",   name: "Jayden Herman"      },
+  { slug: "carterh",   name: "Carter Hritz"       },
+  { slug: "anthonyg",  name: "Anthony Grover"     },
+  { slug: "logang",    name: "Logan Gasser"       },
+  { slug: "ryanh",     name: "Ryan Hatt"          },
+  { slug: "marcusr",   name: "Marcus Rossman"     },
+  { slug: "gabes",     name: "Gabe Sheaffer"      },
+  { slug: "gyasi",     name: "Gyasi"              },
+  { slug: "ashtonc",   name: "Ashton Confino"     },
+  { slug: "jaxtonm",   name: "Jaxton Majcher"     },
+  { slug: "ryand",     name: "Ryan D’Angelo"      },
+  { slug: "mattj",     name: "Matt J."            },
+  { slug: "danb",      name: "Dan Bower"          },
+  { slug: "shanind",   name: "Shanin Drucquer"    },
 ];

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CREW } from "@/data/crew";
 import { jobberGraphQL } from "@/lib/jobber";
+import { CopyButton } from "@/components/CopyButton";
 
 export const metadata: Metadata = {
   title: "Referral Dashboard | Iconic Landscaping",
@@ -218,6 +219,27 @@ export default async function ReferralDashboard() {
             })}
           </div>
         )}
+
+        {/* Referral Links */}
+        <div className="mt-12">
+          <h2 className="font-display text-xl font-medium text-brand-ink mb-1">Referral Links</h2>
+          <p className="text-sm text-brand-ink/50 mb-5">Share or print each person&apos;s unique flyer URL.</p>
+          <div className="rounded-2xl bg-white shadow-[0_4px_20px_rgba(20,44,32,0.07)] overflow-hidden">
+            {CREW.map((c, i) => {
+              const url = `https://iconic.land/quote?ref=${c.slug}`;
+              return (
+                <div
+                  key={c.slug}
+                  className={`flex items-center gap-3 px-5 py-3.5 ${i !== CREW.length - 1 ? "border-b border-brand-sage/15" : ""}`}
+                >
+                  <p className="w-40 shrink-0 text-sm font-medium text-brand-ink">{c.name}</p>
+                  <p className="flex-1 truncate text-sm text-brand-ink/40 font-mono">{url}</p>
+                  <CopyButton text={url} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
