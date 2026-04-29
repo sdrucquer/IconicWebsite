@@ -50,17 +50,17 @@ const compactServices = [
 
 const processSteps = [
   {
-    duration: "01 - FAST RESPONSE",
+    duration: "Fast response",
     title: "Clarity right away",
     body: "Tell us what you need. We respond within 24 hours so you know next steps fast."
   },
   {
-    duration: "02 - FLEXIBLE QUOTING",
+    duration: "Flexible quoting",
     title: "Clear, customizable pricing",
     body: "Itemized quotes you can adjust. Most done online, with free on-site visits if needed."
   },
   {
-    duration: "03 - DAY OF",
+    duration: "Day of",
     title: "A clean, finished result",
     body: "We complete the work, walk it with you, and make sure everything is done right before we leave."
   }
@@ -180,12 +180,14 @@ export default function HomePage() {
         <WhyChooseUs />
 
         {/* ── 6. HOW IT WORKS ── */}
-        <section className="section-shell band-tight">
-          <SectionHeader
-            meta="How it works"
-            title="Three steps to a landscape you&rsquo;ll love."
-          />
-          <div className="mt-10">
+        <section className="bg-brand-bone band-tight">
+          <div className="section-shell grid gap-8 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-14">
+            <SectionHeader
+              meta="How it works"
+              title="Three steps to a landscape you&rsquo;ll love."
+              lede="A simple path from first text to finished walkthrough, with room to adjust the scope before work starts."
+              className="lg:sticky lg:top-24"
+            />
             <ProcessList steps={processSteps} />
           </div>
         </section>
@@ -238,11 +240,10 @@ export default function HomePage() {
         <section id="quote" className="bg-brand-forest band-tight">
           <div className="section-shell grid gap-10 md:grid-cols-2 md:items-center md:gap-14">
             <div>
-              <p className="meta text-brand-cream/65">Free quote</p>
-              <h2 className="mt-3 font-[var(--font-fraunces)] text-3xl font-medium leading-tight tracking-[-0.01em] text-brand-cream md:text-4xl">
+              <h2 className="font-[var(--font-fraunces)] text-3xl font-medium leading-tight tracking-[-0.01em] text-brand-cream md:text-4xl">
                 Ready to make your property iconic?
               </h2>
-              <p className="lede mt-4 text-brand-cream/78">
+              <p className="mt-4 max-w-md text-base font-normal leading-relaxed text-[#E7DDCB] md:text-lg">
                 Free quotes. No pressure. We respond in 24 hours or less.
               </p>
               <a

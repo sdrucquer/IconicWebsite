@@ -258,6 +258,124 @@ main {
   color: rgba(255, 255, 255, 0.78);
 }
 
+.service-area-town-marker {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  border: 3px solid #f5f1e8;
+  border-radius: 999px;
+  background: #1b3a2a;
+  box-shadow: 0 2px 8px rgba(20, 44, 32, 0.4);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.service-area-town-marker:hover,
+.service-area-town-marker.is-active {
+  background: #b8923d;
+  transform: scale(1.35);
+}
+
+.service-area-search-marker {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f5f1e8;
+  border-radius: 999px;
+  background: #b8923d;
+  box-shadow:
+    0 0 0 8px rgba(184, 146, 61, 0.22),
+    0 8px 18px rgba(20, 44, 32, 0.28);
+}
+
+.service-area-map-wrap .mapboxgl-ctrl-bottom-right,
+.service-area-map-wrap .mapboxgl-ctrl-bottom-left {
+  display: none !important;
+}
+
+.service-area-map-wrap .mapboxgl-ctrl-top-right {
+  top: 16px;
+  right: 16px;
+}
+
+.service-area-map-wrap .mapboxgl-ctrl-group {
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0.75rem !important;
+  background: #f5f1e8 !important;
+  box-shadow: 0 4px 12px rgba(20, 44, 32, 0.12) !important;
+}
+
+.service-area-map-wrap .mapboxgl-ctrl-group button {
+  width: 36px !important;
+  height: 36px !important;
+  background-color: transparent !important;
+}
+
+.service-area-map-wrap .mapboxgl-ctrl-group button:hover {
+  background-color: rgba(20, 44, 32, 0.06) !important;
+}
+
+.contact-map-wrap .mapboxgl-ctrl-bottom-right,
+.contact-map-wrap .mapboxgl-ctrl-bottom-left {
+  display: none !important;
+}
+
+.contact-map-wrap .mapboxgl-ctrl-top-right {
+  top: 14px;
+  right: 14px;
+}
+
+.contact-map-wrap .mapboxgl-ctrl-group {
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0.75rem !important;
+  background: #f5f1e8 !important;
+  box-shadow: 0 4px 12px rgba(20, 44, 32, 0.12) !important;
+}
+
+.contact-map-wrap .mapboxgl-ctrl-group button {
+  width: 36px !important;
+  height: 36px !important;
+  background-color: transparent !important;
+}
+
+.contact-map-wrap .mapboxgl-ctrl-group button:hover {
+  background-color: rgba(20, 44, 32, 0.06) !important;
+}
+
+.contact-hq-marker {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border: 4px solid #f5f1e8;
+  border-radius: 999px;
+  background: #b8923d;
+  box-shadow: 0 4px 12px rgba(184, 146, 61, 0.4);
+}
+
+.contact-hq-marker::after {
+  position: absolute;
+  inset: -8px;
+  content: "";
+  border: 2px solid #b8923d;
+  border-radius: 999px;
+  animation: contact-marker-pulse 2s infinite;
+  opacity: 0.4;
+}
+
+@keyframes contact-marker-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
 @media (max-width: 767px) {
   .social-proof-shell {
     min-height: 72px;
