@@ -145,6 +145,7 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
   }
 
   const json = await res.json();
+  console.log("[submit-quote] Jobber GraphQL response:", JSON.stringify(json));
 
   const userErrors = json.data?.requestCreate?.userErrors as
     | { message: string }[]
