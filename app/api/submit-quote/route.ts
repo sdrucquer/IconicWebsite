@@ -200,7 +200,7 @@ type SubmitPayload = {
   notes?: string;
   email?: string;
   referredBy: string;
-  website?: string; // honeypot
+  _hp?: string; // honeypot
 };
 
 function clean(value: unknown): string {
@@ -228,7 +228,7 @@ export async function POST(request: Request) {
   const referredBy = clean(raw.referredBy) || "unknown";
   const notes = clean(raw.notes);
   const email = clean(raw.email);
-  const website = clean(raw.website);
+  const hp = clean(raw._hp);
 
   if (!firstName || !lastName)
     return NextResponse.json({ ok: false, error: "Name is required." }, { status: 400 });
@@ -240,7 +240,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Service is required." }, { status: 400 });
 
   // Honeypot — silently accept bot submissions without processing them
-  if (website) {
+  if (hp) {
     return NextResponse.json({ ok: true });
   }
 

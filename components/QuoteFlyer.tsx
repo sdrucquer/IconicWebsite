@@ -94,7 +94,7 @@ type FormData = {
   notes: string;
   email: string;
   referredBy: string;
-  website: string; // honeypot — must stay empty
+  _hp: string; // honeypot — must stay empty
 };
 
 const inputBase =
@@ -227,7 +227,7 @@ export function QuoteFlyer() {
                 tabIndex={-1}
                 autoComplete="off"
                 aria-hidden="true"
-                {...register("website")}
+                {...register("_hp")}
               />
 
               {/* First + Last Name */}
