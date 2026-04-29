@@ -104,10 +104,62 @@ async function getJobberToken(): Promise<string> {
 }
 
 // ---------------------------------------------------------------------------
-// Jobber — create the request via GraphQL
+// Jobber — create client + request via GraphQL (two-step flow)
 // ---------------------------------------------------------------------------
+async function jobberGraphQL(query: string, variables: Record<string, unknown>, token: string) {
+  const res = await fetch("https://api.getjobber.com/api/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      "X-JOBBER-GRAPHQL-VERSION": "2026-04-16",
+    },
+    body: JSON.stringify({ query, variables }),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Jobber GraphQL HTTP error: ${res.status}`);
+  return res.json();
+}
+
 async function createJobberRequest(data: SubmitPayload, token: string) {
-  const mutation = `
+  // Step 1 — Create the client
+  const clientMutation = `
+    mutation ClientCreate($input: ClientCreateInput!) {
+      clientCreate(input: $input) {
+        client { id }
+        userErrors { message }
+      }
+    }
+  `;
+
+  const clientInput: Record<string, unknown> = {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    phones: [{ number: data.phone, primary: true }],
+    properties: [{
+      address: {
+        street1: data.streetAddress,
+        city: data.city,
+        province: "PA",
+        country: "US",
+      },
+    }],
+  };
+  if (data.email) {
+    clientInput.emails = [{ address: data.email, primary: true }];
+  }
+
+  const clientJson = await jobberGraphQL(clientMutation, { input: clientInput }, token);
+  console.log("[submit-quote] clientCreate response:", JSON.stringify(clientJson));
+
+  const clientErrors = clientJson.data?.clientCreate?.userErrors as { message: string }[] | undefined;
+  if (clientErrors?.length) throw new Error(`Jobber client errors: ${clientErrors.map((e) => e.message).join(", ")}`);
+
+  const clientId = clientJson.data?.clientCreate?.client?.id as string;
+  if (!clientId) throw new Error("Jobber clientCreate returned no client ID");
+
+  // Step 2 — Create the request linked to the new client
+  const requestMutation = `
     mutation RequestCreate($input: RequestCreateInput!) {
       requestCreate(input: $input) {
         request { id }
@@ -116,66 +168,32 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
     }
   `;
 
-  // Jobber requests don't support custom fields — we embed the crew referral
-  // in the title and details so it's visible immediately in Jobber.
-  const referralNote = data.referredBy !== "unknown"
-    ? `Flyer referral: ${data.referredBy}\n\n`
-    : "";
-
-  const variables = {
+  const requestJson = await jobberGraphQL(requestMutation, {
     input: {
+      clientId,
       title: `Quote Request — ${data.serviceNeeded} [Flyer: ${data.referredBy}]`,
-      clientFirstName: data.firstName,
-      clientLastName: data.lastName,
-      clientPhone: data.phone,
-      ...(data.email ? { clientEmail: data.email } : {}),
-      property: {
-        address: {
-          street: data.streetAddress,
-          city: data.city,
-          province: "PA",
-          country: "US",
-        },
-      },
-      details: `${referralNote}${data.notes || ""}`.trim(),
     },
-  };
+  }, token);
+  console.log("[submit-quote] requestCreate response:", JSON.stringify(requestJson));
 
-  const res = await fetch("https://api.getjobber.com/api/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      "X-JOBBER-GRAPHQL-VERSION": "2026-04-16",
-    },
-    body: JSON.stringify({ query: mutation, variables }),
-    cache: "no-store",
-  });
+  const requestErrors = requestJson.data?.requestCreate?.userErrors as { message: string }[] | undefined;
+  if (requestErrors?.length) throw new Error(`Jobber request errors: ${requestErrors.map((e) => e.message).join(", ")}`);
 
-  if (!res.ok) {
-    throw new Error(`Jobber GraphQL HTTP error: ${res.status}`);
-  }
-
-  const json = await res.json();
-  console.log("[submit-quote] Jobber GraphQL response:", JSON.stringify(json));
-
-  const userErrors = json.data?.requestCreate?.userErrors as
-    | { message: string }[]
-    | undefined;
-  if (userErrors && userErrors.length > 0) {
-    throw new Error(`Jobber user errors: ${userErrors.map((e) => e.message).join(", ")}`);
-  }
-
-  const requestId = json.data?.requestCreate?.request?.id as string;
+  const requestId = requestJson.data?.requestCreate?.request?.id as string;
 
   // Add a note to the request so the crew referral is visible on the quote,
   // job, and invoice when the request is converted through the workflow.
-  if (requestId && data.referredBy !== "unknown") {
+  if (requestId) {
     try {
-      await addJobberNote(requestId, `Flyer referral: ${data.referredBy}`, token);
+      const noteParts = [
+        `Service: ${data.serviceNeeded}`,
+        data.referredBy !== "unknown" ? `Flyer referral: ${data.referredBy}` : null,
+        data.notes ? `Notes: ${data.notes}` : null,
+      ].filter(Boolean).join("\n");
+      await addJobberNote(requestId, noteParts, token);
     } catch (err) {
       // Note failure is non-fatal — the request was already created successfully.
-      console.warn("[submit-quote] Could not add referral note:", err);
+      console.warn("[submit-quote] Could not add note:", err);
     }
   }
 
