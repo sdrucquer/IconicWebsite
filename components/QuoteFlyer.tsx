@@ -220,15 +220,15 @@ export function QuoteFlyer() {
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
               {/* Hidden fields */}
               <input type="hidden" {...register("referredBy")} />
-              {/* Honeypot — bots fill this; humans don't */}
-              <input
-                type="text"
-                className="sr-only"
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-                {...register("_hp")}
-              />
+              {/* Honeypot — bots fill this; browsers skip display:none fields */}
+              <div style={{ display: "none" }} aria-hidden="true">
+                <input
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  {...register("_hp")}
+                />
+              </div>
 
               {/* First + Last Name */}
               <div className="grid grid-cols-2 gap-3">
