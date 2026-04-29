@@ -126,8 +126,8 @@ function PrizeCards() {
       </div>
       <div className="rounded-xl bg-brand-gold/20 px-3 py-3 text-center ring-1 ring-brand-gold/40">
         <p className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80 mb-1">Season 🏆</p>
-        <p className="font-display text-xl font-medium text-white">🏈 Tix</p>
-        <p className="text-[10px] text-white/40 mt-0.5">2 NFL, up to $250</p>
+        <p className="font-display text-xl font-medium text-white">🏈 NFL Tix</p>
+        <p className="text-[10px] text-white/40 mt-0.5">up to $250 total</p>
       </div>
     </div>
   );
@@ -242,7 +242,7 @@ export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, 
             </div>
             <div className="flex items-start gap-2">
               <span className="text-brand-forest font-bold shrink-0">🏈</span>
-              <span>2 NFL tickets (up to $250) to the season points leader on Oct 31</span>
+              <span>NFL tickets (up to $250 total) to the season points leader on Oct 31</span>
             </div>
           </div>
         </div>
