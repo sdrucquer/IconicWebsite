@@ -210,7 +210,7 @@ async function addJobberNote(requestId: string, message: string, token: string) 
   const mutation = `
     mutation RequestCreateNote($requestId: EncodedId!, $input: RequestCreateNoteInput!) {
       requestCreateNote(requestId: $requestId, input: $input) {
-        note { id }
+        requestNote { id }
         userErrors { message }
       }
     }
@@ -223,6 +223,7 @@ async function addJobberNote(requestId: string, message: string, token: string) 
 
   console.log("[submit-quote] requestCreateNote response:", JSON.stringify(json));
   const userErrors = json.data?.requestCreateNote?.userErrors as { message: string }[] | undefined;
+  console.log("[submit-quote] note created:", json.data?.requestCreateNote?.requestNote?.id);
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join(", "));
 }
 
