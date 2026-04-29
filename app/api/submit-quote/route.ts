@@ -1,48 +1,52 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { jobberGraphQL } from "@/lib/jobber";
 
 // ---------------------------------------------------------------------------
-// Token cache — reused within a warm Vercel instance so we don't authenticate
-// on every single request. Re-authenticates when expired or missing.
+// Jobber — create client + request via GraphQL (two-step flow)
 // ---------------------------------------------------------------------------
-let cachedToken: string | null = null;
-let tokenExpiresAt = 0;
+async function createJobberRequest(data: SubmitPayload) {
+  // Step 1 — Create the client
+  const clientMutation = `
+    mutation ClientCreate($input: ClientCreateInput!) {
+      clientCreate(input: $input) {
+        client { id properties { id } }
+        userErrors { message }
+      }
+    }
+  `;
 
-async function getJobberToken(): Promise<string> {
-  const now = Date.now();
-  if (cachedToken && now < tokenExpiresAt - 60_000) {
-    return cachedToken;
+  const clientInput: Record<string, unknown> = {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    phones: [{ number: data.phone, primary: true }],
+    properties: [{
+      address: {
+        street1: data.streetAddress,
+        city: data.city,
+        province: "PA",
+        country: "US",
+      },
+    }],
+  };
+  if (data.email) {
+    clientInput.emails = [{ address: data.email, primary: true }];
   }
 
-  // Jobber uses authorization_code flow — we use a stored refresh_token
-  // to get a fresh access_token without user interaction.
-  const res = await fetch("https://api.getjobber.com/api/oauth/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "refresh_token",
-      refresh_token: process.env.JOBBER_REFRESH_TOKEN ?? "",
-      client_id: process.env.JOBBER_CLIENT_ID ?? "",
-      client_secret: process.env.JOBBER_CLIENT_SECRET ?? "",
-    }),
-    cache: "no-store",
-  });
+  const clientJson = await jobberGraphQL(clientMutation, { input: clientInput }) as Record<string, unknown>;
+  console.log("[submit-quote] clientCreate response:", JSON.stringify(clientJson));
 
-  if (!res.ok) {
-    throw new Error(`Jobber auth failed (${res.status}): ${await res.text()}`);
-  }
+  const clientData = clientJson.data as Record<string, unknown> | undefined;
+  const clientErrors = (clientData?.clientCreate as Record<string, unknown> | undefined)?.userErrors as { message: string }[] | undefined;
+  if (clientErrors?.length) throw new Error(`Jobber client errors: ${clientErrors.map((e) => e.message).join(", ")}`);
 
-  const json = await res.json();
-  cachedToken = json.access_token as string;
-  tokenExpiresAt = now + (json.expires_in as number) * 1000;
-  return cachedToken;
-}
+  const clientId = ((clientData?.clientCreate as Record<string, unknown> | undefined)?.client as Record<string, unknown> | undefined)?.id as string;
+  if (!clientId) throw new Error("Jobber clientCreate returned no client ID");
 
-// ---------------------------------------------------------------------------
-// Jobber — create the request via GraphQL
-// ---------------------------------------------------------------------------
-async function createJobberRequest(data: SubmitPayload, token: string) {
-  const mutation = `
+  const propertyId = (((clientData?.clientCreate as Record<string, unknown> | undefined)?.client as Record<string, unknown> | undefined)?.properties as Record<string, unknown>[] | undefined)?.[0]?.id as string | undefined;
+
+  // Step 2 — Create the request linked to the new client
+  const requestMutation = `
     mutation RequestCreate($input: RequestCreateInput!) {
       requestCreate(input: $input) {
         request { id }
@@ -51,65 +55,37 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
     }
   `;
 
-  // Jobber requests don't support custom fields — we embed the crew referral
-  // in the title and details so it's visible immediately in Jobber.
-  const referralNote = data.referredBy !== "unknown"
-    ? `Flyer referral: ${data.referredBy}\n\n`
-    : "";
-
-  const variables = {
+  const requestJson = await jobberGraphQL(requestMutation, {
     input: {
+      clientId,
+      ...(propertyId ? { propertyId } : {}),
       title: `Quote Request — ${data.serviceNeeded} [Flyer: ${data.referredBy}]`,
-      clientFirstName: data.firstName,
-      clientLastName: data.lastName,
-      clientPhone: data.phone,
-      ...(data.email ? { clientEmail: data.email } : {}),
-      property: {
-        address: {
-          street: data.streetAddress,
-          city: data.city,
-          province: "PA",
-          country: "US",
-        },
-      },
-      details: `${referralNote}${data.notes || ""}`.trim(),
     },
-  };
+  }) as Record<string, unknown>;
+  console.log("[submit-quote] requestCreate response:", JSON.stringify(requestJson));
 
-  const res = await fetch("https://api.getjobber.com/api/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      "X-JOBBER-GRAPHQL-VERSION": "2026-04-16",
-    },
-    body: JSON.stringify({ query: mutation, variables }),
-    cache: "no-store",
-  });
+  const requestData = requestJson.data as Record<string, unknown> | undefined;
+  const requestErrors = (requestData?.requestCreate as Record<string, unknown> | undefined)?.userErrors as { message: string }[] | undefined;
+  if (requestErrors?.length) throw new Error(`Jobber request errors: ${requestErrors.map((e) => e.message).join(", ")}`);
 
-  if (!res.ok) {
-    throw new Error(`Jobber GraphQL HTTP error: ${res.status}`);
-  }
+  const requestId = ((requestData?.requestCreate as Record<string, unknown> | undefined)?.request as Record<string, unknown> | undefined)?.id as string;
 
-  const json = await res.json();
-
-  const userErrors = json.data?.requestCreate?.userErrors as
-    | { message: string }[]
-    | undefined;
-  if (userErrors && userErrors.length > 0) {
-    throw new Error(`Jobber user errors: ${userErrors.map((e) => e.message).join(", ")}`);
-  }
-
-  const requestId = json.data?.requestCreate?.request?.id as string;
-
-  // Add a note to the request so the crew referral is visible on the quote,
-  // job, and invoice when the request is converted through the workflow.
-  if (requestId && data.referredBy !== "unknown") {
+  // Add a note so the crew referral is visible on the quote, job, and invoice
+  if (requestId) {
     try {
-      await addJobberNote(requestId, `Flyer referral: ${data.referredBy}`, token);
+      const lines = [
+        "Initial request via flyer form",
+        "──────────────────────────────",
+        `Service interest: ${data.serviceNeeded}`,
+        data.referredBy !== "unknown" ? `Referred by crew: ${data.referredBy}` : null,
+        data.notes ? `Customer notes: "${data.notes}"` : null,
+        "",
+        "Scope is unconfirmed — verify during assessment.",
+      ].filter((l) => l !== null).join("\n");
+      await addJobberNote(requestId, lines);
     } catch (err) {
       // Note failure is non-fatal — the request was already created successfully.
-      console.warn("[submit-quote] Could not add referral note:", err);
+      console.warn("[submit-quote] Could not add note:", err);
     }
   }
 
@@ -117,36 +93,26 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
 }
 
 // ---------------------------------------------------------------------------
-// Jobber — attach a note to the request (carries through to quote/job/invoice)
+// Jobber — attach a pinned internal note to the request
 // ---------------------------------------------------------------------------
-async function addJobberNote(subjectId: string, content: string, token: string) {
+async function addJobberNote(requestId: string, message: string) {
   const mutation = `
-    mutation NoteCreate($input: NoteCreateInput!) {
-      noteCreate(input: $input) {
-        note { id }
+    mutation RequestCreateNote($requestId: EncodedId!, $input: RequestCreateNoteInput!) {
+      requestCreateNote(requestId: $requestId, input: $input) {
+        requestNote { id }
         userErrors { message }
       }
     }
   `;
 
-  const res = await fetch("https://api.getjobber.com/api/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      "X-JOBBER-GRAPHQL-VERSION": "2026-04-16",
-    },
-    body: JSON.stringify({
-      query: mutation,
-      variables: { input: { subjectId, content } },
-    }),
-    cache: "no-store",
-  });
+  const json = await jobberGraphQL(mutation, {
+    requestId,
+    input: { message, pinned: true },
+  }) as Record<string, unknown>;
 
-  if (!res.ok) throw new Error(`Note HTTP error: ${res.status}`);
-
-  const json = await res.json();
-  const userErrors = json.data?.noteCreate?.userErrors as { message: string }[] | undefined;
+  console.log("[submit-quote] requestCreateNote response:", JSON.stringify(json));
+  const noteData = json.data as Record<string, unknown> | undefined;
+  const userErrors = (noteData?.requestCreateNote as Record<string, unknown> | undefined)?.userErrors as { message: string }[] | undefined;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join(", "));
 }
 
@@ -158,7 +124,7 @@ async function sendFallbackEmail(data: SubmitPayload, reason: string) {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST ?? "smtp.gmail.com",
     port: Number(process.env.SMTP_PORT ?? 587),
-    secure: false, // TLS via STARTTLS
+    secure: false,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -200,7 +166,7 @@ type SubmitPayload = {
   notes?: string;
   email?: string;
   referredBy: string;
-  website?: string; // honeypot
+  _hp?: string; // honeypot
 };
 
 function clean(value: unknown): string {
@@ -228,7 +194,7 @@ export async function POST(request: Request) {
   const referredBy = clean(raw.referredBy) || "unknown";
   const notes = clean(raw.notes);
   const email = clean(raw.email);
-  const website = clean(raw.website);
+  const hp = clean(raw._hp);
 
   if (!firstName || !lastName)
     return NextResponse.json({ ok: false, error: "Name is required." }, { status: 400 });
@@ -240,7 +206,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Service is required." }, { status: 400 });
 
   // Honeypot — silently accept bot submissions without processing them
-  if (website) {
+  if (hp) {
     return NextResponse.json({ ok: true });
   }
 
@@ -258,8 +224,7 @@ export async function POST(request: Request) {
 
   // Step 1 — Try Jobber
   try {
-    const token = await getJobberToken();
-    await createJobberRequest(data, token);
+    await createJobberRequest(data);
     return NextResponse.json({ ok: true });
   } catch (jobberError) {
     const reason =
