@@ -4,82 +4,54 @@ import { useState } from "react";
 import type { PlayerStats } from "@/app/leaderboard/page";
 
 // ---------------------------------------------------------------------------
-// Medal colours for top 3
-// ---------------------------------------------------------------------------
-const MEDALS = [
-  { bg: "bg-brand-gold",       text: "text-white",          label: "🥇", ring: "ring-brand-gold/40"   },
-  { bg: "bg-brand-ink/20",     text: "text-brand-ink",      label: "🥈", ring: "ring-brand-ink/20"    },
-  { bg: "bg-[#cd7f32]/30",     text: "text-[#7a4b1a]",      label: "🥉", ring: "ring-[#cd7f32]/30"    },
-];
-
-// ---------------------------------------------------------------------------
-// Prize banner
-// ---------------------------------------------------------------------------
-function PrizeBanner() {
-  return (
-    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-      <div className="rounded-2xl bg-white/10 px-4 py-3 text-center backdrop-blur-sm">
-        <p className="text-xs font-bold uppercase tracking-widest text-brand-sage/70">Per Conversion</p>
-        <p className="mt-1 font-display text-2xl font-medium text-brand-cream">$10–$25</p>
-        <p className="mt-0.5 text-xs text-brand-sage/60">in your paycheck</p>
-      </div>
-      <div className="rounded-2xl bg-brand-gold/20 px-4 py-3 text-center ring-1 ring-brand-gold/30">
-        <p className="text-xs font-bold uppercase tracking-widest text-brand-gold/80">Monthly Winner</p>
-        <p className="mt-1 font-display text-2xl font-medium text-brand-cream">$50 Cash</p>
-        <p className="mt-0.5 text-xs text-brand-sage/60">most points that month</p>
-      </div>
-      <div className="rounded-2xl bg-brand-gold/20 px-4 py-3 text-center ring-1 ring-brand-gold/30">
-        <p className="text-xs font-bold uppercase tracking-widest text-brand-gold/80">Season Winner</p>
-        <p className="mt-1 font-display text-2xl font-medium text-brand-cream">🏈 NFL Tickets</p>
-        <p className="mt-0.5 text-xs text-brand-sage/60">2 tickets, up to $250 · ends Oct 31</p>
-      </div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Podium — top 3
+// Podium
 // ---------------------------------------------------------------------------
 function Podium({ stats }: { stats: PlayerStats[] }) {
-  const [first, second, third] = stats;
+  const top = stats.filter((s) => s.points > 0).slice(0, 3);
+  const [gold, silver, bronze] = top;
 
-  if (!first) {
-    return (
-      <div className="py-12 text-center text-brand-ink/30 text-sm">
-        No referrals yet — be the first! 🚀
-      </div>
-    );
-  }
+  if (!gold) return null;
 
-  // Render order: 2nd, 1st, 3rd (classic podium layout)
-  const podiumOrder = [second, first, third].filter(Boolean);
-  const heightClass = ["h-20", "h-28", "h-16"];
-  const orderIndex = [1, 0, 2]; // which medal index each slot gets
+  // Layout: silver | gold | bronze
+  const slots = [
+    { player: silver, rank: 2, height: "h-24", emoji: "🥈", nameSize: "text-sm", numSize: "text-2xl", bg: "bg-white/10" },
+    { player: gold,   rank: 1, height: "h-32", emoji: "🥇", nameSize: "text-base", numSize: "text-4xl", bg: "bg-brand-gold/25", glow: true },
+    { player: bronze, rank: 3, height: "h-16", emoji: "🥉", nameSize: "text-sm", numSize: "text-2xl", bg: "bg-white/10" },
+  ];
 
   return (
-    <div className="flex items-end justify-center gap-3 mt-8 px-4">
-      {podiumOrder.map((player, slotIdx) => {
-        const medalIdx = orderIndex[slotIdx];
-        const medal = MEDALS[medalIdx];
-        const isFirst = medalIdx === 0;
+    <div className="flex items-end justify-center gap-2 pt-2 pb-1">
+      {slots.map(({ player, rank, height, emoji, nameSize, numSize, bg, glow }) => {
+        if (!player) {
+          return (
+            <div key={rank} className="flex-1 max-w-[110px]">
+              <div className={`${height} rounded-t-xl bg-white/5`} />
+            </div>
+          );
+        }
+        const firstName = player.name.split(" ")[0];
+        const lastName = player.name.split(" ").slice(1).join(" ");
 
         return (
-          <div key={player.slug} className="flex flex-col items-center gap-2 flex-1 max-w-[120px]">
-            {/* Name + points */}
-            <div className="text-center">
-              <p className={`font-semibold leading-tight text-brand-ink ${isFirst ? "text-base" : "text-sm"}`}>
-                {player.name.split(" ")[0]}
-              </p>
-              <p className="text-xs text-brand-ink/50">{player.name.split(" ").slice(1).join(" ")}</p>
-              <p className={`font-display font-medium text-brand-forest mt-1 ${isFirst ? "text-3xl" : "text-2xl"}`}>
-                {player.points}
-              </p>
-              <p className="text-[10px] text-brand-ink/40 uppercase tracking-wide">pts</p>
+          <div key={player.slug} className="flex flex-col items-center flex-1 max-w-[110px]">
+            {/* Avatar bubble */}
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 text-lg font-bold
+              ${glow ? "bg-brand-gold text-white shadow-[0_0_20px_rgba(184,146,61,0.5)]" : "bg-white/20 text-white"}`}>
+              {firstName[0]}{lastName?.[0] ?? ""}
             </div>
 
+            {/* Name */}
+            <p className={`${nameSize} font-semibold text-white text-center leading-tight`}>{firstName}</p>
+            <p className="text-[10px] text-white/50 text-center">{lastName}</p>
+
+            {/* Points */}
+            <p className={`${numSize} font-display font-medium text-white mt-1 leading-none`}>{player.points}</p>
+            <p className="text-[10px] text-white/50 uppercase tracking-widest mb-2">pts</p>
+
             {/* Podium block */}
-            <div className={`w-full ${heightClass[slotIdx]} rounded-t-xl ${medal.bg} flex items-start justify-center pt-2`}>
-              <span className="text-xl">{medal.label}</span>
+            <div className={`w-full ${height} ${bg} rounded-t-xl flex items-start justify-center pt-2.5
+              ${glow ? "ring-1 ring-brand-gold/40" : ""}`}>
+              <span className="text-lg">{emoji}</span>
             </div>
           </div>
         );
@@ -89,47 +61,80 @@ function Podium({ stats }: { stats: PlayerStats[] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Ranked list — everyone below top 3
+// Ranked list — 4th place and below
 // ---------------------------------------------------------------------------
 function RankedList({ stats }: { stats: PlayerStats[] }) {
-  const rest = stats.slice(3).filter((s) => s.submissions > 0 || s.points > 0);
+  const leader = stats[0]?.points ?? 1;
+  const rest = stats.slice(3);
+  const hasAny = rest.some((s) => s.points > 0 || s.submissions > 0);
 
-  if (rest.length === 0) return null;
+  if (!hasAny) return null;
 
   return (
-    <div className="mt-4 rounded-2xl bg-white shadow-[0_4px_20px_rgba(20,44,32,0.07)] overflow-hidden">
-      {rest.map((player, i) => (
-        <div
-          key={player.slug}
-          className={`flex items-center gap-4 px-5 py-3.5 ${i !== rest.length - 1 ? "border-b border-brand-sage/15" : ""}`}
-        >
-          <p className="w-6 text-sm font-bold text-brand-ink/30 tabular-nums">{i + 4}</p>
-          <p className="flex-1 text-sm font-medium text-brand-ink">{player.name}</p>
-          <div className="text-right">
-            <p className="text-sm font-bold text-brand-forest">{player.points} pts</p>
-            <p className="text-[10px] text-brand-ink/40">{player.conversions} converted</p>
+    <div className="rounded-2xl bg-white overflow-hidden shadow-[0_4px_24px_rgba(20,44,32,0.08)]">
+      {rest.map((player, i) => {
+        const pct = leader > 0 ? Math.round((player.points / leader) * 100) : 0;
+        const isActive = player.points > 0 || player.submissions > 0;
+
+        return (
+          <div
+            key={player.slug}
+            className={`px-5 py-4 ${i !== rest.length - 1 ? "border-b border-brand-sage/10" : ""} ${!isActive ? "opacity-40" : ""}`}
+          >
+            <div className="flex items-center gap-3">
+              <span className="w-6 text-sm font-bold text-brand-ink/25 tabular-nums shrink-0">{i + 4}</span>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="text-sm font-semibold text-brand-ink truncate">{player.name}</p>
+                  <div className="flex items-center gap-2 shrink-0 ml-2">
+                    <span className="text-xs text-brand-ink/40">{player.conversions} converted</span>
+                    <span className="text-sm font-bold text-brand-forest">{player.points} pts</span>
+                  </div>
+                </div>
+                {/* Progress bar toward leader */}
+                <div className="h-1 w-full rounded-full bg-brand-sage/15">
+                  <div
+                    className="h-1 rounded-full bg-brand-forest/50 transition-all"
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Zero-state for when nobody has points yet
+// Prize cards
 // ---------------------------------------------------------------------------
-function ZeroState({ label }: { label: string }) {
+function PrizeCards() {
   return (
-    <div className="mt-8 rounded-2xl bg-white shadow-[0_4px_20px_rgba(20,44,32,0.07)] px-6 py-12 text-center">
-      <p className="text-4xl mb-3">🌱</p>
-      <p className="font-display text-xl font-medium text-brand-ink">Season hasn&apos;t started yet</p>
-      <p className="mt-2 text-sm text-brand-ink/50">First referral of {label} takes the lead!</p>
+    <div className="grid grid-cols-3 gap-2 mt-6">
+      <div className="rounded-xl bg-white/10 px-3 py-3 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Per Job</p>
+        <p className="font-display text-xl font-medium text-white">$10–$25</p>
+        <p className="text-[10px] text-white/40 mt-0.5">in paycheck</p>
+      </div>
+      <div className="rounded-xl bg-brand-gold/20 px-3 py-3 text-center ring-1 ring-brand-gold/40">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80 mb-1">Monthly 🏅</p>
+        <p className="font-display text-xl font-medium text-white">$50</p>
+        <p className="text-[10px] text-white/40 mt-0.5">most pts wins</p>
+      </div>
+      <div className="rounded-xl bg-brand-gold/20 px-3 py-3 text-center ring-1 ring-brand-gold/40">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80 mb-1">Season 🏆</p>
+        <p className="font-display text-xl font-medium text-white">🏈 Tix</p>
+        <p className="text-[10px] text-white/40 mt-0.5">2 NFL, up to $250</p>
+      </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Main client component
+// Main
 // ---------------------------------------------------------------------------
 type Props = {
   monthlyStats: PlayerStats[];
@@ -141,64 +146,109 @@ type Props = {
 
 export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, currentMonth }: Props) {
   const [tab, setTab] = useState<"month" | "season">("month");
-
   const activeStats = tab === "month" ? monthlyStats : seasonStats;
   const hasData = activeStats.some((s) => s.points > 0);
+  const monthName = currentMonth.split(" ")[0];
+  const year = currentMonth.split(" ")[1];
 
   return (
     <div className="min-h-screen bg-brand-cream">
-      {/* Header */}
-      <div className="bg-brand-forest px-6 pt-10 pb-8 md:px-12">
+
+      {/* ── Hero header ── */}
+      <div className="bg-brand-forest px-6 pt-10 pb-0 md:px-8">
         <div className="mx-auto max-w-lg">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-sage/60">Iconic Landscaping</p>
-          <h1 className="mt-2 font-display text-3xl font-medium text-brand-cream md:text-4xl">
-            Referral Leaderboard 🏆
-          </h1>
-          <p className="mt-1 text-sm text-brand-sage/70">
-            {daysLeft > 0 ? `${daysLeft} days left in the season` : "Season ended — final standings"}
-          </p>
 
-          <PrizeBanner />
+          {/* Top bar */}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-sage/50">Iconic Landscaping</p>
+              <h1 className="mt-1 font-display text-2xl font-medium text-white md:text-3xl">
+                Referral Leaderboard
+              </h1>
+            </div>
+            <div className="text-right">
+              <p className="font-display text-3xl font-medium text-white">{daysLeft}</p>
+              <p className="text-[10px] text-brand-sage/50 uppercase tracking-wide">days left</p>
+            </div>
+          </div>
+
+          <PrizeCards />
+
+          {/* Tab switcher — sits on the green, bleeds into cream */}
+          <div className="mt-6 flex gap-1 bg-brand-forest/60 rounded-2xl p-1">
+            {(["month", "season"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`flex-1 rounded-xl py-2.5 text-sm font-semibold transition-all ${
+                  tab === t
+                    ? "bg-white text-brand-forest shadow-sm"
+                    : "text-white/60 hover:text-white"
+                }`}
+              >
+                {t === "month" ? `${monthName} ${year}` : "Full Season"}
+              </button>
+            ))}
+          </div>
+
+          {/* Podium — overlaps the cream section below */}
+          {!error && hasData && (
+            <div className="mt-2">
+              <Podium stats={activeStats} />
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Tab switcher */}
-      <div className="sticky top-0 z-10 bg-brand-cream border-b border-brand-sage/20 px-6 md:px-12">
-        <div className="mx-auto max-w-lg flex gap-1 py-3">
-          {(["month", "season"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`flex-1 rounded-xl py-2 text-sm font-semibold transition ${
-                tab === t
-                  ? "bg-brand-forest text-brand-cream"
-                  : "text-brand-ink/50 hover:text-brand-ink"
-              }`}
-            >
-              {t === "month" ? `📅 ${currentMonth.split(" ")[0]}` : "🌿 Full Season"}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="mx-auto max-w-lg px-6 pb-16 md:px-12">
+      {/* ── Rankings ── */}
+      <div className="mx-auto max-w-lg px-6 pb-16 md:px-8">
         {error ? (
           <div className="mt-8 rounded-2xl bg-red-50 border border-red-200 px-6 py-5 text-sm text-red-700">
-            Could not load data: {error}
+            Could not load data right now — check back in a moment.
           </div>
         ) : hasData ? (
-          <>
-            <Podium stats={activeStats} />
+          <div className="mt-4">
             <RankedList stats={activeStats} />
-          </>
+          </div>
         ) : (
-          <ZeroState label={tab === "month" ? currentMonth : "the season"} />
+          <div className="mt-8 rounded-2xl bg-white shadow-[0_4px_24px_rgba(20,44,32,0.07)] px-6 py-12 text-center">
+            <p className="text-4xl mb-3">🌱</p>
+            <p className="font-display text-xl font-medium text-brand-ink">No converted referrals yet</p>
+            <p className="mt-2 text-sm text-brand-ink/50">
+              First conversion of {tab === "month" ? monthName : "the season"} takes the lead!
+            </p>
+          </div>
         )}
 
-        {/* Points note */}
-        <p className="mt-8 text-center text-xs text-brand-ink/30">
-          1 point per converted referral · points update live
+        {/* How it works */}
+        <div className="mt-8 rounded-2xl bg-white shadow-[0_4px_24px_rgba(20,44,32,0.07)] px-5 py-5">
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-ink/40 mb-3">How it works</p>
+          <div className="space-y-2 text-sm text-brand-ink/70">
+            <div className="flex items-start gap-2">
+              <span className="text-brand-forest font-bold shrink-0">1 pt</span>
+              <span>Every converted referral earns 1 point toward the leaderboard</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-brand-forest font-bold shrink-0">$10</span>
+              <span>Paid to you when referred job is under $500</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-brand-forest font-bold shrink-0">$25</span>
+              <span>Paid to you when referred job is $500 or more</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-brand-forest font-bold shrink-0">$50</span>
+              <span>Bonus to whoever leads the monthly points race</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-brand-forest font-bold shrink-0">🏈</span>
+              <span>2 NFL tickets (up to $250) to the season points leader on Oct 31</span>
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-6 text-center text-xs text-brand-ink/25">
+          Points update live · season runs Apr 1 – Oct 31
         </p>
       </div>
     </div>
