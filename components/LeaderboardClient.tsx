@@ -115,20 +115,23 @@ function RankedList({ stats }: { stats: PlayerStats[] }) {
 function PrizeCards() {
   return (
     <div className="grid grid-cols-3 gap-2 mt-6">
-      <div className="rounded-xl bg-white/10 px-3 py-3 text-center">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Per Job</p>
-        <p className="font-display text-xl font-medium text-white">$10–$25</p>
-        <p className="text-[10px] text-white/40 mt-0.5">in paycheck</p>
+      {/* Per job */}
+      <div className="rounded-2xl bg-white/15 px-3 py-4 text-center">
+        <p className="text-lg font-display font-medium text-white">$10–$25</p>
+        <p className="text-xs font-semibold text-white/90 mt-0.5">Per Job</p>
+        <p className="text-[10px] text-white/50 mt-1 leading-tight">paid in your paycheck</p>
       </div>
-      <div className="rounded-xl bg-brand-gold/20 px-3 py-3 text-center ring-1 ring-brand-gold/40">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80 mb-1">Monthly 🏅</p>
-        <p className="font-display text-xl font-medium text-white">$50</p>
-        <p className="text-[10px] text-white/40 mt-0.5">most pts wins</p>
+      {/* Monthly */}
+      <div className="rounded-2xl bg-brand-gold px-3 py-4 text-center shadow-[0_4px_16px_rgba(184,146,61,0.4)]">
+        <p className="text-lg font-display font-medium text-white">$50</p>
+        <p className="text-xs font-semibold text-white/90 mt-0.5">Monthly 🏅</p>
+        <p className="text-[10px] text-white/70 mt-1 leading-tight">most points wins</p>
       </div>
-      <div className="rounded-xl bg-brand-gold/20 px-3 py-3 text-center ring-1 ring-brand-gold/40">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80 mb-1">Season 🏆</p>
-        <p className="font-display text-xl font-medium text-white">🏈 NFL Tix</p>
-        <p className="text-[10px] text-white/40 mt-0.5">up to $250 total</p>
+      {/* Season */}
+      <div className="rounded-2xl bg-brand-gold px-3 py-4 text-center shadow-[0_4px_16px_rgba(184,146,61,0.4)]">
+        <p className="text-lg font-display font-medium text-white">🏈 Tix</p>
+        <p className="text-xs font-semibold text-white/90 mt-0.5">Season 🏆</p>
+        <p className="text-[10px] text-white/70 mt-1 leading-tight">NFL, up to $250</p>
       </div>
     </div>
   );
@@ -210,14 +213,14 @@ export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, 
           {/* Top bar */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-sage/50">Iconic Landscaping</p>
-              <h1 className="mt-1 font-display text-2xl font-medium text-white md:text-3xl">
-                Referral Leaderboard
+              <p className="text-sm font-semibold text-brand-sage/70">Iconic Landscaping</p>
+              <h1 className="mt-0.5 font-display text-3xl font-medium text-white md:text-4xl">
+                Leaderboard 🏆
               </h1>
             </div>
-            <div className="text-right">
-              <p className="font-display text-3xl font-medium text-white">{daysLeft}</p>
-              <p className="text-[10px] text-brand-sage/50 uppercase tracking-wide">days left</p>
+            <div className="text-right shrink-0">
+              <p className="font-display text-4xl font-medium text-white">{daysLeft}</p>
+              <p className="text-xs text-brand-sage/60 uppercase tracking-wide">days left</p>
             </div>
           </div>
 
