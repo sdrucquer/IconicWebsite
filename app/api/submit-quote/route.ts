@@ -126,7 +126,7 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
   const clientMutation = `
     mutation ClientCreate($input: ClientCreateInput!) {
       clientCreate(input: $input) {
-        client { id properties { nodes { id } } }
+        client { id properties { id } }
         userErrors { message }
       }
     }
@@ -158,7 +158,7 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
   const clientId = clientJson.data?.clientCreate?.client?.id as string;
   if (!clientId) throw new Error("Jobber clientCreate returned no client ID");
 
-  const propertyId = clientJson.data?.clientCreate?.client?.properties?.nodes?.[0]?.id as string | undefined;
+  const propertyId = clientJson.data?.clientCreate?.client?.properties?.[0]?.id as string | undefined;
 
   // Step 2 — Create the request linked to the new client
   const requestMutation = `
