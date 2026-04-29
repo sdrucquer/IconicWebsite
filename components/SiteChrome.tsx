@@ -8,7 +8,10 @@ import { Footer } from "@/components/Footer";
 // Pages whose paths start with /quote are standalone (no nav).
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isStandalone = pathname.startsWith("/quote");
+  const isStandalone =
+    pathname.startsWith("/quote") ||
+    pathname.startsWith("/leaderboard") ||
+    pathname.startsWith("/admin");
 
   return (
     <>

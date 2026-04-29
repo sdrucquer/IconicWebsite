@@ -135,6 +135,7 @@ export default async function LeaderboardPage() {
       daysLeft={daysLeft}
       error={error}
       currentMonth={now.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+      crew={CREW}
     />
   );
 }

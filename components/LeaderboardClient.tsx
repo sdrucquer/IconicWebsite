@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { PlayerStats } from "@/app/leaderboard/page";
+import type { CrewMember } from "@/data/crew";
 
 // ---------------------------------------------------------------------------
 // Podium
@@ -136,15 +137,63 @@ function PrizeCards() {
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// My Link section
+// ---------------------------------------------------------------------------
+function MyLink({ crew }: { crew: CrewMember[] }) {
+  const [selected, setSelected] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const url = selected ? `https://iconic.land/quote?ref=${selected}` : "";
+
+  async function handleCopy() {
+    if (!url) return;
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  return (
+    <div className="rounded-2xl bg-white shadow-[0_4px_24px_rgba(20,44,32,0.08)] px-5 py-5">
+      <p className="text-xs font-bold uppercase tracking-widest text-brand-ink/40 mb-3">🔗 My Referral Link</p>
+      <select
+        value={selected}
+        onChange={(e) => { setSelected(e.target.value); setCopied(false); }}
+        className="w-full h-11 rounded-xl border border-brand-sage/30 bg-white px-3 text-sm text-brand-ink outline-none focus:border-brand-forest focus:ring-4 focus:ring-brand-forest/10"
+      >
+        <option value="">Select your name…</option>
+        {crew.map((c) => (
+          <option key={c.slug} value={c.slug}>{c.name}</option>
+        ))}
+      </select>
+
+      {url && (
+        <div className="mt-3 flex items-center gap-2">
+          <p className="flex-1 truncate rounded-xl bg-brand-cream px-3 py-2.5 text-xs font-mono text-brand-ink/60">
+            {url}
+          </p>
+          <button
+            onClick={handleCopy}
+            className="shrink-0 rounded-xl px-4 py-2.5 text-xs font-semibold bg-brand-forest text-brand-cream transition hover:bg-brand-forest/90 active:scale-95"
+          >
+            {copied ? "Copied!" : "Copy"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 type Props = {
   monthlyStats: PlayerStats[];
   seasonStats: PlayerStats[];
   daysLeft: number;
   error: string | null;
   currentMonth: string;
+  crew: CrewMember[];
 };
 
-export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, currentMonth }: Props) {
+export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, currentMonth, crew }: Props) {
   const [tab, setTab] = useState<"month" | "season">("month");
   const activeStats = tab === "month" ? monthlyStats : seasonStats;
   const hasData = activeStats.some((s) => s.points > 0);
@@ -219,6 +268,11 @@ export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, 
             </p>
           </div>
         )}
+
+        {/* My referral link */}
+        <div className="mt-6">
+          <MyLink crew={crew} />
+        </div>
 
         {/* How it works */}
         <div className="mt-8 rounded-2xl bg-white shadow-[0_4px_24px_rgba(20,44,32,0.07)] px-5 py-5">
