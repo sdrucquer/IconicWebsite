@@ -22,6 +22,7 @@ async function persistRefreshToken(token: string) {
   if (!accessToken || !projectId) return; // skip silently if not configured
 
   const url = `https://api.vercel.com/v10/projects/${projectId}/env${teamId ? `?teamId=${teamId}` : ""}`;
+  console.log(`[submit-quote] persistRefreshToken: listing env vars for project ${projectId.slice(0, 8)}...`);
 
   try {
     // Find the existing env var ID first
@@ -29,15 +30,21 @@ async function persistRefreshToken(token: string) {
       headers: { Authorization: `Bearer ${accessToken}` },
       cache: "no-store",
     });
-    if (!listRes.ok) return;
+    if (!listRes.ok) {
+      console.log(`[submit-quote] persistRefreshToken: list failed (${listRes.status}): ${await listRes.text()}`);
+      return;
+    }
     const list = await listRes.json();
     const existing = (list.envs as { key: string; id: string }[])?.find(
       (e) => e.key === "JOBBER_REFRESH_TOKEN"
     );
-    if (!existing) return;
+    if (!existing) {
+      console.log("[submit-quote] persistRefreshToken: JOBBER_REFRESH_TOKEN not found in env list");
+      return;
+    }
 
     // Patch the value
-    await fetch(`https://api.vercel.com/v10/projects/${projectId}/env/${existing.id}${teamId ? `?teamId=${teamId}` : ""}`, {
+    const patchRes = await fetch(`https://api.vercel.com/v10/projects/${projectId}/env/${existing.id}${teamId ? `?teamId=${teamId}` : ""}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -46,8 +53,13 @@ async function persistRefreshToken(token: string) {
       body: JSON.stringify({ value: token }),
       cache: "no-store",
     });
-  } catch {
-    // Non-fatal — in-memory cache still works for warm instances
+    if (patchRes.ok) {
+      console.log(`[submit-quote] persistRefreshToken: updated JOBBER_REFRESH_TOKEN to ${token.slice(0, 8)}...`);
+    } else {
+      console.log(`[submit-quote] persistRefreshToken: patch failed (${patchRes.status}): ${await patchRes.text()}`);
+    }
+  } catch (err) {
+    console.log("[submit-quote] persistRefreshToken error:", err);
   }
 }
 
