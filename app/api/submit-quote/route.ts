@@ -204,37 +204,25 @@ async function createJobberRequest(data: SubmitPayload, token: string) {
 }
 
 // ---------------------------------------------------------------------------
-// Jobber — attach a note to the request (carries through to quote/job/invoice)
+// Jobber — attach a pinned internal note to the request
 // ---------------------------------------------------------------------------
-async function addJobberNote(subjectId: string, content: string, token: string) {
+async function addJobberNote(requestId: string, message: string, token: string) {
   const mutation = `
-    mutation NoteCreate($input: NoteCreateInput!) {
-      noteCreate(input: $input) {
+    mutation RequestCreateNote($requestId: EncodedId!, $input: RequestCreateNoteInput!) {
+      requestCreateNote(requestId: $requestId, input: $input) {
         note { id }
         userErrors { message }
       }
     }
   `;
 
-  const res = await fetch("https://api.getjobber.com/api/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      "X-JOBBER-GRAPHQL-VERSION": "2026-04-16",
-    },
-    body: JSON.stringify({
-      query: mutation,
-      variables: { input: { subjectId, content } },
-    }),
-    cache: "no-store",
-  });
+  const json = await jobberGraphQL(mutation, {
+    requestId,
+    input: { message, pinned: true },
+  }, token);
 
-  if (!res.ok) throw new Error(`Note HTTP error: ${res.status}`);
-
-  const json = await res.json();
-  console.log("[submit-quote] noteCreate response:", JSON.stringify(json));
-  const userErrors = json.data?.noteCreate?.userErrors as { message: string }[] | undefined;
+  console.log("[submit-quote] requestCreateNote response:", JSON.stringify(json));
+  const userErrors = json.data?.requestCreateNote?.userErrors as { message: string }[] | undefined;
   if (userErrors?.length) throw new Error(userErrors.map((e) => e.message).join(", "));
 }
 
