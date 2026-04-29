@@ -41,9 +41,7 @@ declare global {
   }
 }
 
-const MAPBOX_TOKEN =
-  process.env.NEXT_PUBLIC_MAPBOX_TOKEN ??
-  "pk.eyJ1IjoiaWNvbmljbGFuZHNjYXBpbmciLCJhIjoiY21vaGNxZnZ0MDF6MTJxcHZiZmc1ZG9wNiJ9.9kUdj_cd4My8zE12Bdowwg";
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
 
 const mapboxScriptId = "mapbox-gl-js";
 const mapboxCssId = "mapbox-gl-css";
