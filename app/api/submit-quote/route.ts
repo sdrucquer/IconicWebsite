@@ -4,9 +4,52 @@ import nodemailer from "nodemailer";
 // ---------------------------------------------------------------------------
 // Token cache — reused within a warm Vercel instance so we don't authenticate
 // on every single request. Re-authenticates when expired or missing.
+//
+// Refresh token rotation: Jobber issues a new refresh_token on every exchange.
+// We persist the latest one in JOBBER_REFRESH_TOKEN_LIVE (an env var we update
+// via the Vercel API) so cold starts always have the current token.
 // ---------------------------------------------------------------------------
 let cachedToken: string | null = null;
 let tokenExpiresAt = 0;
+let cachedRefreshToken: string | null = null; // latest rotated token, in-memory
+
+async function persistRefreshToken(token: string) {
+  // Write the new refresh token back to the Vercel environment variable so
+  // the next cold start picks it up. Requires VERCEL_ACCESS_TOKEN + VERCEL_PROJECT_ID.
+  const accessToken = process.env.VERCEL_ACCESS_TOKEN;
+  const projectId = process.env.VERCEL_PROJECT_ID;
+  const teamId = process.env.VERCEL_TEAM_ID; // optional, only needed for team projects
+  if (!accessToken || !projectId) return; // skip silently if not configured
+
+  const url = `https://api.vercel.com/v10/projects/${projectId}/env${teamId ? `?teamId=${teamId}` : ""}`;
+
+  try {
+    // Find the existing env var ID first
+    const listRes = await fetch(url, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: "no-store",
+    });
+    if (!listRes.ok) return;
+    const list = await listRes.json();
+    const existing = (list.envs as { key: string; id: string }[])?.find(
+      (e) => e.key === "JOBBER_REFRESH_TOKEN"
+    );
+    if (!existing) return;
+
+    // Patch the value
+    await fetch(`https://api.vercel.com/v10/projects/${projectId}/env/${existing.id}${teamId ? `?teamId=${teamId}` : ""}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ value: token }),
+      cache: "no-store",
+    });
+  } catch {
+    // Non-fatal — in-memory cache still works for warm instances
+  }
+}
 
 async function getJobberToken(): Promise<string> {
   const now = Date.now();
@@ -14,14 +57,16 @@ async function getJobberToken(): Promise<string> {
     return cachedToken;
   }
 
-  // Jobber uses authorization_code flow — we use a stored refresh_token
-  // to get a fresh access_token without user interaction.
+  // Use the latest rotated refresh token if we have one in memory,
+  // otherwise fall back to the env var (first cold start after deploy).
+  const refreshToken = cachedRefreshToken ?? process.env.JOBBER_REFRESH_TOKEN ?? "";
+
   const res = await fetch("https://api.getjobber.com/api/oauth/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
       grant_type: "refresh_token",
-      refresh_token: process.env.JOBBER_REFRESH_TOKEN ?? "",
+      refresh_token: refreshToken,
       client_id: process.env.JOBBER_CLIENT_ID ?? "",
       client_secret: process.env.JOBBER_CLIENT_SECRET ?? "",
     }),
@@ -35,6 +80,13 @@ async function getJobberToken(): Promise<string> {
   const json = await res.json();
   cachedToken = json.access_token as string;
   tokenExpiresAt = now + (json.expires_in as number) * 1000;
+
+  // Capture the new refresh token Jobber issued and persist it
+  if (json.refresh_token && json.refresh_token !== refreshToken) {
+    cachedRefreshToken = json.refresh_token as string;
+    void persistRefreshToken(cachedRefreshToken);
+  }
+
   return cachedToken;
 }
 
