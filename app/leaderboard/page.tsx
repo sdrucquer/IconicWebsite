@@ -47,38 +47,39 @@ async function _fetchFlyerRequests(): Promise<JobberRequest[]> {
   const all: JobberRequest[] = [];
   let cursor: string | null = null;
 
-  while (true) {
-    const json = await jobberGraphQL(
-      `query Requests($after: String) {
-        requests(first: 100, after: $after) {
-          nodes {
-            id title createdAt requestStatus
-            quotes { nodes { quoteStatus jobs { nodes { id } } } }
+  try {
+    while (true) {
+      const json = await jobberGraphQL(
+        `query Requests($after: String) {
+          requests(first: 100, after: $after) {
+            nodes {
+              id title createdAt requestStatus
+              quotes { nodes { quoteStatus jobs { nodes { id } } } }
+            }
+            pageInfo { hasNextPage endCursor }
           }
-          pageInfo { hasNextPage endCursor }
-        }
-      }`,
-      { after: cursor }
-    ) as Record<string, unknown>;
+        }`,
+        { after: cursor }
+      ) as Record<string, unknown>;
 
-    const data = json.data as Record<string, unknown> | undefined;
-    const errors = (json as Record<string, unknown>).errors;
-    if (errors) {
-      console.error("[leaderboard] Jobber GraphQL errors:", JSON.stringify(errors));
-      // If throttled, return whatever we have so far rather than empty
-      const isThrottled = Array.isArray(errors) && errors.some((e: Record<string, unknown>) =>
-        (e.extensions as Record<string, unknown>)?.code === "THROTTLED"
-      );
-      if (isThrottled) break;
+      const data = json.data as Record<string, unknown> | undefined;
+      const errors = (json as Record<string, unknown>).errors;
+      if (errors) {
+        console.error("[leaderboard] Jobber GraphQL errors:", JSON.stringify(errors));
+        break; // return whatever we have so far
+      }
+
+      const nodes = ((data?.requests as Record<string, unknown>)?.nodes ?? []) as JobberRequest[];
+      const pageInfo = (data?.requests as Record<string, unknown>)?.pageInfo as Record<string, unknown> | undefined;
+
+      all.push(...nodes.filter((n) => /\[Flyer:/i.test(n.title)));
+
+      if (!pageInfo?.hasNextPage) break;
+      cursor = pageInfo.endCursor as string;
     }
-
-    const nodes = ((data?.requests as Record<string, unknown>)?.nodes ?? []) as JobberRequest[];
-    const pageInfo = (data?.requests as Record<string, unknown>)?.pageInfo as Record<string, unknown> | undefined;
-
-    all.push(...nodes.filter((n) => /\[Flyer:/i.test(n.title)));
-
-    if (!pageInfo?.hasNextPage) break;
-    cursor = pageInfo.endCursor as string;
+  } catch (err) {
+    // Throttle or network error — return whatever we fetched so far
+    console.error("[leaderboard] fetchFlyerRequests error:", err);
   }
 
   return all;
