@@ -38,7 +38,7 @@ async function fetchAllFlyerRequests(): Promise<JobberRequest[]> {
   while (true) {
     const json = await jobberGraphQL(
       `query Requests($after: String) {
-        requests(first: 100, after: $after, filter: { statuses: [pending, converted, archived] }) {
+        requests(first: 100, after: $after) {
           nodes { id title createdAt requestStatus quote { status job { id } } }
 
           pageInfo { hasNextPage endCursor }

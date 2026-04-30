@@ -50,7 +50,7 @@ async function fetchFlyerRequests(): Promise<JobberRequest[]> {
   while (true) {
     const json = await jobberGraphQL(
       `query Requests($after: String) {
-        requests(first: 100, after: $after, filter: { statuses: [pending, converted, archived] }) {
+        requests(first: 100, after: $after) {
           nodes {
             id title createdAt requestStatus
             quote { status job { id } }
@@ -62,10 +62,15 @@ async function fetchFlyerRequests(): Promise<JobberRequest[]> {
     ) as Record<string, unknown>;
 
     const data = json.data as Record<string, unknown> | undefined;
+    const errors = (json as Record<string, unknown>).errors;
+    if (errors) console.error("[leaderboard] Jobber GraphQL errors:", JSON.stringify(errors));
+
     const nodes = ((data?.requests as Record<string, unknown>)?.nodes ?? []) as JobberRequest[];
     const pageInfo = (data?.requests as Record<string, unknown>)?.pageInfo as Record<string, unknown> | undefined;
 
-    all.push(...nodes.filter((n) => /\[Flyer:/i.test(n.title)));
+    const flyerNodes = nodes.filter((n) => /\[Flyer:/i.test(n.title));
+    console.log(`[leaderboard] page nodes: ${nodes.length} total, ${flyerNodes.length} flyer, statuses: ${[...new Set(nodes.map(n => n.requestStatus))].join(",")}`);
+    all.push(...flyerNodes);
 
     if (!pageInfo?.hasNextPage) break;
     cursor = pageInfo.endCursor as string;
