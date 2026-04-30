@@ -11,7 +11,8 @@ type JobberRequest = {
   createdAt: string;
   requestStatus: string;
   quote: {
-    status: string; // draft | sent | approved | changes_requested | archived | converted_to_job
+    status: string;
+    job: { id: string } | null; // present if quote was converted to a job
   } | null;
 };
 
@@ -49,10 +50,10 @@ async function fetchFlyerRequests(): Promise<JobberRequest[]> {
   while (true) {
     const json = await jobberGraphQL(
       `query Requests($after: String) {
-        requests(first: 100, after: $after) {
+        requests(first: 100, after: $after, filter: { statuses: [pending, converted, archived] }) {
           nodes {
             id title createdAt requestStatus
-            quote { status }
+            quote { status job { id } }
           }
           pageInfo { hasNextPage endCursor }
         }
@@ -104,15 +105,20 @@ function buildStats(requests: JobberRequest[], from: string, to?: string): Playe
 
     // Count as earned only when the client actually said yes:
     // quote approved, quote converted to job, or request converted to active work
+    // Earned when the client actually said yes:
+    // - quote was approved by client
+    // - quote was converted to an active job
+    // - a job exists on the quote (belt-and-suspenders check)
     const quoteStatus = req.quote?.status ?? "";
+    const hasJob = !!req.quote?.job?.id;
     const isEarned =
       quoteStatus === "approved" ||
       quoteStatus === "converted_to_job" ||
-      req.requestStatus === "converted"; // fallback: treat Jobber "converted" as earned if no quote status
+      hasJob;
 
     if (isEarned) {
       s.conversions++;
-      s.points += 1; // TODO: upgrade to 1pt (<$500) or 3pt ($500+) once revenue data is wired
+      s.points += 1;
     }
   }
 
