@@ -77,8 +77,7 @@ async function fetchFromJobber(): Promise<JobberRequest[]> {
 
     const errors = (json as Record<string, unknown>).errors;
     if (errors) {
-      console.error("[leaderboard-cache] Jobber errors:", JSON.stringify(errors));
-      break;
+      throw new Error(JSON.stringify(errors));
     }
 
     const data = json.data as Record<string, unknown> | undefined;
