@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CREW } from "@/data/crew";
 import { jobberGraphQL } from "@/lib/jobber";
 import { CopyButton } from "@/components/CopyButton";
+import { CacheBustButton } from "@/components/CacheBustButton";
 import { Redis } from "@upstash/redis";
 
 const ADMIN_CACHE_KEY = "admin:flyer_requests";
@@ -169,9 +170,12 @@ export default async function ReferralDashboard() {
       <div className="bg-brand-forest px-6 py-10 md:px-12 md:py-14">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-sage/70">Iconic Landscaping</p>
-          <h1 className="mt-2 font-display text-3xl font-medium text-brand-cream md:text-4xl">
-            Flyer Referral Dashboard
-          </h1>
+          <div className="mt-2 flex items-center justify-between gap-4">
+            <h1 className="font-display text-3xl font-medium text-brand-cream md:text-4xl">
+              Flyer Referral Dashboard
+            </h1>
+            <CacheBustButton />
+          </div>
           <p className="mt-1 text-sm text-brand-sage/80">{formatMonth()}</p>
 
           {/* Overall stats */}
