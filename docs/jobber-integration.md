@@ -125,6 +125,65 @@ This should only ever be needed once — unless the Jobber app is revoked or the
 
 ---
 
+## Jobber GraphQL Field Name Reference
+
+Hard-won field names discovered through API errors. Use these exactly — Jobber's naming is inconsistent.
+
+### Request
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | String | Encoded ID |
+| `title` | String | Contains `[Flyer: slug]` pattern for referral requests |
+| `createdAt` | String | ISO timestamp |
+| `requestStatus` | String | `pending`, `converted`, `archived` |
+| `quotes` | Connection | **Plural.** `quotes { nodes { ... } }` — NOT `quote` |
+
+### Quote (inside `quotes.nodes`)
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `quoteStatus` | String | **`quoteStatus`** — NOT `status`. Values: `draft`, `sent`, `approved`, `changes_requested`, `archived`, `converted_to_job` |
+| `jobs` | Connection | **Plural.** `jobs { nodes { id } }` — NOT `job` |
+
+### Conversion detection logic
+
+A referral counts as earned when:
+```ts
+const firstQuote = req.quotes?.nodes?.[0];
+const quoteStatus = firstQuote?.quoteStatus ?? "";
+const hasJob = (firstQuote?.jobs?.nodes?.length ?? 0) > 0;
+
+const isEarned =
+  quoteStatus === "approved" ||
+  quoteStatus === "converted_to_job" ||
+  hasJob;
+```
+
+### Full requests query used in leaderboard / admin dashboard
+
+```graphql
+query Requests($after: String) {
+  requests(first: 100, after: $after) {
+    nodes {
+      id
+      title
+      createdAt
+      requestStatus
+      quotes {
+        nodes {
+          quoteStatus
+          jobs { nodes { id } }
+        }
+      }
+    }
+    pageInfo { hasNextPage endCursor }
+  }
+}
+```
+
+---
+
 ## Adding a New Jobber Integration
 
 Import from the shared lib:
