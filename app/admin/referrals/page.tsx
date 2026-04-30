@@ -16,7 +16,7 @@ type JobberRequest = {
   title: string;
   createdAt: string;
   requestStatus: string;
-  quotes: { nodes: { status: string; job: { id: string } | null }[] };
+  quotes: { nodes: { quoteStatus: string; jobs: { nodes: { id: string }[] } }[] };
 };
 
 type CrewStats = {
@@ -39,7 +39,7 @@ async function fetchAllFlyerRequests(): Promise<JobberRequest[]> {
     const json = await jobberGraphQL(
       `query Requests($after: String) {
         requests(first: 100, after: $after) {
-          nodes { id title createdAt requestStatus quotes { nodes { status job { id } } } }
+          nodes { id title createdAt requestStatus quotes { nodes { quoteStatus jobs { nodes { id } } } } }
           pageInfo { hasNextPage endCursor }
         }
       }`,
@@ -88,8 +88,8 @@ function buildStats(requests: JobberRequest[]): CrewStats[] {
     s.total++;
     if (req.createdAt >= monthStart) s.thisMonth++;
     const firstQuote = req.quotes?.nodes?.[0];
-    const quoteStatus = firstQuote?.status ?? "";
-    const hasJob = !!firstQuote?.job?.id;
+    const quoteStatus = firstQuote?.quoteStatus ?? "";
+    const hasJob = (firstQuote?.jobs?.nodes?.length ?? 0) > 0;
     const isEarned =
       quoteStatus === "approved" ||
       quoteStatus === "converted_to_job" ||

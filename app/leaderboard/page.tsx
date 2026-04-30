@@ -11,7 +11,7 @@ type JobberRequest = {
   createdAt: string;
   requestStatus: string;
   quotes: {
-    nodes: { status: string; job: { id: string } | null }[];
+    nodes: { quoteStatus: string; jobs: { nodes: { id: string }[] } }[];
   };
 };
 
@@ -52,7 +52,7 @@ async function fetchFlyerRequests(): Promise<JobberRequest[]> {
         requests(first: 100, after: $after) {
           nodes {
             id title createdAt requestStatus
-            quotes { nodes { status job { id } } }
+            quotes { nodes { quoteStatus jobs { nodes { id } } } }
           }
           pageInfo { hasNextPage endCursor }
         }
@@ -114,8 +114,8 @@ function buildStats(requests: JobberRequest[], from: string, to?: string): Playe
     // - quote was converted to an active job
     // - a job exists on the quote (belt-and-suspenders check)
     const firstQuote = req.quotes?.nodes?.[0];
-    const quoteStatus = firstQuote?.status ?? "";
-    const hasJob = !!firstQuote?.job?.id;
+    const quoteStatus = firstQuote?.quoteStatus ?? "";
+    const hasJob = (firstQuote?.jobs?.nodes?.length ?? 0) > 0;
     const isEarned =
       quoteStatus === "approved" ||
       quoteStatus === "converted_to_job" ||
