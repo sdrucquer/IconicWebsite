@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { CREW } from "@/data/crew";
 import { jobberGraphQL } from "@/lib/jobber";
 import { LeaderboardClient } from "@/components/LeaderboardClient";
@@ -42,7 +43,7 @@ function getMonthStart() {
 // ---------------------------------------------------------------------------
 // Fetch all flyer requests from Jobber
 // ---------------------------------------------------------------------------
-async function fetchFlyerRequests(): Promise<JobberRequest[]> {
+async function _fetchFlyerRequests(): Promise<JobberRequest[]> {
   const all: JobberRequest[] = [];
   let cursor: string | null = null;
 
@@ -62,14 +63,19 @@ async function fetchFlyerRequests(): Promise<JobberRequest[]> {
 
     const data = json.data as Record<string, unknown> | undefined;
     const errors = (json as Record<string, unknown>).errors;
-    if (errors) console.error("[leaderboard] Jobber GraphQL errors:", JSON.stringify(errors));
+    if (errors) {
+      console.error("[leaderboard] Jobber GraphQL errors:", JSON.stringify(errors));
+      // If throttled, return whatever we have so far rather than empty
+      const isThrottled = Array.isArray(errors) && errors.some((e: Record<string, unknown>) =>
+        (e.extensions as Record<string, unknown>)?.code === "THROTTLED"
+      );
+      if (isThrottled) break;
+    }
 
     const nodes = ((data?.requests as Record<string, unknown>)?.nodes ?? []) as JobberRequest[];
     const pageInfo = (data?.requests as Record<string, unknown>)?.pageInfo as Record<string, unknown> | undefined;
 
-    const flyerNodes = nodes.filter((n) => /\[Flyer:/i.test(n.title));
-    console.log(`[leaderboard] page nodes: ${nodes.length} total, ${flyerNodes.length} flyer, statuses: ${[...new Set(nodes.map(n => n.requestStatus))].join(",")}`);
-    all.push(...flyerNodes);
+    all.push(...nodes.filter((n) => /\[Flyer:/i.test(n.title)));
 
     if (!pageInfo?.hasNextPage) break;
     cursor = pageInfo.endCursor as string;
@@ -77,6 +83,13 @@ async function fetchFlyerRequests(): Promise<JobberRequest[]> {
 
   return all;
 }
+
+// Cache results for 5 minutes — prevents hammering Jobber on every page load
+const fetchFlyerRequests = unstable_cache(
+  _fetchFlyerRequests,
+  ["flyer-requests"],
+  { revalidate: 300 }
+);
 
 function parseSlug(title: string): string | null {
   const match = title.match(/\[Flyer:\s*([^\]]+)\]/i);
