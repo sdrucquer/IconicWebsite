@@ -189,9 +189,10 @@ type Props = {
   error: string | null;
   currentMonth: string;
   crew: CrewMember[];
+  updatedAt: number | null;
 };
 
-export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, currentMonth, crew }: Props) {
+export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, currentMonth, crew, updatedAt }: Props) {
   const [tab, setTab] = useState<"month" | "season">("month");
   const activeStats = tab === "month" ? monthlyStats : seasonStats;
   const hasData = activeStats.some((s) => s.points > 0);
@@ -304,7 +305,9 @@ export function LeaderboardClient({ monthlyStats, seasonStats, daysLeft, error, 
         </div>
 
         <p className="mt-6 text-center text-xs text-brand-ink/25">
-          Points update live · season runs Apr 1 – Oct 31
+          {updatedAt
+            ? `Updated ${Math.round((Date.now() - updatedAt) / 60_000)} min ago · season runs Apr 1 – Oct 31`
+            : "Season runs Apr 1 – Oct 31"}
         </p>
       </div>
     </div>

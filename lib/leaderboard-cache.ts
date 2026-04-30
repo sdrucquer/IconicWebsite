@@ -16,6 +16,8 @@ import { CREW } from "@/data/crew";
 
 const CACHE_KEY = "leaderboard:stats";
 const CACHE_TTL_SECONDS = 300; // 5 minutes
+const LOCK_KEY = "leaderboard:refresh_lock";
+const LOCK_TTL_SECONDS = 15;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -168,8 +170,19 @@ export async function getLeaderboardStats(): Promise<{
         return { monthly: cached.monthly, season: cached.season, updatedAt: cached.updatedAt, stale: false };
       }
 
-      // Stale — try to refresh, but keep stale data as fallback
+      // Stale — acquire a lock so only one concurrent request hits Jobber
       console.log(`[leaderboard-cache] KV stale (${Math.round(age / 1000)}s old), refreshing from Jobber`);
+      const lockAcquired = await redis.set(LOCK_KEY, "1", { nx: true, ex: LOCK_TTL_SECONDS });
+
+      if (!lockAcquired) {
+        // Another request is already refreshing — wait briefly and serve whatever is in cache
+        console.log("[leaderboard-cache] Lock held by another request, waiting 2s then serving stale");
+        await new Promise((r) => setTimeout(r, 2_000));
+        const rechecked = await redis.get<CachedStats>(CACHE_KEY);
+        const source = rechecked ?? cached;
+        return { monthly: source.monthly, season: source.season, updatedAt: source.updatedAt, stale: !rechecked };
+      }
+
       try {
         const requests = await fetchFromJobber();
         const { monthStart, seasonStart, seasonEnd } = getWindows();
@@ -184,6 +197,8 @@ export async function getLeaderboardStats(): Promise<{
       } catch (err) {
         console.error("[leaderboard-cache] Jobber refresh failed, serving stale:", err);
         return { monthly: cached.monthly, season: cached.season, updatedAt: cached.updatedAt, stale: true };
+      } finally {
+        await redis.del(LOCK_KEY).catch(() => {});
       }
     }
   }

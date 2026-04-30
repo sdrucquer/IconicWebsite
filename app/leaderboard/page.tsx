@@ -7,7 +7,7 @@ export type { PlayerStats } from "@/lib/leaderboard-cache";
 // Page
 // ---------------------------------------------------------------------------
 export default async function LeaderboardPage() {
-  const { monthly, season, stale } = await getLeaderboardStats();
+  const { monthly, season, stale, updatedAt } = await getLeaderboardStats();
 
   const now = new Date();
   const seasonEndDate = new Date(`${now.getFullYear()}-10-31`);
@@ -21,6 +21,7 @@ export default async function LeaderboardPage() {
       error={stale && monthly.length === 0 ? "Could not load data right now — check back in a moment." : null}
       currentMonth={now.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
       crew={CREW}
+      updatedAt={updatedAt}
     />
   );
 }

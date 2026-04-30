@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import { CREW } from "@/data/crew";
 import { jobberGraphQL } from "@/lib/jobber";
 import { CopyButton } from "@/components/CopyButton";
+import { Redis } from "@upstash/redis";
+
+const ADMIN_CACHE_KEY = "admin:flyer_requests";
+const ADMIN_CACHE_TTL = 120; // 2 minutes
+
+function getAdminRedis(): Redis | null {
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  return url && token ? new Redis({ url, token }) : null;
+}
 
 export const metadata: Metadata = {
   title: "Referral Dashboard | Iconic Landscaping",
@@ -32,6 +42,17 @@ type CrewStats = {
 // Jobber helpers — token management is handled by lib/jobber.ts
 // ---------------------------------------------------------------------------
 async function fetchAllFlyerRequests(): Promise<JobberRequest[]> {
+  const redis = getAdminRedis();
+
+  // Serve from KV if fresh (2-min cache)
+  if (redis) {
+    const cached = await redis.get<JobberRequest[]>(ADMIN_CACHE_KEY);
+    if (cached) {
+      console.log("[admin/referrals] Serving from KV cache");
+      return cached;
+    }
+  }
+
   const all: JobberRequest[] = [];
   let cursor: string | null = null;
 
@@ -54,6 +75,11 @@ async function fetchAllFlyerRequests(): Promise<JobberRequest[]> {
 
     if (!pageInfo?.hasNextPage) break;
     cursor = pageInfo.endCursor as string;
+  }
+
+  if (redis) {
+    await redis.set(ADMIN_CACHE_KEY, all, { ex: ADMIN_CACHE_TTL }).catch(() => {});
+    console.log("[admin/referrals] KV cache written");
   }
 
   return all;
@@ -99,6 +125,14 @@ function buildStats(requests: JobberRequest[]): CrewStats[] {
   }
 
   return [...map.values()].sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
+}
+
+function topMonthlySlug(stats: CrewStats[]): string | null {
+  const best = stats.reduce<CrewStats | null>(
+    (top, s) => (s.thisMonth > (top?.thisMonth ?? 0) ? s : top),
+    null
+  );
+  return best && best.thisMonth > 0 ? best.slug : null;
 }
 
 function formatDate(iso: string | null): string {
@@ -164,9 +198,9 @@ export default async function ReferralDashboard() {
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {stats.map((s, i) => {
+            {(() => { const topSlug = topMonthlySlug(stats); return stats.map((s) => {
               const rate = s.total > 0 ? Math.round((s.converted / s.total) * 100) : 0;
-              const isTopPerformer = i === 0 && s.total > 0;
+              const isTopPerformer = s.slug === topSlug;
 
               return (
                 <div
@@ -224,7 +258,7 @@ export default async function ReferralDashboard() {
                   </p>
                 </div>
               );
-            })}
+            }); })()}
           </div>
         )}
 

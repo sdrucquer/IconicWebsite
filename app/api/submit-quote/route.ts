@@ -1,6 +1,29 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { jobberGraphQL } from "@/lib/jobber";
+import { Redis } from "@upstash/redis";
+
+// 3 submissions per IP per minute
+const RATE_LIMIT = 3;
+const RATE_WINDOW = 60; // seconds
+
+let _rl_redis: Redis | null | undefined = undefined;
+function getRLRedis(): Redis | null {
+  if (_rl_redis !== undefined) return _rl_redis;
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  _rl_redis = url && token ? new Redis({ url, token }) : null;
+  return _rl_redis;
+}
+
+async function isRateLimited(ip: string): Promise<boolean> {
+  const redis = getRLRedis();
+  if (!redis) return false; // no KV in local dev — allow all
+  const key = `rl:submit-quote:${ip}`;
+  const count = await redis.incr(key);
+  if (count === 1) await redis.expire(key, RATE_WINDOW);
+  return count > RATE_LIMIT;
+}
 
 // ---------------------------------------------------------------------------
 // Jobber — create client + request via GraphQL (two-step flow)
@@ -177,6 +200,15 @@ function clean(value: unknown): string {
 // Route handler
 // ---------------------------------------------------------------------------
 export async function POST(request: Request) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    request.headers.get("x-real-ip") ??
+    "unknown";
+
+  if (await isRateLimited(ip)) {
+    return NextResponse.json({ ok: false, error: "Too many requests. Please try again shortly." }, { status: 429 });
+  }
+
   let raw: SubmitPayload;
 
   try {
