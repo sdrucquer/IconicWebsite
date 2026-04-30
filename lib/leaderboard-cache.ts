@@ -11,7 +11,7 @@
  */
 import "server-only";
 import { Redis } from "@upstash/redis";
-import { jobberGraphQL } from "@/lib/jobber";
+import { jobberReaderGraphQL as jobberGraphQL } from "@/lib/jobber-reader";
 import { CREW } from "@/data/crew";
 
 const CACHE_KEY = "leaderboard:stats";

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CREW } from "@/data/crew";
-import { jobberGraphQL } from "@/lib/jobber";
+import { jobberReaderGraphQL as jobberGraphQL } from "@/lib/jobber-reader";
 import { CopyButton } from "@/components/CopyButton";
 import { CacheBustButton } from "@/components/CacheBustButton";
 import { Redis } from "@upstash/redis";
