@@ -202,8 +202,23 @@ export async function getLeaderboardStats(): Promise<{
     }
   }
 
-  // 2. No KV or no cached data — fetch live
+  // 2. No KV or no cached data — fetch live, with lock to prevent concurrent cold-starts
   console.log("[leaderboard-cache] No cache, fetching from Jobber");
+
+  if (redis) {
+    const lockAcquired = await redis.set(LOCK_KEY, "1", { nx: true, ex: LOCK_TTL_SECONDS });
+    if (!lockAcquired) {
+      // Another cold-start request is already fetching — wait then re-read
+      console.log("[leaderboard-cache] Cold-start lock held, waiting 3s");
+      await new Promise((r) => setTimeout(r, 3_000));
+      const rechecked = await redis.get<CachedStats>(CACHE_KEY);
+      if (rechecked) {
+        return { monthly: rechecked.monthly, season: rechecked.season, updatedAt: rechecked.updatedAt, stale: false };
+      }
+      return { monthly: [], season: [], updatedAt: null, stale: true };
+    }
+  }
+
   try {
     const requests = await fetchFromJobber();
     const { monthStart, seasonStart, seasonEnd } = getWindows();
@@ -218,6 +233,12 @@ export async function getLeaderboardStats(): Promise<{
     return { ...fresh, stale: false };
   } catch (err) {
     console.error("[leaderboard-cache] Jobber fetch failed:", err);
+    // Write a 60s backoff marker so the next request doesn't immediately retry
+    if (redis) {
+      await redis.set(CACHE_KEY, { monthly: [], season: [], updatedAt: null } as unknown as CachedStats, { ex: 60 }).catch(() => {});
+    }
     return { monthly: [], season: [], updatedAt: null, stale: true };
+  } finally {
+    if (redis) await redis.del(LOCK_KEY).catch(() => {});
   }
 }
